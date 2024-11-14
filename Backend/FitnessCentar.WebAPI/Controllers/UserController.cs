@@ -9,5 +9,6 @@ namespace FitnessCentar.WebAPI.Controllers
 {
     public class UserController : ApiController
     {
+
     }
 }
