@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="DiscountFilter.cs" />
     <Compile Include="PagedList.cs" />
     <Compile Include="Paging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
