@@ -95,6 +95,7 @@
     <Compile Include="IFoodService.cs" />
     <Compile Include="IMealService.cs" />
     <Compile Include="ISubscriptionService.cs" />
+    <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
