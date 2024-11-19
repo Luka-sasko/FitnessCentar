@@ -112,6 +112,10 @@
       <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
       <Name>FitnessCentar.Model.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FitnessCentar.Model\FitnessCentar.Model.csproj">
+      <Project>{F0310478-246F-47E8-8965-B5AA3A9B98A6}</Project>
+      <Name>FitnessCentar.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Repository.Common\FitnessCentar.Repository.Common.csproj">
       <Project>{2EFBAA40-FDFD-4C5D-AB98-6ECEDBDEB7D8}</Project>
       <Name>FitnessCentar.Repository.Common</Name>

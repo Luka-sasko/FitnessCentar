@@ -52,7 +52,7 @@
       <HintPath>packages\Autofac.WebApi2.6.1.1\lib\net472\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+      <HintPath>packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.Contrib.Autofac.DependencyInjection.5.0.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
@@ -234,6 +234,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="AutoMapper\DiscountMapperProfile.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -241,6 +242,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DiscountCreate.cs" />
+    <Compile Include="Models\DiscountUpdate.cs" />
+    <Compile Include="Models\DiscountView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -311,7 +315,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />
@@ -385,6 +388,14 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FitnessCentar.Model.Common\FitnessCentar.Model.Common.csproj">
+      <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
+      <Name>FitnessCentar.Model.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FitnessCentar.Model\FitnessCentar.Model.csproj">
+      <Project>{F0310478-246F-47E8-8965-B5AA3A9B98A6}</Project>
+      <Name>FitnessCentar.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Repository\FitnessCentar.Repository.csproj">
       <Project>{42CD27F7-4C83-44D8-B688-72C8E786BA30}</Project>
       <Name>FitnessCentar.Repository</Name>
