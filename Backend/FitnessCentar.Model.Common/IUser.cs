@@ -8,15 +8,15 @@ namespace FitnessCentar.Model.Common
 {
     public interface IUser
     {
-         Guid Id { get; set; }
-         string Password { get; set; }
-         string Salt { get; set; }
+        Guid Id { get; set; }
+        string Password { get; set; }
+        string Salt { get; set; }
         string Email { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
 
         string Contact { get; set; }
-        DateTime Birthday { get; set; }
+        DateTime Birthdate { get; set; }
 
         decimal Weight { get; set; }
 

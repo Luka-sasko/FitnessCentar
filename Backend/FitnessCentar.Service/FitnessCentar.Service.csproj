@@ -96,12 +96,17 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceModule.cs" />
+    <Compile Include="UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FitnessCentar.Model.Common\FitnessCentar.Model.Common.csproj">
+      <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
+      <Name>FitnessCentar.Model.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Service.Common\FitnessCentar.Service.Common.csproj">
       <Project>{0AE6BFCC-10DF-4D5C-8A5A-A3AAB5EA0667}</Project>
       <Name>FitnessCentar.Service.Common</Name>

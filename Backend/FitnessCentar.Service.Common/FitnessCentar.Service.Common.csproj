@@ -91,11 +91,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IClass1.cs" />
+    <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FitnessCentar.Model.Common\FitnessCentar.Model.Common.csproj">
+      <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
+      <Name>FitnessCentar.Model.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

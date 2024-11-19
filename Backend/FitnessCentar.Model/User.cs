@@ -16,12 +16,12 @@ namespace FitnessCentar.Model
         public string LastName { get; set; }
         
         public string Contact { get; set; }
-        public DateTime Birthday { get; set; }
+        public DateTime Birthdate { get; set; }
 
         public decimal Weight { get; set; }
 
         public decimal Height { get; set; }
-        public Guid CoachId { get; set; }
+        public Guid? CoachId { get; set; }
         public Guid CreatedBy { get; set; }
         public Guid UpdatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
