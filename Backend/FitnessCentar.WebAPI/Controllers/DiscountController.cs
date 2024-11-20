@@ -11,6 +11,7 @@ using FitnessCentar.Model.Common;
 using FitnessCentar.WebAPI.Models;
 using AutoMapper;
 using FitnessCentar.Model;
+using FitnessCentar.Common;
 
 namespace FitnessCentar.WebAPI.Controllers
 {
@@ -136,9 +137,63 @@ namespace FitnessCentar.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetAll
+            (
+            int pageNumber = 1,
+            int pageSize = 10,
+            string sortBy = "StartDate",
+            string sortOrder = "ASC",
+            string searchQuery = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            int? amount = null
+            )
+        {
+            Paging paging = new Paging() { PageNumber=pageNumber, PageSize=pageSize};
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
+            DiscountFilter filter = new DiscountFilter() {SearchQuery=searchQuery, StartDate=startDate, EndDate=endDate, Amount=amount };
+
+            var discounts = await _discountService.GetAllDiscountsAsync(filter, sorting, paging);
+            if(discounts == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request!");
+
+            }
+
+            try
+            {
+                var discountViews = discounts.Items.Select(discount => new DiscountView
+                {
+                    Id=discount.Id,
+                    Name = discount.Name,
+                    Amount = discount.Amount,
+                    StartDate = discount.StartDate,
+                    EndDate = discount.EndDate
+                }).ToList();
+
+                var discountsView = new PagedList<DiscountView>(
+                    discountViews,
+                    discounts.PageNumber,
+                    discounts.PageSize,
+                    discounts.TotalCount
+                );
+                if (discountsView != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, discountsView);
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request!");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+            
+
         private bool ValidateInputDate(DateTime startDate, DateTime endDate)
         {
-            if ((startDate >= DateTime.Today || endDate <= DateTime.Today) && (startDate < endDate) && (startDate!=DateTime.MinValue && endDate!=DateTime.MinValue))
+            if ((startDate >= DateTime.Today || endDate >= DateTime.Today) && (startDate < endDate) && (startDate!=DateTime.MinValue && endDate!=DateTime.MinValue))
             {
                 return true;
             }

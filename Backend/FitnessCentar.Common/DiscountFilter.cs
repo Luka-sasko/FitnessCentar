@@ -8,9 +8,9 @@ namespace FitnessCentar.Common
 {
     public class DiscountFilter
     {
-        public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public int Amount { get; set; }
+        public string SearchQuery {get; set;}
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? Amount { get; set; }
     }
 }

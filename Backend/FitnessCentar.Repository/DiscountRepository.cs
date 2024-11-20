@@ -18,6 +18,96 @@ namespace FitnessCentar.Repository
 
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
 
+        public async Task<PagedList<IDiscount>> GetAllDiscountsAsync(DiscountFilter filter, Sorting sorting, Paging paging)
+        {
+            var discounts = new List<IDiscount>();
+            var itemCount = 0;
+            if (filter != null)
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    var queryBuilder = new StringBuilder();
+                    queryBuilder.AppendLine("SELECT discount.* FROM \"Discount\" discount");
+                    queryBuilder.AppendLine(" WHERE discount.\"IsActive\" = TRUE");
+
+                    using (var cmd = new NpgsqlCommand())
+                    {
+
+
+                        cmd.Connection = connection;
+                        cmd.CommandText = queryBuilder.ToString();
+
+                        ApplyFilter(cmd, filter);
+                        ApplySorting(cmd, sorting);
+
+                        itemCount = await GetItemCountAsync(filter);
+                        ApplyPaging(cmd, paging, itemCount);
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                discounts.Add(new Discount
+                                {
+                                    Id = (Guid)reader["Id"],
+                                    Amount = (int)reader["Amount"],
+                                    StartDate = (DateTime)reader["StartDate"],
+                                    EndDate = (DateTime)reader["EndDate"],
+                                    Name = (string)reader["Name"],
+                                    CreatedBy = (Guid)reader["CreatedBy"],
+                                    UpdatedBy = (Guid)reader["UpdatedBy"],
+                                    DateCreated = (DateTime)reader["DateCreated"],
+                                    DateUpdated = (DateTime)reader["DatedUpdated"],
+                                    IsActive = (bool)reader["IsActive"],
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return new PagedList<IDiscount>(discounts, paging.PageNumber, paging.PageSize, itemCount);
+        }
+
+        public async Task<IDiscount> GetDiscountByIdAsync(Guid id)
+        {
+            IDiscount discount = null;
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var query = "SELECT * FROM \"Discount\" WHERE \"Id\" = @Id AND \"IsActive\" = TRUE";
+                using (var cmd = new NpgsqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await reader.ReadAsync())
+                        {
+                            discount = new Discount
+                            {
+                                Id = (Guid)reader["Id"],
+                                Amount = (int)reader["Amount"],
+                                StartDate = (DateTime)reader["StartDate"],
+                                EndDate = (DateTime)reader["EndDate"],
+                                Name = (string)reader["Name"],
+                                CreatedBy = (Guid)reader["CreatedBy"],
+                                UpdatedBy = (Guid)reader["UpdatedBy"],
+                                DateCreated = (DateTime)reader["DateCreated"],
+                                DateUpdated = (DateTime)reader["DatedUpdated"],
+                                IsActive = (bool)reader["IsActive"],
+
+                            };
+                        }
+                    }
+
+                }
+                return discount;
+
+            }
+        }
+
         public async Task<string> CreateDiscountAsync(IDiscount newDiscount)
         {
 
@@ -102,48 +192,7 @@ namespace FitnessCentar.Repository
             return "Discount deleted!";
         }
 
-        public Task<PagedList<IDiscount>> GetAllDiscountsAsync(DiscountFilter filter, Sorting sorting, Paging paging)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IDiscount> GetDiscountByIdAsync(Guid id)
-        {
-            IDiscount discount = null;
-            using (var connection = new NpgsqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var query = "SELECT * FROM \"Discount\" WHERE \"Id\" = @Id AND \"IsActive\" = TRUE";
-                using (var cmd = new NpgsqlCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@Id", id);
-
-                    using (var reader = await cmd.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            discount = new Discount
-                            {
-                                Id = (Guid)reader["Id"],
-                                Amount = (int)reader["Amount"],
-                                StartDate = (DateTime)reader["StartDate"],
-                                EndDate = (DateTime)reader["EndDate"],
-                                Name= (string)reader["Name"],
-                                CreatedBy = (Guid)reader["CreatedBy"],
-                                UpdatedBy = (Guid)reader["UpdatedBy"],
-                                DateCreated = (DateTime)reader["DateCreated"],
-                                DateUpdated = (DateTime)reader["DatedUpdated"],
-                                IsActive = (bool)reader["IsActive"],
-
-                            };
-                        }
-                    }
-
-                }
-                return discount;
-
-            }
-        }
+        
 
         public async Task<string> UpdateDiscountAsync(IDiscount discountUpdated)
         {
@@ -201,5 +250,98 @@ namespace FitnessCentar.Repository
             }
             return "Discount updated!";
         }
+
+
+        private void ApplyPaging(NpgsqlCommand cmd, Paging paging, int itemCount)
+        {
+            StringBuilder commandText = new StringBuilder(cmd.CommandText);
+            int currentItem = (paging.PageNumber - 1) * paging.PageSize;
+            if (currentItem >= 0 && currentItem < itemCount)
+            {
+                commandText.Append(" LIMIT ").Append(paging.PageSize).Append(" OFFSET ").Append(currentItem);
+                cmd.CommandText = commandText.ToString();
+            }
+            else
+            {
+                commandText.Append(" LIMIT 10");
+                cmd.CommandText = commandText.ToString();
+            }
+        }
+
+        private async Task<int> GetItemCountAsync(DiscountFilter filter)
+        {
+            NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
+            using (connection)
+            {
+                NpgsqlCommand command = new NpgsqlCommand();
+                command.CommandText = "SELECT COUNT(\"Id\") FROM \"Discount\" discount WHERE discount.\"IsActive\" = TRUE";
+                ApplyFilter(command, filter);
+                command.Connection = connection;
+                try
+                {
+                    await connection.OpenAsync();
+                    NpgsqlDataReader reader = await command.ExecuteReaderAsync();
+                    await reader.ReadAsync();
+                    return reader.GetInt32(0);
+                }
+                catch (Exception e)
+                {
+                    return 0;
+                }
+                finally
+                {
+                    await connection.CloseAsync();
+                }
+            }
+        }
+
+        private void ApplySorting(NpgsqlCommand cmd, Sorting sorting)
+        {
+            StringBuilder commandText = new StringBuilder(cmd.CommandText);
+            commandText.Append(" ORDER BY \"");
+            commandText.Append(sorting.SortBy).Append("\" ");
+            commandText.Append(sorting.SortOrder == "ASC" ? "ASC" : "DESC");
+            cmd.CommandText = commandText.ToString();
+        }
+
+        private void ApplyFilter(NpgsqlCommand cmd, DiscountFilter filter)
+        {
+            StringBuilder queryBuilder = new StringBuilder(cmd.CommandText);
+
+            if (filter.StartDate != default && filter.EndDate != default)
+            {
+                cmd.Parameters.AddWithValue("@StartDate", filter.StartDate);
+                cmd.Parameters.AddWithValue("@EndDate", filter.EndDate);
+                queryBuilder.AppendLine(" AND NOT (discount.\"StartDate\" >= @StartDate AND discount.\"EndDate\" <= @EndDate)");
+            }
+            else if (filter.StartDate != default || filter.EndDate != default)
+            {
+                if (filter.StartDate != default)
+                {
+                    cmd.Parameters.AddWithValue("@StartDate", filter.StartDate);
+                    queryBuilder.AppendLine(" AND NOT (discount.\"StartDate\" >= @StartDate)");
+                }
+                if (filter.EndDate != default)
+                {
+                    queryBuilder.AppendLine(" AND (discount.\"EndDate\" <=EndDate)");
+                    cmd.Parameters.AddWithValue("@EndDate", filter.EndDate);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filter.SearchQuery))
+            {
+                cmd.Parameters.AddWithValue("@SearchQuery", $"%{filter.SearchQuery}%");
+                queryBuilder.AppendLine(" AND discount.\"Name\" ILIKE @SearchQuery");
+            }
+
+            if (filter.Amount != null && filter.Amount > 0 && filter.Amount<=100)
+            {
+                cmd.Parameters.AddWithValue("@Amount", filter.Amount);
+                queryBuilder.AppendLine(" AND discount.\"Amount\" >= @Amount");
+            }
+
+            cmd.CommandText = queryBuilder.ToString();
+        }
+
     }
 }

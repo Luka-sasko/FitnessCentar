@@ -40,7 +40,8 @@ namespace FitnessCentar.Service
 
         public Task<PagedList<IDiscount>> GetAllDiscountsAsync(DiscountFilter filter, Sorting sorting, Paging paging)
         {
-            throw new NotImplementedException();
+            return _discountRepository.GetAllDiscountsAsync(filter, sorting, paging);
+
         }
 
         public Task<IDiscount> GetDiscountByIdAsync(Guid id)
