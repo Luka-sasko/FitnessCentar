@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDiscountRepository.cs" />
     <Compile Include="IRClass1.cs" />
     <Compile Include="IUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,6 +100,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FitnessCentar.Common\FitnessCentar.Common.csproj">
+      <Project>{A083B2BA-9A21-47D7-99B1-CC82D7787AB7}</Project>
+      <Name>FitnessCentar.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Model.Common\FitnessCentar.Model.Common.csproj">
       <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
       <Name>FitnessCentar.Model.Common</Name>
