@@ -157,7 +157,7 @@ namespace FitnessCentar.Repository
         }
 
 
-        public async Task<string> DeleteDiscountAsync(Guid discountId,Guid userId)
+        public async Task<string> DeleteDiscountAsync(Guid discountId, Guid userId)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -167,7 +167,7 @@ namespace FitnessCentar.Repository
                 queryBuilder.AppendLine("UPDATE \"Discount\"");
                 queryBuilder.AppendLine("SET");
 
-                
+
 
                 using (var cmd = new NpgsqlCommand())
                 {
@@ -192,7 +192,7 @@ namespace FitnessCentar.Repository
             return "Discount deleted!";
         }
 
-        
+
 
         public async Task<string> UpdateDiscountAsync(IDiscount discountUpdated)
         {
@@ -314,18 +314,15 @@ namespace FitnessCentar.Repository
                 cmd.Parameters.AddWithValue("@EndDate", filter.EndDate);
                 queryBuilder.AppendLine(" AND NOT (discount.\"StartDate\" >= @StartDate AND discount.\"EndDate\" <= @EndDate)");
             }
-            else if (filter.StartDate != default || filter.EndDate != default)
+            else if (filter.StartDate != default)
             {
-                if (filter.StartDate != default)
-                {
-                    cmd.Parameters.AddWithValue("@StartDate", filter.StartDate);
-                    queryBuilder.AppendLine(" AND NOT (discount.\"StartDate\" >= @StartDate)");
-                }
-                if (filter.EndDate != default)
-                {
-                    queryBuilder.AppendLine(" AND (discount.\"EndDate\" <=EndDate)");
-                    cmd.Parameters.AddWithValue("@EndDate", filter.EndDate);
-                }
+                cmd.Parameters.AddWithValue("@StartDate", filter.StartDate);
+                queryBuilder.AppendLine(" AND discount.\"StartDate\" >= @StartDate");
+            }
+            else if (filter.EndDate != default)
+            {
+                cmd.Parameters.AddWithValue("@EndDate", filter.EndDate);
+                queryBuilder.AppendLine(" AND discount.\"EndDate\" <= @EndDate");
             }
 
             if (!string.IsNullOrEmpty(filter.SearchQuery))
@@ -334,7 +331,7 @@ namespace FitnessCentar.Repository
                 queryBuilder.AppendLine(" AND discount.\"Name\" ILIKE @SearchQuery");
             }
 
-            if (filter.Amount != null && filter.Amount > 0 && filter.Amount<=100)
+            if (filter.Amount != null && filter.Amount > 0 && filter.Amount <= 100)
             {
                 cmd.Parameters.AddWithValue("@Amount", filter.Amount);
                 queryBuilder.AppendLine(" AND discount.\"Amount\" >= @Amount");
@@ -342,6 +339,5 @@ namespace FitnessCentar.Repository
 
             cmd.CommandText = queryBuilder.ToString();
         }
-
     }
 }
