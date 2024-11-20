@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="IClass1.cs" />
     <Compile Include="IDiscountService.cs" />
+    <Compile Include="ISubscriptionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
