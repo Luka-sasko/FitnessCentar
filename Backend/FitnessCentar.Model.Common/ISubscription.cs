@@ -12,12 +12,14 @@ namespace FitnessCentar.Model.Common
         decimal Price { set; get; }
         string Description { set; get; }
         string Name { set; get; }
+        int Duration { set; get; }
         DateTime StartDate { set; get; }
         Guid CreatedBy { get; set; }
         Guid UpdatedBy { get; set; }
         DateTime DateCreated { get; set; }
         DateTime DateUpdated { get; set; }
         bool IsActive { get; set; }
+        Guid DiscountId { get; set; } 
 
     }
 }

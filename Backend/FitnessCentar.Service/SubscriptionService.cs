@@ -1,5 +1,6 @@
 ﻿using FitnessCentar.Common;
 using FitnessCentar.Model.Common;
+using FitnessCentar.Repository.Common;
 using FitnessCentar.Service.Common;
 using System;
 using System.Collections.Generic;
@@ -11,29 +12,59 @@ namespace FitnessCentar.Service
 {
     public class SubscriptionService : ISubscriptionService
     {
-        public Task<string> CreateSubscriptionAsync(ISubscription newSubscription)
+        private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly Guid _userId = Guid.NewGuid();
+
+        public SubscriptionService(ISubscriptionRepository subscriptionRepository)
         {
-            throw new NotImplementedException();
+            _subscriptionRepository = subscriptionRepository;
+        }
+        public async Task<string> CreateSubscriptionAsync(ISubscription newSubscription)
+        {
+            ISubscription subscription = FillDateAndUserInfoForCreate(newSubscription,_userId);
+            return await _subscriptionRepository.CreateSubscriptionAsync(subscription);
         }
 
-        public Task<string> DeleteSubscriptionAsync(Guid id)
+        private ISubscription FillDateAndUserInfoForCreate(ISubscription newSubscription, Guid userId)
         {
-            throw new NotImplementedException();
+            newSubscription.Id=Guid.NewGuid();
+            newSubscription.DateCreated = DateTime.UtcNow;
+            newSubscription.DateUpdated = DateTime.UtcNow;
+            newSubscription.CreatedBy = userId;
+            newSubscription.UpdatedBy = userId;
+            newSubscription.IsActive = true;
+            newSubscription.DiscountId = Guid.Parse("22222222-2222-2222-2222-222222222222");
+
+            return newSubscription;
         }
 
-        public Task<PagedList<ISubscription>> GetAlISubscriptionAsync(SubscriptionFilter filter, Sorting sorting, Paging paging)
+        public async Task<string> DeleteSubscriptionAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _subscriptionRepository.DeleteSubscriptionAsync(id,_userId);
+        }
+
+        public async Task<PagedList<ISubscription>> GetAlSubscriptionAsync(SubscriptionFilter filter, Sorting sorting, Paging paging)
+        {
+            return await _subscriptionRepository.GetAllSubscriptionAsync(filter, sorting, paging);
         }
 
         public Task<ISubscription> GetSubscriptionByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+           return _subscriptionRepository.GetSubscriptionByIdAsync(id);
         }
 
-        public Task<string> UpdateSubscriptionAsync(Guid id, ISubscription updatedSubscription)
+        public async Task<string> UpdateSubscriptionAsync(Guid id, ISubscription updatedSubscription)
         {
-            throw new NotImplementedException();
+            ISubscription subscription = FillDateAndUserInfoForUpdate(updatedSubscription, _userId);
+            subscription.Id = id;
+            return await _subscriptionRepository.UpdateSubscriptionAsync(subscription);
+        }
+
+        private ISubscription FillDateAndUserInfoForUpdate(ISubscription updatedSubscription, Guid userId)
+        {
+            updatedSubscription.DateUpdated = DateTime.UtcNow;
+            updatedSubscription.UpdatedBy = userId;
+            return updatedSubscription;
         }
     }
 }

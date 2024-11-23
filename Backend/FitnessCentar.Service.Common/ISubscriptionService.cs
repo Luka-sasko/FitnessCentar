@@ -10,7 +10,7 @@ namespace FitnessCentar.Service.Common
 {
     public interface ISubscriptionService
     {
-        Task<PagedList<ISubscription>> GetAlISubscriptionAsync(SubscriptionFilter filter, Sorting sorting, Paging paging);
+        Task<PagedList<ISubscription>> GetAlSubscriptionAsync(SubscriptionFilter filter, Sorting sorting, Paging paging);
         Task<ISubscription> GetSubscriptionByIdAsync(Guid id);
         Task<string> DeleteSubscriptionAsync(Guid id);
         Task<string> CreateSubscriptionAsync(ISubscription newSubscription);

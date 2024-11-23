@@ -247,6 +247,9 @@
     <Compile Include="Models\DiscountCreate.cs" />
     <Compile Include="Models\DiscountUpdate.cs" />
     <Compile Include="Models\DiscountView.cs" />
+    <Compile Include="Models\SubscriptionCreate.cs" />
+    <Compile Include="Models\SubscriptionUpdate.cs" />
+    <Compile Include="Models\SubscriptionView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
