@@ -14,6 +14,7 @@ namespace FitnessCentar.Repository
 
             //builder.RegisterType<Class1>().As<IRClass1>();
             builder.RegisterType<DiscountRepository>().As<IDiscountRepository>();
+            builder.RegisterType<SubscriptionRepository>().As<ISubscriptionRepository>();
         }
     }
 }

@@ -97,6 +97,7 @@
     <Compile Include="DiscountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceModule.cs" />
+    <Compile Include="SubscriptionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

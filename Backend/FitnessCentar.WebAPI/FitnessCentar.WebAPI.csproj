@@ -235,8 +235,10 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="AutoMapper\DiscountMapperProfile.cs" />
+    <Compile Include="AutoMapper\SubscriptionMapperProfile.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -245,6 +247,9 @@
     <Compile Include="Models\DiscountCreate.cs" />
     <Compile Include="Models\DiscountUpdate.cs" />
     <Compile Include="Models\DiscountView.cs" />
+    <Compile Include="Models\SubscriptionCreate.cs" />
+    <Compile Include="Models\SubscriptionUpdate.cs" />
+    <Compile Include="Models\SubscriptionView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

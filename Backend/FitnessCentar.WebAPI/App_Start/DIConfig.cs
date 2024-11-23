@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using AutoMapper;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using FitnessCentar.Repository;
 using FitnessCentar.Service;
+using FitnessCentar.WebAPI.AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,7 @@ namespace FitnessCentar.WebAPI.App_Start
             builder.RegisterModule( new RepositoryModule());
 
             builder.AddAutoMapper(Assembly.GetExecutingAssembly());
+
 
             var contrainer = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(contrainer);
