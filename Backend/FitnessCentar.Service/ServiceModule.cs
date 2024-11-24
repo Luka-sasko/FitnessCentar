@@ -16,6 +16,7 @@ namespace FitnessCentar.Service
            builder.RegisterType<DiscountService>().As<IDiscountService>();
            builder.RegisterType<SubscriptionService>().As<ISubscriptionService>();
            builder.RegisterType<FoodService>().As<IFoodService>();
+           builder.RegisterType<MealService>().As<IMealService>();
 
         }
     }
