@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="IFood.cs" />
     <Compile Include="ISubscription.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IDiscount.cs" />
