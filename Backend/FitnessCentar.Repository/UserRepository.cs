@@ -1,4 +1,5 @@
-﻿using FitnessCentar.Model.Common;
+﻿using FitnessCentar.Model;
+using FitnessCentar.Model.Common;
 using FitnessCentar.Repository.Common;
 using Npgsql;
 using NpgsqlTypes;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,14 +28,14 @@ namespace FitnessCentar.Repository
 
             using (connection)
             {
-                string insertQuery= "INSERT INTO \"User\" (\"Id\", \"FirstName\", \"LastName\", \"Email\", \"Password\", \"Salt\", \"Contact\",\"Birthdate\",\"Weight\",\"Height\",\"CoachId\",\"SubscriptionId\", \"RoleId\", \"CreatedBy\", \"UpdatedBy\", \"IsActive\") " +
-                    "VALUES (@Id, @FirstName, @LastName, @Email, @Password, @Salt, @Contact, @Birthdate, @Weight, @Height, @CoachId, @SubscriptionId, (SELECT \"Id\" FROM \"Role\" WHERE \"Name\" = 'User'), @CreatedBy, @UpdatedBy, @IsActive)";
+                string insertQuery= "INSERT INTO \"User\" (\"Id\", \"Firstname\", \"Lastname\", \"Email\", \"Password\", \"Salt\", \"Contact\",\"Birthdate\",\"Weight\",\"Height\",\"CoachId\",\"SubscriptionId\", \"RoleId\", \"CreatedBy\", \"UpdatedBy\", \"IsActive\") " +
+                    "VALUES (@Id, @Firstname, @Lastname, @Email, @Password, @Salt, @Contact, @Birthdate, @Weight, @Height, @CoachId, @SubscriptionId, (SELECT \"Id\" FROM \"Role\" WHERE \"RoleName\" = 'User'), @CreatedBy, @UpdatedBy, @IsActive)";
 
                 NpgsqlCommand insertCommand= new NpgsqlCommand(insertQuery, connection);
 
                 insertCommand.Parameters.Add("@Id", NpgsqlDbType.Uuid).Value = user.Id;
-                insertCommand.Parameters.Add("@FirstName", NpgsqlDbType.Text).Value = user.FirstName;
-                insertCommand.Parameters.Add("@LastName", NpgsqlDbType.Text).Value = user.LastName;
+                insertCommand.Parameters.Add("@Firstname", NpgsqlDbType.Text).Value = user.Firstname;
+                insertCommand.Parameters.Add("@Lastname", NpgsqlDbType.Text).Value = user.Lastname;
                 insertCommand.Parameters.Add("@Email", NpgsqlDbType.Text).Value = user.Email;
                 insertCommand.Parameters.Add("@Password", NpgsqlDbType.Text).Value = hashedPassword;
                 insertCommand.Parameters.Add("@Salt", NpgsqlDbType.Text).Value = Convert.ToBase64String(salt);
@@ -65,25 +67,238 @@ namespace FitnessCentar.Repository
             }
         }
 
-        public Task<bool> DeleteAsync(Guid Id)
+        public async Task<bool> DeleteAsync(Guid id,Guid userId,DateTime time)
         {
-            throw new NotImplementedException();
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                string deleteQuery = "UPDATE \"User\" SET \"IsActive\" = false , \"DatedUpdated\" = @DatedUpdated, \"UpdatedBy\" = @UpdatedBy WHERE \"Id\" = @Id";
+                NpgsqlCommand deleteCommand = new NpgsqlCommand(deleteQuery, connection);
+                deleteCommand.Parameters.AddWithValue("@Id", id);
+                deleteCommand.Parameters.AddWithValue("@DatedUpdated", time);
+                deleteCommand.Parameters.AddWithValue("@UpdatedBy", userId);
+
+
+
+                try
+                {
+                    await connection.OpenAsync();
+
+                    int rowsAffected = await deleteCommand.ExecuteNonQueryAsync();
+
+                    return rowsAffected > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+            }
+
         }
 
-        public Task<IUser> GetByIdAsync(Guid id)
+
+
+        public async Task<IUser> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                IUser profile = null;
+                string commandText = "SELECT * FROM \"User\" WHERE \"Id\" = @Id AND \"IsActive\" = TRUE";
+                using (NpgsqlCommand npgsqlCommand = new NpgsqlCommand(commandText, connection))
+                {
+                    npgsqlCommand.Parameters.AddWithValue("@Id", id);
+                    try
+                    {
+                        await connection.OpenAsync();
+
+                        using (NpgsqlDataReader reader = await npgsqlCommand.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                profile = new User()
+                                {
+                                    Id = (Guid)reader["Id"],
+                                    Firstname = (String)reader["Firstname"],
+                                    Lastname = reader.GetString(reader.GetOrdinal("Lastname")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    Password = reader.GetString(reader.GetOrdinal("Password")),
+                                    Contact = reader.IsDBNull(reader.GetOrdinal("Contact")) ? null : reader.GetString(reader.GetOrdinal("Contact")),
+                                    RoleId = reader.GetGuid(reader.GetOrdinal("RoleId")),
+                                    CreatedBy = reader.GetGuid(reader.GetOrdinal("CreatedBy")),
+                                    UpdatedBy = reader.GetGuid(reader.GetOrdinal("UpdatedBy")),
+                                    DateCreated = reader.GetDateTime(reader.GetOrdinal("DateCreated")),
+                                    DatedUpdated = reader.GetDateTime(reader.GetOrdinal("DatedUpdated")),
+                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                                    Weight=reader.GetDouble(reader.GetOrdinal("Weight")),
+                                    Height=reader.GetDouble(reader.GetOrdinal("Height")),
+                                    Birthdate=reader.GetDateTime(reader.GetOrdinal("Birthdate")),
+                                    SubscriptionId=reader.GetGuid(reader.GetOrdinal("SubscriptionId")),
+                                    CoachId=reader.GetGuid(reader.GetOrdinal("CoachId"))
+                                };
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                return profile;
+            }
         }
 
-        public Task<bool> UpdateAsync(Guid Id, IUser user)
+        public async Task<bool> UpdateAsync(Guid id, IUser updatedUser)
         {
-            throw new NotImplementedException();
+            int rowsChanged;
+            IUser profile = await GetByIdAsync(id);
+            if(profile == null)
+            {
+                throw new Exception("No user with such ID in the database!");
+            }
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+                string updateQuery = "UPDATE \"User\" SET";
+                List<String> updateFields = new List<String>();
+                if (!string.IsNullOrEmpty(updatedUser.Firstname)) { updateFields.Add("\"Firstname\" = @Firstname"); }
+                if (!string.IsNullOrEmpty(updatedUser.Lastname)) { updateFields.Add("\"Lastname\"= @Lastname"); }
+                if (!string.IsNullOrEmpty(updatedUser.Email)) { updateFields.Add("\"Email\" = @Email"); }
+                if (!string.IsNullOrEmpty(updatedUser.Contact)) { updateFields.Add("\"Contact\" = @Contact"); }
+                if (!string.IsNullOrEmpty(updatedUser.Password)) { updateFields.Add("\"Password\" = @Password"); }
+                updateFields.Add("\"DatedUpdated\" = @DatedUpdated");
+
+                
+
+                updateQuery += " " + string.Join(",", updateFields);
+                updateQuery += " WHERE \"Id\" = @Id AND \"IsActive\" = TRUE";
+
+                NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
+                AddProfileParameters(updateCommand, id, updatedUser);
+
+                rowsChanged = await updateCommand.ExecuteNonQueryAsync();
+            }
+            return rowsChanged != 0;
+
         }
 
-        public Task<IUser> ValidateUserAsync(string username, string password)
+        public async Task<IUser> ValidateUserAsync(string email, string password)
         {
-            throw new NotImplementedException();
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                IUser user = null;
+                string commandText = "SELECT \"User\".\"Id\", \"User\".\"Email\", \"User\".\"Password\", \"User\".\"RoleId\", \"User\".\"Salt\"  FROM \"User\" WHERE \"Email\" = @Email AND \"IsActive\" = TRUE";
+                using (NpgsqlCommand npgsqlCommand = new NpgsqlCommand(commandText, connection))
+                {
+                    npgsqlCommand.Parameters.AddWithValue("@Email", email);
+                    Console.WriteLine($"Email parameter: {email}");
+                    try
+                    {
+                        await connection.OpenAsync();
+                        using (NpgsqlDataReader reader = await npgsqlCommand.ExecuteReaderAsync())
+                        {
+                            if (reader.Read())
+                            {
+                                user = new User()
+                                {
+                                    Id = (Guid)reader["Id"],
+                                    RoleId = (Guid)reader["RoleId"],
+                                };
+                                string storedPassword = (String)reader["Password"];
+                                byte[] salt = Convert.FromBase64String((String)reader["Salt"]);
+
+                                string hashedPassword = HashPassword(password, salt);
+
+                                if (hashedPassword != storedPassword)
+                                {
+                                    user = null;
+                                }
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                return user;
+            }
         }
+
+        public async Task<IUser> ValidateUserByPasswordAsync(Guid id, string password)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+            {
+                IUser user = null;
+                string commandText = "SELECT \"User\".\"Id\", \"User\".\"Email\", \"User\".\"Password\", \"User\".\"RoleId\", \"User\".\"Salt\" FROM \"User\" WHERE \"User\".\"Id\" = @id AND \"IsActive\" = TRUE";
+                using (NpgsqlCommand npgsqlCommand = new NpgsqlCommand(commandText, connection))
+                {
+                    npgsqlCommand.Parameters.AddWithValue("id", id);
+                    try
+                    {
+                        await connection.OpenAsync();
+                        using (NpgsqlDataReader reader = await npgsqlCommand.ExecuteReaderAsync())
+                        {
+                            if (reader.Read())
+                            {
+                                user = new User()
+                                {
+                                    Id = (Guid)reader["Id"],
+                                    RoleId = (Guid)reader["RoleId"]
+                                };
+                                string storedPassword = (String)reader["Password"];
+                                byte[] salt = Convert.FromBase64String((String)reader["Salt"]);
+
+                                string hashedPassword = HashPassword(password, salt);
+
+                                if (hashedPassword != storedPassword)
+                                {
+                                    user = null;
+                                }
+
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                }
+                return user;
+            }
+        }
+
+        public async Task<bool> UpdatePasswordAsync(Guid id, string passwordNew, string passwordOld)
+        {
+            int rowsChanged;
+            byte[] salt = GenerateSalt();
+            string hashedPassword = HashPassword(passwordNew, salt);
+            IUser currUser = await ValidateUserByPasswordAsync(id, passwordOld);
+            string oldPassword = currUser.Password;
+            if (hashedPassword == oldPassword)
+            {
+                return false;
+            }
+            IUser profile = await GetByIdAsync(id) ?? throw new Exception("No user with such ID in the database!");
+
+            if (passwordOld != hashedPassword)
+            {
+                using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string updateCommand = $"UPDATE \"User\" SET \"Password\" = @password, \"Salt\"=@salt WHERE \"Id\"=@id AND \"IsActive\" = TRUE";
+                    NpgsqlCommand command = new NpgsqlCommand(updateCommand, connection);
+                    command.Parameters.AddWithValue("password", hashedPassword);
+                    command.Parameters.AddWithValue("salt", Convert.ToBase64String(salt));
+                    command.Parameters.AddWithValue("id", id);
+                    rowsChanged = await command.ExecuteNonQueryAsync();
+                }
+                return rowsChanged != 0;
+            }
+            return false;
+        }
+
         public static byte[] GenerateSalt()
         {
             byte[] salt = new byte[32];
@@ -108,5 +323,72 @@ namespace FitnessCentar.Repository
                 return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
+
+        private void AddProfileParameters(NpgsqlCommand command, Guid id, IUser updatedProfile)
+        {
+            command.Parameters.AddWithValue("@Id", id);
+            if (!string.IsNullOrEmpty(updatedProfile.Firstname))
+            {
+                command.Parameters.AddWithValue("@FirstName", updatedProfile.Firstname);
+            }
+            if (!string.IsNullOrEmpty(updatedProfile.Lastname))
+            {
+                command.Parameters.AddWithValue("@LastName", updatedProfile.Lastname);
+            }
+            if (!string.IsNullOrEmpty(updatedProfile.Email))
+            {
+                command.Parameters.AddWithValue("@Email", updatedProfile.Email);
+            }
+            if (!string.IsNullOrEmpty(updatedProfile.Password))
+            {
+                command.Parameters.AddWithValue("@Password", updatedProfile.Password);
+            }
+            if (!string.IsNullOrEmpty(updatedProfile.Contact))
+            {
+                command.Parameters.AddWithValue("@Contact", updatedProfile.Contact);
+            }
+            if(updatedProfile.Weight != 0.0)
+            {
+                command.Parameters.AddWithValue("@Weight",updatedProfile.Weight);
+            }
+            if (updatedProfile.Height != 0.0)
+            {
+                command.Parameters.AddWithValue("@Height", updatedProfile.Height);
+            }
+            if(updatedProfile.CoachId != null)
+            {
+                command.Parameters.AddWithValue("@CoachId", updatedProfile.CoachId);
+            }
+            if(updatedProfile.SubscriptionId != null)
+            {
+                command.Parameters.AddWithValue("@SubscriptionId", updatedProfile.SubscriptionId);
+            }
+         
+            if (updatedProfile.RoleId != null)
+            {
+                command.Parameters.AddWithValue("@RoleId", updatedProfile.RoleId);
+            }
+            if (updatedProfile.CreatedBy != null)
+            {
+                command.Parameters.AddWithValue("@CreatedBy", updatedProfile.CreatedBy);
+            }
+            if (updatedProfile.UpdatedBy != null)
+            {
+                command.Parameters.AddWithValue("@UpdatedBy", updatedProfile.UpdatedBy);
+            }
+            if (updatedProfile.DateCreated != null)
+            {
+                command.Parameters.AddWithValue("@DateCreated", updatedProfile.DateCreated);
+            }
+            if (updatedProfile.DatedUpdated != null)
+            {
+                command.Parameters.AddWithValue("@DatedUpdated", updatedProfile.DatedUpdated);
+            }
+            if (updatedProfile.IsActive != null)
+            {
+                command.Parameters.AddWithValue("@IsActive", updatedProfile.IsActive);
+            }
+        }
+       
     }
 }

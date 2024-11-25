@@ -57,6 +57,9 @@
     <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.Contrib.Autofac.DependencyInjection.5.0.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -260,6 +263,11 @@
     <Compile Include="Models\SubscriptionCreate.cs" />
     <Compile Include="Models\SubscriptionUpdate.cs" />
     <Compile Include="Models\SubscriptionView.cs" />
+    <Compile Include="Models\PasswordUpdateModel.cs" />
+    <Compile Include="Models\UserLoginRequest.cs" />
+    <Compile Include="Models\UserRegistered.cs" />
+    <Compile Include="Models\UserUpdated.cs" />
+    <Compile Include="Models\ValidateUserRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
