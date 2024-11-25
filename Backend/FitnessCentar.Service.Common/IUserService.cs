@@ -14,7 +14,6 @@ namespace FitnessCentar.Service.Common
         Task<bool> UpdateUserAsync(IUser user);
         Task<bool> DeleteUserAsync(Guid id);
         Task<IUser> ValidateUserAsync(string email, string password);
-        Task<IUser> ValidateUserByPasswordAsync(Guid id, string password);
         Task<string> GetRoleTypeByRoleIdAsync(Guid id);
         Task<string> GetUserEmailByIdAsync(Guid id);
         Task<bool> UpdatePasswordAsync(string passwordNew, string passwordOld);

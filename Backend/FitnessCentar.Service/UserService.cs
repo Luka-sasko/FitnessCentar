@@ -27,13 +27,7 @@ namespace FitnessCentar.Service
 
         public async Task<Model.Common.IUser> GetUserAsync()
         {
-            var userIdString = HttpContext.Current.User.Identity.GetUserId();
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                userIdString = "53718dab-8fc9-404f-aaf1-c3305745a4c0";
-            }
-
-            var userId = Guid.Parse(userIdString);
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
             try
             {
                 return await _userRepository.GetByIdAsync(userId);
@@ -92,19 +86,10 @@ namespace FitnessCentar.Service
 
         public async Task<bool> DeleteUserAsync(Guid id)
         {
-            var userIdString = HttpContext.Current.User.Identity.GetUserId();
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                userIdString = "53718dab-8fc9-404f-aaf1-c3305745a4c0";
-            }
-
-            var userId = Guid.Parse(userIdString);
-
-            var time=DateTime.UtcNow;
-
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
             try
             {
-                return await _userRepository.DeleteAsync(id,userId,time);
+                return await _userRepository.DeleteAsync(id,userId,DateTime.UtcNow);
             }
             catch (Exception ex)
             {
@@ -126,19 +111,6 @@ namespace FitnessCentar.Service
             }
         }
 
-        public async Task<Model.Common.IUser> ValidateUserByPasswordAsync(Guid id, string password)
-        {
-            try
-            {
-                
-                return await _userRepository.ValidateUserByPasswordAsync(id, password);
-            }
-            catch (Exception ex)
-            {
-                
-                throw new Exception("An error occurred while validating the user by password.", ex);
-            }
-        }
 
 
         public async Task<string> GetRoleTypeByRoleIdAsync(Guid id)

@@ -15,13 +15,39 @@ namespace FitnessCentar.WebAPI.Controllers
     public class UserController : ApiController
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
         
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper= mapper;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,User")]
+
+        public async Task<HttpResponseMessage> GetUserAsync()
+        {
+            try
+            {
+                IUser profile = await _userService.GetUserAsync();
+
+                if (profile == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound);
+                }
+                var profileView = _mapper.Map<UserView>(profile);
+                profileView.Role = await _userService.GetRoleTypeByRoleIdAsync(profile.RoleId);
+                return Request.CreateResponse(HttpStatusCode.OK, profileView);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+            }
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> CreateUserAsync(UserRegistered userRegistered)
         {
             if(userRegistered==null)
@@ -51,6 +77,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles ="Admin,User")]
         public async Task<HttpResponseMessage> UpdateUserAsync(UserUpdated updatedProfile)
         {
             if (updatedProfile == null)
@@ -83,7 +110,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 bool updated = await _userService.UpdateUserAsync(user);
                 if (updated)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.OK,"User updated!");
                 }
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
@@ -95,6 +122,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> DeleteUserAsync(Guid id)
         {
             try
@@ -119,6 +147,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         [Route("validate")]
         public async Task<HttpResponseMessage> ValidateUserAsync([FromBody] UserLoginRequest request)
         {
@@ -145,34 +174,9 @@ namespace FitnessCentar.WebAPI.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("validatebypassword")]
-        public async Task<HttpResponseMessage> ValidateUserByPasswordAsync([FromBody] ValidateUserRequest request)
-        {
-            if (request == null || request.Id == Guid.Empty || string.IsNullOrEmpty(request.Password))
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid request!");
-            }
-
-            try
-            {
-                var user = await _userService.ValidateUserByPasswordAsync(request.Id, request.Password);
-
-                if (user == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.Unauthorized, "Invalid Id or password.");
-                }
-
-                return Request.CreateResponse(HttpStatusCode.OK, "User authorized successfully.");
-            }
-            catch (Exception ex)
-            {
-                
-                throw ex;
-            }
-        }
 
         [HttpPut]
+        [Authorize(Roles = "Admin,User")]
         [Route("updatePassword")]
         public async Task<HttpResponseMessage> UpdatePasswordAsync([FromBody] PasswordUpdateModel passwordUpdateModel)
         {
