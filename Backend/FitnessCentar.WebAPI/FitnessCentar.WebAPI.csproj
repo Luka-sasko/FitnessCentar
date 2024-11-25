@@ -57,6 +57,9 @@
     <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.Contrib.Autofac.DependencyInjection.5.0.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -72,6 +75,9 @@
     </Reference>
     <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Cors, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Owin.Cors.4.2.2\lib\net45\Microsoft.Owin.Cors.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Owin.Host.SystemWeb.4.2.2\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
@@ -128,6 +134,9 @@
     </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Cors, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Cors.5.0.0\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -234,10 +243,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Authorization\AuthorizationServerProvider.cs" />
     <Compile Include="AutoMapper\DiscountMapperProfile.cs" />
     <Compile Include="AutoMapper\FoodMapperProfile.cs" />
     <Compile Include="AutoMapper\MealMapperProfile.cs" />
     <Compile Include="AutoMapper\SubscriptionMapperProfile.cs" />
+    <Compile Include="AutoMapper\UserMapperProfile.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -260,6 +271,12 @@
     <Compile Include="Models\SubscriptionCreate.cs" />
     <Compile Include="Models\SubscriptionUpdate.cs" />
     <Compile Include="Models\SubscriptionView.cs" />
+    <Compile Include="Models\PasswordUpdateModel.cs" />
+    <Compile Include="Models\UserLoginRequest.cs" />
+    <Compile Include="Models\UserRegistered.cs" />
+    <Compile Include="Models\UserUpdated.cs" />
+    <Compile Include="Models\UserView.cs" />
+    <Compile Include="Models\ValidateUserRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -414,6 +431,10 @@
     <ProjectReference Include="..\FitnessCentar.Model\FitnessCentar.Model.csproj">
       <Project>{F0310478-246F-47E8-8965-B5AA3A9B98A6}</Project>
       <Name>FitnessCentar.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FitnessCentar.Repository.Common\FitnessCentar.Repository.Common.csproj">
+      <Project>{2EFBAA40-FDFD-4C5D-AB98-6ECEDBDEB7D8}</Project>
+      <Name>FitnessCentar.Repository.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Repository\FitnessCentar.Repository.csproj">
       <Project>{42CD27F7-4C83-44D8-B688-72C8E786BA30}</Project>

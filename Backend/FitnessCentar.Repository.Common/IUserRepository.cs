@@ -12,9 +12,10 @@ namespace FitnessCentar.Repository.Common
         Task<IUser> GetByIdAsync (Guid id);
         Task<bool> CreateAsync (IUser user);
         Task<bool> UpdateAsync(Guid Id,IUser user);
-        Task<bool> DeleteAsync(Guid Id);
-        Task<IUser> ValidateUserAsync (string username, string password);
-
-
+        Task<bool> DeleteAsync(Guid Id,Guid userId,DateTime time);
+        Task<IUser> ValidateUserAsync (string email, string password);
+        Task<IUser> ValidateUserByPasswordAsync(Guid id, string password);
+        Task<bool> UpdatePasswordAsync(Guid id, string passwordNew, string passwordOld);
     }
 }
+
