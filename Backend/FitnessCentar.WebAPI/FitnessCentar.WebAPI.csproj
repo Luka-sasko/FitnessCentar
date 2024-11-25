@@ -57,6 +57,9 @@
     <Reference Include="AutoMapper.Contrib.Autofac.DependencyInjection, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.Contrib.Autofac.DependencyInjection.5.0.0\lib\netstandard2.0\AutoMapper.Contrib.Autofac.DependencyInjection.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -240,6 +243,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PasswordUpdateModel.cs" />
+    <Compile Include="Models\UserLoginRequest.cs" />
+    <Compile Include="Models\UserRegistered.cs" />
+    <Compile Include="Models\UserUpdated.cs" />
+    <Compile Include="Models\ValidateUserRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -310,7 +318,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />
@@ -384,9 +391,21 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FitnessCentar.Model.Common\FitnessCentar.Model.Common.csproj">
+      <Project>{5688E6E8-598C-46C5-980F-A9A0C704C5F6}</Project>
+      <Name>FitnessCentar.Model.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FitnessCentar.Model\FitnessCentar.Model.csproj">
+      <Project>{F0310478-246F-47E8-8965-B5AA3A9B98A6}</Project>
+      <Name>FitnessCentar.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Repository\FitnessCentar.Repository.csproj">
       <Project>{42CD27F7-4C83-44D8-B688-72C8E786BA30}</Project>
       <Name>FitnessCentar.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FitnessCentar.Service.Common\FitnessCentar.Service.Common.csproj">
+      <Project>{0AE6BFCC-10DF-4D5C-8A5A-A3AAB5EA0667}</Project>
+      <Name>FitnessCentar.Service.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\FitnessCentar.Service\FitnessCentar.Service.csproj">
       <Project>{5AA02484-6CF5-4E81-86C1-AF4016D6284E}</Project>

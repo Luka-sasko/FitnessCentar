@@ -11,7 +11,9 @@ namespace FitnessCentar.Repository
     public class RepositoryModule : Module
     {
         protected override void Load(ContainerBuilder builder) {
-            builder.RegisterType<Class1>().As<IRClass1>();
+            /* builder.RegisterType<Class1>().As<IRClass1>();*/
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
+            builder.RegisterType<RoleTypeRepository>().As<IRoleTypeRepository>();
         }
     }
 }

@@ -12,20 +12,20 @@ namespace FitnessCentar.Model.Common
         string Password { get; set; }
         string Salt { get; set; }
         string Email { get; set; }
-        string FirstName { get; set; }
-        string LastName { get; set; }
+        string Firstname { get; set; }
+        string Lastname { get; set; }
 
         string Contact { get; set; }
         DateTime Birthdate { get; set; }
 
-        decimal Weight { get; set; }
+        double Weight { get; set; }
 
-        decimal Height { get; set; }
-        Guid CoachId { get; set; }
+        double Height { get; set; }
+        Guid? CoachId { get; set; }
         Guid CreatedBy { get; set; }
         Guid UpdatedBy { get; set; }
-        DateTime CreatedDate { get; set; }
-        DateTime UpdatedDate { get; set; }
+        DateTime DateCreated { get; set; }
+        DateTime DatedUpdated { get; set; }
         bool? IsActive { get; set; }
         Guid RoleId { get; set; }
         Guid SubscriptionId { get; set; }

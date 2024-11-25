@@ -12,7 +12,8 @@ namespace FitnessCentar.Service
     {
         protected override void Load(ContainerBuilder builder)
         {
-           builder.RegisterType<Class1>().As<IClass1>();
+           //builder.RegisterType<Class1>().As<IClass1>();
+           builder.RegisterType<UserService>().As<IUserService>();
 
         }
     }
