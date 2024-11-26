@@ -18,6 +18,9 @@ namespace FitnessCentar.WebAPI.AutoMapper
             CreateMap<FoodCreate, Food>();
             CreateMap<Food, FoodView>();
             CreateMap<FoodUpdate, Food>();
+
+            CreateMap<PagedList<IFood>, PagedList<Food>>();
+            CreateMap<PagedList<Food>, PagedList<FoodView>>();
         }
     }
 }

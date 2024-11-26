@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessCentar.Common;
 using FitnessCentar.Model;
+using FitnessCentar.Model.Common;
 using FitnessCentar.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,10 @@ namespace FitnessCentar.WebAPI.AutoMapper
             CreateMap<DiscountUpdate, Discount>();
             CreateMap<Discount, DiscountView>();
             CreateMap<PagedList<Discount>, PagedList<DiscountView>>();
-    
+
+            CreateMap<PagedList<IDiscount>, PagedList<Discount>>();
+            CreateMap<PagedList<Discount>, PagedList<DiscountView>>();
+
         }
 
     }

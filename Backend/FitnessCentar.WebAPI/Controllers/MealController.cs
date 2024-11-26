@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FitnessCentar.Common;
 using FitnessCentar.Model;
+using FitnessCentar.Model.Common;
 using FitnessCentar.Service.Common;
 using FitnessCentar.WebAPI.Models;
 using System;
@@ -43,20 +44,10 @@ namespace FitnessCentar.WebAPI.Controllers
                 if (meals == null)
                     return Request.CreateResponse(HttpStatusCode.NotFound);
 
-                var mealViews = meals.Items.Select(f => new MealView
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                }).ToList();
-
-                var plMealViews = new PagedList<MealView>(
-                    mealViews,
-                    meals.PageNumber,
-                    meals.PageSize,
-                    meals.TotalCount
-                );
-                if (plMealViews != null)
-                    return Request.CreateResponse(HttpStatusCode.Found, plMealViews);
+                var plMeal = _mapper.Map<PagedList<Meal>>(meals);
+                var plMealsView = _mapper.Map<PagedList<MealView>>(plMeal);
+                if (plMealsView != null)
+                    return Request.CreateResponse(HttpStatusCode.Found, plMealsView);
 
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }

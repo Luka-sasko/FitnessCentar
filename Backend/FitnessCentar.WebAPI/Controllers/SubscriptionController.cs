@@ -49,25 +49,11 @@ namespace FitnessCentar.WebAPI.Controllers
                 var subscriptions = await _subscriptionService.GetAlSubscriptionAsync(filter, sorting, paging);
                 if (subscriptions == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
 
-                var subscriptionsView = subscriptions.Items.Select(subscription => new SubscriptionView
-                {
-                    Id = subscription.Id,
-                    Duration = subscription.Duration,
-                    Name = subscription.Name,
-                    Price = subscription.Price,
-                    StartDate = subscription.StartDate,
-                    Description = subscription.Description
-                }).ToList();
+                var plSubscriptions = _mapper.Map<PagedList<Subscription>>(subscriptions);
+                var plSubscriptionsView = _mapper.Map<PagedList<SubscriptionView>>(plSubscriptions);
 
-                var subscriptionsViewPL = new PagedList<SubscriptionView>(
-                    subscriptionsView,
-                    subscriptions.PageNumber,
-                    subscriptions.PageSize,
-                    subscriptions.TotalCount
-                );
-
-                if (subscriptionsView != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, subscriptionsViewPL);
+                if (plSubscriptionsView != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, plSubscriptionsView);
 
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             

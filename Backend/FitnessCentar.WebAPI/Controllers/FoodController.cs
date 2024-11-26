@@ -44,19 +44,8 @@ namespace FitnessCentar.WebAPI.Controllers
                 if(allFood == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
 
 
-                var foodViews = allFood.Items.Select(f => new FoodView
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Weight = f.Weight,
-                }).ToList();
-
-                var plFoodViews = new PagedList<FoodView>(
-                    foodViews,
-                    allFood.PageNumber,
-                    allFood.PageSize,
-                    allFood.TotalCount
-                );
+                var plFood = _mapper.Map<PagedList<Food>>(allFood);
+                var plFoodViews = _mapper.Map<PagedList<FoodView>>(plFood);
                 if (plFoodViews != null)
                     return Request.CreateResponse(HttpStatusCode.Found, plFoodViews);
 

@@ -18,6 +18,8 @@ namespace FitnessCentar.WebAPI.AutoMapper
             CreateMap<Subscription, SubscriptionView>();
             CreateMap<SubscriptionUpdate, Subscription>();
 
+            CreateMap<PagedList<ISubscription>, PagedList<Subscription>>();
+            CreateMap<PagedList<Subscription>, PagedList<SubscriptionView>>();
         }
 
     }

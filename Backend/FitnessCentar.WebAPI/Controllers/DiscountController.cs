@@ -163,23 +163,10 @@ namespace FitnessCentar.WebAPI.Controllers
 
             try
             {
-                var discountViews = discounts.Items.Select(discount => new DiscountView
-                {
-                    Id=discount.Id,
-                    Name = discount.Name,
-                    Amount = discount.Amount,
-                    StartDate = discount.StartDate,
-                    EndDate = discount.EndDate
-                }).ToList();
-
-                var discountsView = new PagedList<DiscountView>(
-                    discountViews,
-                    discounts.PageNumber,
-                    discounts.PageSize,
-                    discounts.TotalCount
-                );
-                if (discountsView != null)
-                    return Request.CreateResponse(HttpStatusCode.OK, discountsView);
+                var plDiscounts = _mapper.Map<PagedList<Discount>>(discounts);
+                var plDiscountsView = _mapper.Map<PagedList<DiscountView>>(plDiscounts);
+                if (plDiscountsView != null)
+                    return Request.CreateResponse(HttpStatusCode.OK, plDiscountsView);
 
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Bad request!");
             }

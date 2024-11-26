@@ -96,6 +96,7 @@
     <Compile Include="IClass1.cs" />
     <Compile Include="IDiscountService.cs" />
     <Compile Include="IFoodService.cs" />
+    <Compile Include="IMealPlanService.cs" />
     <Compile Include="IMealService.cs" />
     <Compile Include="ISubscriptionService.cs" />
     <Compile Include="IUserService.cs" />
