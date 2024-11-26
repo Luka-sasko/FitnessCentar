@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDiscountRepository.cs" />
+    <Compile Include="IExerciseRepository.cs" />
     <Compile Include="IFoodRepository.cs" />
     <Compile Include="IMealRepository.cs" />
     <Compile Include="IRClass1.cs" />
