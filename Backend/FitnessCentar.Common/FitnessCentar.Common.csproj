@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DiscountFilter.cs" />
+    <Compile Include="ExerciseFilter.cs" />
     <Compile Include="FoodFilter.cs" />
     <Compile Include="MealFilter.cs" />
     <Compile Include="MealPlanFilter.cs" />

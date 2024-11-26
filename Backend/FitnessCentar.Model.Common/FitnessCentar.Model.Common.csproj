@@ -94,12 +94,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="IExercise.cs" />
     <Compile Include="IFood.cs" />
     <Compile Include="IMeal.cs" />
     <Compile Include="IMealPlan.cs" />
     <Compile Include="ISubscription.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IDiscount.cs" />
+    <Compile Include="IWorkoutPlan.cs" />
+    <Compile Include="IWorkoutPlanExercise.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

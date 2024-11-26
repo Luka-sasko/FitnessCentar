@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DiscountRepository.cs" />
+    <Compile Include="ExerciseRepository.cs" />
     <Compile Include="FoodRepository.cs" />
     <Compile Include="MealPlanRepository.cs" />
     <Compile Include="MealRepository.cs" />
