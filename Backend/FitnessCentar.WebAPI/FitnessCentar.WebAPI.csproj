@@ -252,6 +252,7 @@
     <Compile Include="AutoMapper\SubscriptionMapperProfile.cs" />
     <Compile Include="AutoMapper\UserMapperProfile.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
+    <Compile Include="Controllers\ExerciseController.cs" />
     <Compile Include="Controllers\FoodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MealController.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Models\DiscountCreate.cs" />
     <Compile Include="Models\DiscountUpdate.cs" />
     <Compile Include="Models\DiscountView.cs" />
+    <Compile Include="Models\ExerciseView.cs" />
     <Compile Include="Models\FoodCreate.cs" />
     <Compile Include="Models\FoodUpdate.cs" />
     <Compile Include="Models\FoodView.cs" />
