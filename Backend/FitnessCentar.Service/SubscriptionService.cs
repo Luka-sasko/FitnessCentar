@@ -2,18 +2,19 @@
 using FitnessCentar.Model.Common;
 using FitnessCentar.Repository.Common;
 using FitnessCentar.Service.Common;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace FitnessCentar.Service
 {
     public class SubscriptionService : ISubscriptionService
     {
         private readonly ISubscriptionRepository _subscriptionRepository;
-        private readonly Guid _userId = Guid.NewGuid();
 
         public SubscriptionService(ISubscriptionRepository subscriptionRepository)
         {
@@ -21,7 +22,9 @@ namespace FitnessCentar.Service
         }
         public async Task<string> CreateSubscriptionAsync(ISubscription newSubscription)
         {
-            ISubscription subscription = FillDateAndUserInfoForCreate(newSubscription,_userId);
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+
+            ISubscription subscription = FillDateAndUserInfoForCreate(newSubscription,userId);
             return await _subscriptionRepository.CreateSubscriptionAsync(subscription);
         }
 
@@ -40,7 +43,9 @@ namespace FitnessCentar.Service
 
         public async Task<string> DeleteSubscriptionAsync(Guid id)
         {
-            return await _subscriptionRepository.DeleteSubscriptionAsync(id,_userId);
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+
+            return await _subscriptionRepository.DeleteSubscriptionAsync(id,userId);
         }
 
         public async Task<PagedList<ISubscription>> GetAlSubscriptionAsync(SubscriptionFilter filter, Sorting sorting, Paging paging)
@@ -55,7 +60,9 @@ namespace FitnessCentar.Service
 
         public async Task<string> UpdateSubscriptionAsync(Guid id, ISubscription updatedSubscription)
         {
-            ISubscription subscription = FillDateAndUserInfoForUpdate(updatedSubscription, _userId);
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+
+            ISubscription subscription = FillDateAndUserInfoForUpdate(updatedSubscription, userId);
             subscription.Id = id;
             return await _subscriptionRepository.UpdateSubscriptionAsync(subscription);
         }

@@ -2,17 +2,18 @@
 using FitnessCentar.Model.Common;
 using FitnessCentar.Repository.Common;
 using FitnessCentar.Service.Common;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace FitnessCentar.Service
 {
     public class MealService : IMealService
     {
-        private readonly Guid _userId = Guid.NewGuid();
         private readonly IMealRepository _mealRepository;
         public MealService(IMealRepository mealRepository)
         {
@@ -21,7 +22,7 @@ namespace FitnessCentar.Service
 
         public async Task<string> CreateAsync(IMeal newMeal)
         {
-            var userId = _userId;
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
 
             newMeal = FillUserAndDateInfoOnCreate(newMeal, userId);
             return await _mealRepository.CreateAsync(newMeal);
@@ -40,7 +41,7 @@ namespace FitnessCentar.Service
 
         public async Task<string> DeleteAsync(Guid mealId)
         {
-            var userId = _userId;
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
             return await _mealRepository.DeleteAsync(mealId,userId);
         }
 
@@ -56,7 +57,7 @@ namespace FitnessCentar.Service
 
         public async Task<string> UpdateAsync(IMeal updatedMeal)
         {
-            var userId = _userId;
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
             updatedMeal = FillUserAndDateInfoOnUpdate(userId, updatedMeal);
             return await _mealRepository.UpdateAsync(updatedMeal);
         }

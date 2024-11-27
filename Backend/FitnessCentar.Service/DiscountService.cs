@@ -2,11 +2,13 @@
 using FitnessCentar.Model.Common;
 using FitnessCentar.Repository.Common;
 using FitnessCentar.Service.Common;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace FitnessCentar.Service
 {
@@ -14,7 +16,6 @@ namespace FitnessCentar.Service
     {
 
         private readonly IDiscountRepository _discountRepository;
-        private readonly Guid _userId = Guid.NewGuid();
 
         public DiscountService (IDiscountRepository discountRepository)
         {
@@ -25,8 +26,9 @@ namespace FitnessCentar.Service
 
         public Task<string> CreateDiscountAsync(IDiscount newDiscount)
         {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
 
-            IDiscount Discount = FillUserAndDateInformationsOnCreate(newDiscount,_userId);
+            IDiscount Discount = FillUserAndDateInformationsOnCreate(newDiscount,userId);
 
             return _discountRepository.CreateDiscountAsync(Discount);
         }
@@ -35,7 +37,9 @@ namespace FitnessCentar.Service
 
         public Task<string> DeleteDiscountAsync(Guid discountId)
         {
-            return _discountRepository.DeleteDiscountAsync(discountId,_userId);
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+
+            return _discountRepository.DeleteDiscountAsync(discountId,userId);
         }
 
         public Task<PagedList<IDiscount>> GetAllDiscountsAsync(DiscountFilter filter, Sorting sorting, Paging paging)
@@ -52,7 +56,9 @@ namespace FitnessCentar.Service
         public async Task<string> UpdateDiscountAsync(Guid id, IDiscount discountUpdated)
         {
 
-            return await _discountRepository.UpdateDiscountAsync(FillUserAndDateInformationOnUpdate(discountUpdated,_userId));
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+
+            return await _discountRepository.UpdateDiscountAsync(FillUserAndDateInformationOnUpdate(discountUpdated,userId));
         }
 
 
