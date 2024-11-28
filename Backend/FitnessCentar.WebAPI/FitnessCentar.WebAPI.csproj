@@ -245,6 +245,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Authorization\AuthorizationServerProvider.cs" />
     <Compile Include="AutoMapper\DiscountMapperProfile.cs" />
+    <Compile Include="AutoMapper\ExerciseMapperProfile.cs" />
     <Compile Include="AutoMapper\FoodMapperProfile.cs" />
     <Compile Include="AutoMapper\MealMapperProfile.cs" />
     <Compile Include="AutoMapper\MealPlanMapperProfile.cs" />

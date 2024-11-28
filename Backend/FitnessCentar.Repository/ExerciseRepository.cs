@@ -67,6 +67,85 @@ namespace FitnessCentar.Repository
             return new PagedList<IExercise>(exercise,paging.PageNumber,paging.PageSize, itemCount);
         }
 
+        public async Task<IExercise> GetExerciseById(Guid id)
+        {
+            IExercise exercise = null;
+            var connection = new NpgsqlConnection(_connectionString);
+            using (connection)
+            {
+                await connection.OpenAsync();
+                var queryBuilder = new StringBuilder();
+                queryBuilder.AppendLine("SELECT * FROM \"Exercises\"");
+                queryBuilder.AppendLine("WHERE \"Id\" = @Id AND \"IsActive\" = TRUE");
+
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = queryBuilder.ToString();
+                    cmd.Parameters.AddWithValue("@Id", id);
+
+                    using(var reader=await cmd.ExecuteReaderAsync())
+                    {
+                        if(await reader.ReadAsync())
+                        {
+                            exercise = new Exercise
+                            {
+                                Id = (Guid)reader["Id"],
+                                Name = (string)reader["Name"],
+                                Desc= (string)reader["Desc"],
+                                Reps = (int)reader["Reps"],
+                                Sets = (int)reader["Sets"],
+                                RestPeriod = (int)reader["RestPeriod"],
+                                CreatedBy = (Guid)reader["CreatedBy"],
+                                UpdatedBy = (Guid)reader["UpdatedBy"],
+                                DateCreated = (DateTime)reader["DateCreated"],
+                                DatedUpdated = (DateTime)reader["DatedUpdated"],
+                                IsActive = (bool)reader["IsActive"]
+                            };
+                        }
+                    }
+                }
+                return exercise;
+            }    
+            
+        }
+
+        public async Task<string> DeleteExerciseAsync(Guid exerciseId, Guid userId)
+        {
+            NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
+            using (connection)
+            {
+               await connection.OpenAsync();
+                var queryBuilder = new StringBuilder();
+                queryBuilder.AppendLine("UPDATE \"Exercises\"");
+                queryBuilder.AppendLine("SET");
+                queryBuilder.AppendLine("   \"IsActive\" = @IsActive, \"DatedUpdated\" = @DatedUpdated, \"UpdatedBy\" = @UpdatedBy ");
+                queryBuilder.AppendLine("WHERE \"Id\" = @Id AND \"IsActive\" = TRUE");
+
+                using(var cmd=new NpgsqlCommand(queryBuilder.ToString(), connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id",exerciseId);
+                    cmd.Parameters.AddWithValue("@IsActive", false);
+                    cmd.Parameters.AddWithValue("@UpdatedBy",userId);
+                    cmd.Parameters.AddWithValue("@DatedUpdated",DateTime.UtcNow);
+
+                    cmd.CommandText=queryBuilder.ToString();
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        return "Food deleted";
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally { connection.Close(); }
+                }
+            }
+
+        }
+
         public async Task<int> GetItemCountAsync(ExerciseFilter filter)
         {
             NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
@@ -131,5 +210,7 @@ namespace FitnessCentar.Repository
                 cmd.CommandText = commandText.ToString();
             }
         }
+
+        
     }
 }

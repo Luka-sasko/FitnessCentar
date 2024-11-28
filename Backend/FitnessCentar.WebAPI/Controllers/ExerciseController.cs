@@ -62,5 +62,38 @@ namespace FitnessCentar.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<HttpResponseMessage> GetExerciseById([FromUri]Guid id)
+        {
+            try
+            {
+                var exercise = await _exerciseService.GetExerciseById(id);
+                var exerciseView = _mapper.Map<ExerciseView>(exercise);
+                if (exerciseView == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+                return Request.CreateResponse(HttpStatusCode.Found, exerciseView);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<HttpResponseMessage> DeleteExerciseAsync([FromUri] Guid exerciseId)
+        {
+            string deletedExercise=await _exerciseService.DeleteExerciseAsync(exerciseId);
+            try
+            {
+                if (deletedExercise != null) { return Request.CreateResponse(HttpStatusCode.OK, deletedExercise); }
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
+
+        }
+
     }
 }
