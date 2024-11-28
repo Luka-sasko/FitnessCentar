@@ -45,15 +45,8 @@ namespace FitnessCentar.Service
             user.UpdatedBy= id;
             user.Id= id;
             user.IsActive = true;
-            if (user.CoachId == null)
-            {
-                user.CoachId = Guid.Parse("151b32b8-16c1-49f5-91fb-cb6b4bff141c");
-            }
-           
-            if (user.SubscriptionId == null)
-            {
-                user.SubscriptionId = Guid.Parse("00000000-0000-0000-0000-000000000000");
-            }
+            user.CoachId = Guid.Parse("151b32b8-16c1-49f5-91fb-cb6b4bff141c");
+            user.SubscriptionId = Guid.Parse("00000000-0000-0000-0000-000000000000");
             try
             {
                 return await _userRepository.CreateAsync(user);
@@ -67,15 +60,12 @@ namespace FitnessCentar.Service
 
         public async Task<bool> UpdateUserAsync(Model.Common.IUser profile)
         {
-            var userIdString = HttpContext.Current.User.Identity.GetUserId();
-            if (string.IsNullOrEmpty(userIdString))
-            {
-                userIdString = "53718dab-8fc9-404f-aaf1-c3305745a4c0";
-            }
-
-            var userId = Guid.Parse(userIdString);
             try
             {
+                var userIdString = HttpContext.Current.User.Identity.GetUserId();
+
+                var userId = Guid.Parse(userIdString);
+
                 return await _userRepository.UpdateAsync(userId, profile);
             }
             catch (Exception ex)
