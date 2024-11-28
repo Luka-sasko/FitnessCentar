@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="IDiscountRepository.cs" />
     <Compile Include="IFoodRepository.cs" />
+    <Compile Include="IMealPlanMealRepository.cs" />
     <Compile Include="IMealPlanRepository.cs" />
     <Compile Include="IMealRepository.cs" />
     <Compile Include="IRClass1.cs" />

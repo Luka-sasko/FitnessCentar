@@ -97,6 +97,7 @@
     <Compile Include="IFood.cs" />
     <Compile Include="IMeal.cs" />
     <Compile Include="IMealPlan.cs" />
+    <Compile Include="IMealPlanMeal.cs" />
     <Compile Include="ISubscription.cs" />
     <Compile Include="IUser.cs" />
     <Compile Include="IDiscount.cs" />

@@ -98,6 +98,7 @@
     <Compile Include="FoodFilter.cs" />
     <Compile Include="MealFilter.cs" />
     <Compile Include="MealPlanFilter.cs" />
+    <Compile Include="MealPlanMealFilter.cs" />
     <Compile Include="PagedList.cs" />
     <Compile Include="Paging.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
