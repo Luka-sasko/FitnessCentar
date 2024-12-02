@@ -13,5 +13,7 @@ namespace FitnessCentar.Service.Common
         Task<PagedList<IExercise>> GetAllExercisesAsync(ExerciseFilter filter, Sorting sorting, Paging paging);
         Task<IExercise> GetExerciseById(Guid id);
         Task<string> DeleteExerciseAsync(Guid exerciseId);
+        Task<string> CreateExerciseAsync(IExercise newExercise);
+        Task<string> UpdateExerciseAsync(IExercise updatedExercise);
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace FitnessCentar.Repository
 {
@@ -134,7 +135,7 @@ namespace FitnessCentar.Repository
                     try
                     {
                         cmd.ExecuteNonQuery();
-                        return "Food deleted";
+                        return "Exercise deleted";
                     }
                     catch (Exception ex)
                     {
@@ -144,6 +145,113 @@ namespace FitnessCentar.Repository
                 }
             }
 
+        }
+
+        public async Task<string> CreateExerciseAsync(IExercise newExercise)
+        {
+            using(var connection=new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var queryBuilder = new StringBuilder();
+                queryBuilder.AppendLine("INSERT INTO \"Exercises\" (");
+                queryBuilder.AppendLine(" \"Id\", \"Name\", \"Desc\", \"Reps\", \"Sets\", \"RestPeriod\", \"CreatedBy\", \"UpdatedBy\", \"DateCreated\", \"DatedUpdated\", \"IsActive\"");
+                queryBuilder.AppendLine(")");
+                queryBuilder.AppendLine("VALUES (");
+                queryBuilder.AppendLine("    @Id, @Name, @Desc, @Reps,");
+                queryBuilder.AppendLine("    @Sets, @RestPeriod, @CreatedBy, @UpdatedBy, @DateCreated, @DatedUpdated, @IsActive");
+                queryBuilder.AppendLine(")");
+
+                using(var cmd=new NpgsqlCommand(queryBuilder.ToString(),connection))
+                {
+                    cmd.Parameters.AddWithValue("@Id", newExercise.Id);
+                    cmd.Parameters.AddWithValue("@Name", newExercise.Name);
+                    cmd.Parameters.AddWithValue("@Desc", newExercise.Desc);
+                    cmd.Parameters.AddWithValue("@Reps", newExercise.Reps);
+                    cmd.Parameters.AddWithValue("@Sets",newExercise.Sets);
+                    cmd.Parameters.AddWithValue("@RestPeriod",newExercise.RestPeriod);
+                    cmd.Parameters.AddWithValue("@CreatedBy", newExercise.CreatedBy);
+                    cmd.Parameters.AddWithValue("@UpdatedBy", newExercise.UpdatedBy);
+                    cmd.Parameters.AddWithValue("@DateCreated", newExercise.DateCreated);
+                    cmd.Parameters.AddWithValue("@DatedUpdated", newExercise.DatedUpdated);
+                    cmd.Parameters.AddWithValue("@IsActive", newExercise.IsActive);
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        return "Exercise created!";
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally { connection.Close(); }
+                }
+            }
+
+           
+        }
+
+        public async Task<string> UpdateExerciseAsync(IExercise updatedExercise)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var queryBuilder= new StringBuilder();
+                queryBuilder.AppendLine("UPDATE \"Exercises\"");
+                queryBuilder.AppendLine("SET");
+
+                using(var cmd=new NpgsqlCommand(queryBuilder.ToString(), connection))
+                {
+                    if (updatedExercise.Name != null)
+                    { 
+                        queryBuilder.AppendLine("   \"Name\" = @Name,");
+                        cmd.Parameters.AddWithValue("@Name", updatedExercise.Name);
+                    }
+                    if(updatedExercise.Desc != null) 
+                    {
+                        queryBuilder.AppendLine("   \"Desc\" = @Desc,");
+                        cmd.Parameters.AddWithValue("@Desc", updatedExercise.Desc);
+                    }
+                    if (updatedExercise.Reps > 0)
+                    {
+                        queryBuilder.AppendLine("   \"Reps\" = @Reps,");
+                        cmd.Parameters.AddWithValue("@Reps", updatedExercise.Reps);
+                    }
+                    if (updatedExercise.Sets > 0)
+                    {
+                        queryBuilder.AppendLine("   \"Sets\" = @Sets,");
+                        cmd.Parameters.AddWithValue("@Sets", updatedExercise.Sets);
+                    }
+                    if (updatedExercise.RestPeriod > 0)
+                    {
+                        queryBuilder.AppendLine("   \"RestPeriod\" = @RestPeriod,");
+                        cmd.Parameters.AddWithValue("@RestPeriod", updatedExercise.RestPeriod);
+                    }
+                    queryBuilder.AppendLine("    \"UpdatedBy\" = @UpdatedBy,");
+                    queryBuilder.AppendLine("    \"DatedUpdated\" = @DatedUpdated");
+                    queryBuilder.AppendLine(" WHERE \"Id\" = @Id AND \"IsActive\" = TRUE");
+
+                    cmd.Parameters.AddWithValue("@UpdatedBy", updatedExercise.UpdatedBy);
+                    cmd.Parameters.AddWithValue("@DatedUpdated", updatedExercise.DatedUpdated);
+                    cmd.Parameters.AddWithValue("@Id", updatedExercise.Id);
+
+                    cmd.CommandText = queryBuilder.ToString();
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        return "Exercise updated!";
+                    }
+                    catch (Exception ex)
+                    {
+                        throw ex;
+                    }
+                    finally
+                    {
+                        connection.Close();
+                    }
+                }
+
+            }
         }
 
         public async Task<int> GetItemCountAsync(ExerciseFilter filter)
@@ -211,6 +319,6 @@ namespace FitnessCentar.Repository
             }
         }
 
-        
+       
     }
 }

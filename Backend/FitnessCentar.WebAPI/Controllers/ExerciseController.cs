@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using FitnessCentar.Common;
+using FitnessCentar.Model;
 using FitnessCentar.Service.Common;
 using FitnessCentar.WebAPI.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -80,15 +84,54 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task<HttpResponseMessage> DeleteExerciseAsync([FromUri] Guid exerciseId)
+        public async Task<HttpResponseMessage> DeleteExerciseAsync([FromUri] Guid id)
         {
-            string deletedExercise=await _exerciseService.DeleteExerciseAsync(exerciseId);
+            string deletedExercise=await _exerciseService.DeleteExerciseAsync(id);
             try
             {
                 if (deletedExercise != null) { return Request.CreateResponse(HttpStatusCode.OK, deletedExercise); }
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
+            }
+
+        }
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> PostExercise([FromBody] ExerciseCreate exerciseCreate)
+        {
+            var newExercise=_mapper.Map<Exercise>(exerciseCreate);
+            
+            try
+            {
+                string createdExercise = await _exerciseService.CreateExerciseAsync(newExercise);
+                if(createdExercise != null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.Created, createdExercise);
+                }
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+        }
+
+        [HttpPut]
+        public async Task<HttpResponseMessage> PutExercise([FromUri] Guid id, [FromBody] ExerciseUpdate exerciseUpdate)
+        {
+            var updateExercise=_mapper.Map<Exercise>(exerciseUpdate);
+            updateExercise.Id = id;
+            try
+            {
+                string updatedExercise = await _exerciseService.UpdateExerciseAsync(updateExercise);
+                if(updatedExercise != null) { return Request.CreateResponse(HttpStatusCode.OK, updatedExercise); }
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError,ex.Message);
             }

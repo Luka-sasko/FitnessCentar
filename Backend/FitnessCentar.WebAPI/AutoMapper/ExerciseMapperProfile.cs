@@ -13,6 +13,8 @@ namespace FitnessCentar.WebAPI.AutoMapper
         public ExerciseMapperProfile()
         {
             CreateMap<Exercise, ExerciseView>();
+            CreateMap<ExerciseCreate,Exercise> ();
+            CreateMap<ExerciseUpdate, Exercise> ();
         }
     }
 }

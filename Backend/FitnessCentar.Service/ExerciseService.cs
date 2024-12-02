@@ -21,10 +21,36 @@ namespace FitnessCentar.Service
             _exerciseRepository = exerciseRepository;
         }
 
+        public async Task<string> CreateExerciseAsync(IExercise newExercise)
+        {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            newExercise = FillDateAndUserInfoOnCreate(newExercise, userId);
+            return await _exerciseRepository.CreateExerciseAsync(newExercise);
+        }
+
+        private IExercise FillDateAndUserInfoOnCreate(IExercise newExercise, Guid userId)
+        {
+            newExercise.Id = Guid.NewGuid();
+            newExercise.DateCreated = DateTime.UtcNow;
+            newExercise.DatedUpdated = DateTime.UtcNow;
+            newExercise.CreatedBy = userId;
+            newExercise.UpdatedBy = userId;
+            newExercise.IsActive = true;
+            return newExercise;
+        }
+
         public async Task<string> DeleteExerciseAsync(Guid exerciseId)
         {
             var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
            return await _exerciseRepository.DeleteExerciseAsync(exerciseId,userId);
+        }
+
+        public async Task<string> UpdateExerciseAsync(IExercise updatedExercise)
+        {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            updatedExercise= FillDateAndUserInfoOnUpdate(updatedExercise, userId);
+            return await _exerciseRepository.UpdateExerciseAsync(updatedExercise);
+
         }
 
         public async Task<PagedList<IExercise>> GetAllExercisesAsync(ExerciseFilter filter, Sorting sorting, Paging paging)
@@ -36,5 +62,14 @@ namespace FitnessCentar.Service
         {
             return await _exerciseRepository.GetExerciseById(id);
         }
+
+        private IExercise FillDateAndUserInfoOnUpdate(IExercise updatedExercise, Guid userId)
+        {
+            updatedExercise.UpdatedBy = userId;
+            updatedExercise.DatedUpdated = DateTime.UtcNow;
+            return updatedExercise;
+        }
+
+
     }
 }
