@@ -23,6 +23,7 @@ namespace FitnessCentar.Repository
             builder.RegisterType<RoleTypeRepository>().As<IRoleTypeRepository>();
             builder.RegisterType<ExerciseRepository>().As<IExerciseRepository>();
             builder.RegisterType<WorkoutPlanRepository>().As<IWorkoutPlanRepository>();
+            builder.RegisterType<WorkoutPlanExerciseRepository>().As<IWorkoutPlanExerciseRepository>();
         }
     }
 }

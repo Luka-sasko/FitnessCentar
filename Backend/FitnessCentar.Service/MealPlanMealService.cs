@@ -23,11 +23,11 @@ namespace FitnessCentar.Service
         public async  Task<string> CreateAsync(IMealPlanMeal newMealPlanMeal)
         {
             var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
-            var mealPlanMeal = FillDateAndUserInfoOnCreate(newMealPlanMeal, userId);
+            newMealPlanMeal = FillDateAndUserInfoOnCreate(newMealPlanMeal, userId);
             return await _mealPlanMealRepository.CreateAsync(newMealPlanMeal);
         }
 
-        private object FillDateAndUserInfoOnCreate(IMealPlanMeal newMealPlanMeal, Guid userId)
+        private IMealPlanMeal FillDateAndUserInfoOnCreate(IMealPlanMeal newMealPlanMeal, Guid userId)
         {
             
             newMealPlanMeal.DateCreated = DateTime.UtcNow;

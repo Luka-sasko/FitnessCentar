@@ -103,6 +103,7 @@
     <Compile Include="ISubscriptionRepository.cs" />
     <Compile Include="IRoleTypeRepository.cs" />
     <Compile Include="IUserRepository.cs" />
+    <Compile Include="IWorkoutPlanExerciseRepository.cs" />
     <Compile Include="IWorkoutPlanRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

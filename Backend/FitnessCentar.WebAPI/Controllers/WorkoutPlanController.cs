@@ -113,6 +113,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> UpdateAsync([FromUri] Guid id, [FromBody] WorkoutPlanUpdate workoutPlanUpdate)
         {
             var workoutPlan=_mapper.Map<WorkoutPlan>(workoutPlanUpdate);
