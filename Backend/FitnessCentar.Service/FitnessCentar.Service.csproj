@@ -108,6 +108,7 @@
     <Compile Include="ServiceModule.cs" />
     <Compile Include="SubscriptionService.cs" />
     <Compile Include="UserService.cs" />
+    <Compile Include="WorkoutPlanService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

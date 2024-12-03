@@ -28,6 +28,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetAllExercises([FromUri] 
         int pageNumber=1,
         int pageSize=10,
@@ -68,6 +69,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetExerciseById([FromUri]Guid id)
         {
             try
@@ -84,6 +86,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> DeleteExerciseAsync([FromUri] Guid id)
         {
             string deletedExercise=await _exerciseService.DeleteExerciseAsync(id);
@@ -100,6 +103,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> PostExercise([FromBody] ExerciseCreate exerciseCreate)
         {
             var newExercise=_mapper.Map<Exercise>(exerciseCreate);
@@ -121,6 +125,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> PutExercise([FromUri] Guid id, [FromBody] ExerciseUpdate exerciseUpdate)
         {
             var updateExercise=_mapper.Map<Exercise>(exerciseUpdate);

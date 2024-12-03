@@ -252,6 +252,7 @@
     <Compile Include="AutoMapper\MealPlanMealMapperProfile.cs" />
     <Compile Include="AutoMapper\SubscriptionMapperProfile.cs" />
     <Compile Include="AutoMapper\UserMapperProfile.cs" />
+    <Compile Include="AutoMapper\WorkoutPlanMapperProfile.cs" />
     <Compile Include="Controllers\DiscountController.cs" />
     <Compile Include="Controllers\ExerciseController.cs" />
     <Compile Include="Controllers\FoodController.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\WorkoutPlanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -292,6 +294,9 @@
     <Compile Include="Models\UserUpdated.cs" />
     <Compile Include="Models\UserView.cs" />
     <Compile Include="Models\ValidateUserRequest.cs" />
+    <Compile Include="Models\WorkoutPlanCreate.cs" />
+    <Compile Include="Models\WorkoutPlanUpdate.cs" />
+    <Compile Include="Models\WorkoutPlanView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

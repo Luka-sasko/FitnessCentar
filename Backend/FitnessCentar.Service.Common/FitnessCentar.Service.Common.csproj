@@ -102,6 +102,7 @@
     <Compile Include="IMealService.cs" />
     <Compile Include="ISubscriptionService.cs" />
     <Compile Include="IUserService.cs" />
+    <Compile Include="IWorkoutPlanService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

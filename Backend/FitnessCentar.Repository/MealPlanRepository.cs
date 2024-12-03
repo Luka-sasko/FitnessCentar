@@ -22,7 +22,7 @@ namespace FitnessCentar.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
+                
                 var queryBuilder = new StringBuilder();
 
                 queryBuilder.AppendLine("INSERT INTO \"MealPlan\" (");
