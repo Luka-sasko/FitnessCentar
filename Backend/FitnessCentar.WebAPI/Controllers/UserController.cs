@@ -47,7 +47,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,User")]
+        //[Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> CreateUserAsync(UserRegistered userRegistered)
         {
             if(userRegistered==null)
