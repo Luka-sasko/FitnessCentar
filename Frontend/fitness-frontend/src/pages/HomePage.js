@@ -7,13 +7,11 @@ import axios from "axios";
 const HomePage = () => {
     useEffect(() => {
   const autoLogin = async () => {
-    const existing = JSON.parse(localStorage.getItem("user") || "{}");
-    if (existing?.token) return;
 
     try {
       const response = await axios.post("https://localhost:44366/Login", new URLSearchParams({
         grant_type: "password",
-        username: "johndoe@example.com'",
+        username: "johndoe@example.com",
         password: "lsasko1."
       }), {
         headers: { "Content-Type": "application/x-www-form-urlencoded" }
