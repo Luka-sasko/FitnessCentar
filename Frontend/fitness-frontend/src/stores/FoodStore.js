@@ -1,30 +1,14 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeObservable, observable, runInAction } from "mobx";
+import { BasePagedStore } from "./BasePagedStore";
 import FoodService from "../api/services/FoodService";
 
-class FoodStore {
-  foodList = [];
+class FoodStore extends BasePagedStore {
   selectedFood = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
 
   constructor() {
-    makeAutoObservable(this);
-  }
-
-  async fetchAll(params) {
-    const response = await FoodService.getAll(params);
-    runInAction(() => {
-      this.foodList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
+    super(FoodService.getAll);
+    makeObservable(this, {
+      selectedFood: observable
     });
   }
 

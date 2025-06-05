@@ -25,6 +25,7 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 const baseApi = {
+  getAll: (url, params) => axiosInstance.get(url, { params }),
   get: (url) => axiosInstance.get(url),
   post: (url, data) => axiosInstance.post(url, data),
   put: (url, data) => axiosInstance.put(url, data),

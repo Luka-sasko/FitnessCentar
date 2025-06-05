@@ -35,7 +35,7 @@ namespace FitnessCentar.WebAPI.Controllers
             Guid? mealId = null        )
         {
             Paging paging = new Paging() { PageNumber = pageNumber, PageSize=pageSize};
-            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder=sortOrder};
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder=sortOrder.ToUpper()};
             FoodFilter filter = new FoodFilter() { SearchQuery = searchQuery, MealId=mealId};
 
             try

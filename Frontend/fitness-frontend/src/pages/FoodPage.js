@@ -1,23 +1,19 @@
 import React, { useEffect } from "react";
-import { toJS } from "mobx";
+import { observer } from "mobx-react-lite";
 import { foodStore } from "../stores/FoodStore";
+import GenericTable from "../components/Common/GenericTable";
 
-const FoodPage = () => {
+const FoodPage = observer(() => {
   useEffect(() => {
-    const fetchData = async () => {
-      await foodStore.fetchAll();
-      console.log("Fetched Food list:", toJS(foodStore.foodList));
-      console.log("PagedMeta:", toJS(foodStore.pagedMeta));
-
-    };
-    fetchData();
+    foodStore.fetchAll();
   }, []);
 
   return (
-    <div>
-      <h2>Food Page</h2>
+    <div style={{ padding: 20 }}>
+      <h2>🍽️ Food Page</h2>
+      <GenericTable store={foodStore} />
     </div>
   );
-};
+});
 
 export default FoodPage;
