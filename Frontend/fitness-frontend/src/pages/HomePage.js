@@ -14,7 +14,7 @@ const HomePage = () => {
       const response = await axios.post("https://localhost:44366/Login", new URLSearchParams({
         grant_type: "password",
         username: "johndoe@example.com'",
-        password: "hash_password"
+        password: "lsasko1."
       }), {
         headers: { "Content-Type": "application/x-www-form-urlencoded" }
       });
