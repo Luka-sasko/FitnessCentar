@@ -1,11 +1,11 @@
-import baseApi from '../api/baseApi';
+import api from "../BaseApi";
 
 const MealPlanService = {
-  getAll: () => baseApi.get('/mealplan'),
-  getById: (id) => baseApi.get(`/mealplan/${id}`),
-  create: (data) => baseApi.post('/mealplan', data),
-  update: (id, data) => baseApi.put(`/mealplan/${id}`, data),
-  delete: (id) => baseApi.delete(`/mealplan/${id}`),
+  getAll: (params) => api.get("/mealplan", { params }),
+  getById: (id) => api.get("/mealplan/" + id),
+  create: (data) => api.post("/mealplan", data),
+  update: (id, data) => api.put("/mealplan/" + id, data),
+  delete: (id) => api.delete("/mealplan/" + id),
 };
 
 export default MealPlanService;

@@ -1,79 +1,57 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import DiscountService from "../services/DiscountService";
+import DiscountService from "../api/services/DiscountService";
+
+
 
 class DiscountStore {
-  discounts = [];
+  discountList = [];
   selectedDiscount = null;
-  loading = false;
-  error = null;
+  pagedMeta = {
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 0
+  };
+
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchAll() {
-    this.loading = true;
-    try {
-      const response = await DiscountService.getAll();
-      runInAction(() => {
-        this.discounts = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+  async fetchAll(params) {
+    const response = await DiscountService.getAll(params);
+    runInAction(() => {
+      this.discountList = response.data.Items;
+      this.pagedMeta = {
+        pageNumber: response.data.PageNumber,
+        pageSize: response.data.PageSize,
+        totalCount: response.data.TotalCount,
+        totalPages: response.data.TotalPages
+      };
+    });
   }
+
 
   async fetchById(id) {
-    this.loading = true;
-    try {
-      const response = await DiscountService.getById(id);
-      runInAction(() => {
-        this.selectedDiscount = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+    const response = await DiscountService.getById(id);
+    runInAction(() => {
+      this.selectedDiscount = response.data;
+    });
   }
 
-  async create(data) {
-    try {
-      await DiscountService.create(data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async createDiscount(data) {
+    await DiscountService.create(data);
+    await this.fetchAll();
   }
 
-  async update(id, data) {
-    try {
-      await DiscountService.update(id, data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async updateDiscount(id, data) {
+    await DiscountService.update(id, data);
+    await this.fetchAll();
   }
 
-  async delete(id) {
-    try {
-      await DiscountService.delete(id);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async deleteDiscount(id) {
+    await DiscountService.delete(id);
+    await this.fetchAll();
   }
 }
 

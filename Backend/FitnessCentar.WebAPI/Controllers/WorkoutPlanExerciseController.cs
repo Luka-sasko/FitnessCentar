@@ -25,7 +25,7 @@ namespace FitnessCentar.WebAPI.Controllers
             _workoutPlanExerciseService = workoutPlanExerciseService;
         }
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetAllAsync
             (
             Guid? workoutPlanId=null,
@@ -49,7 +49,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-                return Request.CreateResponse(HttpStatusCode.Found, plWorkoutPlanExerciseView);
+                return Request.CreateResponse(HttpStatusCode.OK, plWorkoutPlanExerciseView);
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetById([FromUri] Guid id)
         {
             try
@@ -66,7 +66,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 var workoutPlanExercise = await _workoutPlanExerciseService.GetByIdAsync(id);
                 var workoutPlanExerciseView = _mapper.Map<WorkoutPlanExerciseView>(workoutPlanExercise);
                 if(workoutPlanExerciseView == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
-                return   Request.CreateResponse(HttpStatusCode.Found, workoutPlanExerciseView);
+                return   Request.CreateResponse(HttpStatusCode.OK, workoutPlanExerciseView);
 
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> DeleteAsync([FromUri] Guid id)
         {
             try
@@ -91,7 +91,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> CreateAsync([FromBody] WorkoutPlanExerciseCreate workoutPlanExerciseCreate)
         {
             var newWorkoutPlanExercise = _mapper.Map<WorkoutPlanExercise>(workoutPlanExerciseCreate);
@@ -112,7 +112,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Admin,User")]
+      //  [Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> UpdateAsync([FromUri] Guid id,[FromBody] WorkoutPlanExerciseUpdate workoutPlanExerciseUpdate)
         {
             var workoutPlanExercise = _mapper.Map<WorkoutPlanExercise>(workoutPlanExerciseUpdate);

@@ -1,11 +1,11 @@
-import baseApi from '../api/baseApi';
+import api from "../BaseApi";
 
 const ExerciseService = {
-  getAll: () => baseApi.get('/exercise'),
-  getById: (id) => baseApi.get(`/exercise/${id}`),
-  create: (data) => baseApi.post('/exercise', data),
-  update: (id, data) => baseApi.put(`/exercise/${id}`, data),
-  delete: (id) => baseApi.delete(`/exercise/${id}`),
+  getAll: (params) => api.get("/exercise", { params }),
+  getById: (id) => api.get("/exercise/" + id),
+  create: (data) => api.post("/exercise", data),
+  update: (id, data) => api.put("/exercise/" + id, data),
+  delete: (id) => api.delete("/exercise/" + id),
 };
 
 export default ExerciseService;

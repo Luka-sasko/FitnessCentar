@@ -1,11 +1,11 @@
-import baseApi from '../api/baseApi';
+import api from "../BaseApi";
 
 const FoodService = {
-  getAll: () => baseApi.get('/food'),
-  getById: (id) => baseApi.get(`/food/${id}`),
-  create: (data) => baseApi.post('/food', data),
-  update: (id, data) => baseApi.put(`/food/${id}`, data),
-  delete: (id) => baseApi.delete(`/food/${id}`),
+  getAll: (params) => api.get("/food", { params }),
+  getById: (id) => api.get(`/food/${id}`),
+  create: (data) => api.post("/food", data),
+  update: (id, data) => api.put(`/food/${id}`, data),
+  delete: (id) => api.delete(`/food/${id}`),
 };
 
 export default FoodService;

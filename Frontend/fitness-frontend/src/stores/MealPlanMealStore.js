@@ -1,79 +1,53 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import MealPlanMealService from "../services/MealPlanMealService";
+import MealPlanMealService from "../api/services/MealPlanMealService";
 
 class MealPlanMealStore {
-  mealplanmeals = [];
+  mealPlanMealList = [];
   selectedMealPlanMeal = null;
-  loading = false;
-  error = null;
+  pagedMeta = {
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 0
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchAll() {
-    this.loading = true;
-    try {
-      const response = await MealPlanMealService.getAll();
-      runInAction(() => {
-        this.mealplanmeals = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+  async fetchAll(params) {
+    const response = await MealPlanMealService.getAll(params);
+    runInAction(() => {
+      this.mealPlanMealList = response.data.Items;
+      this.pagedMeta = {
+        pageNumber: response.data.PageNumber,
+        pageSize: response.data.PageSize,
+        totalCount: response.data.TotalCount,
+        totalPages: response.data.TotalPages
+      };
+    });
   }
 
   async fetchById(id) {
-    this.loading = true;
-    try {
-      const response = await MealPlanMealService.getById(id);
-      runInAction(() => {
-        this.selectedMealPlanMeal = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+    const response = await MealPlanMealService.getById(id);
+    runInAction(() => {
+      this.selectedMealPlanMeal = response.data;
+    });
   }
 
-  async create(data) {
-    try {
-      await MealPlanMealService.create(data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async createMealPlanMeal(data) {
+    await MealPlanMealService.create(data);
+    await this.fetchAll();
   }
 
-  async update(id, data) {
-    try {
-      await MealPlanMealService.update(id, data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async updateMealPlanMeal(id, data) {
+    await MealPlanMealService.update(id, data);
+    await this.fetchAll();
   }
 
-  async delete(id) {
-    try {
-      await MealPlanMealService.delete(id);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async deleteMealPlanMeal(id) {
+    await MealPlanMealService.delete(id);
+    await this.fetchAll();
   }
 }
 

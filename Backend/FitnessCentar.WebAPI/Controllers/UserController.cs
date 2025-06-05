@@ -24,7 +24,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
+       // [Authorize(Roles = "Admin,User")]
 
         public async Task<HttpResponseMessage> GetUserAsync()
         {
@@ -77,7 +77,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles ="Admin,User")]
+        //[Authorize(Roles ="Admin,User")]
         public async Task<HttpResponseMessage> UpdateUserAsync(UserUpdated updatedProfile)
         {
             if (updatedProfile == null)
@@ -122,7 +122,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "Admin,User")]
+        //[Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> DeleteUserAsync(Guid id)
         {
             try
@@ -147,7 +147,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,User")]
+        //[Authorize(Roles = "Admin,User")]
         [Route("validate")]
         public async Task<HttpResponseMessage> ValidateUserAsync([FromBody] UserLoginRequest request)
         {
@@ -176,7 +176,7 @@ namespace FitnessCentar.WebAPI.Controllers
 
 
         [HttpPut]
-        [Authorize(Roles = "Admin,User")]
+       // [Authorize(Roles = "Admin,User")]
         [Route("updatePassword")]
         public async Task<HttpResponseMessage> UpdatePasswordAsync([FromBody] PasswordUpdateModel passwordUpdateModel)
         {

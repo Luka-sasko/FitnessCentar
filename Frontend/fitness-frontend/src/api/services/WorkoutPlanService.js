@@ -1,11 +1,11 @@
-import baseApi from '../api/baseApi';
+import api from "../BaseApi";
 
 const WorkoutPlanService = {
-  getAll: () => baseApi.get('/workoutplan'),
-  getById: (id) => baseApi.get(`/workoutplan/${id}`),
-  create: (data) => baseApi.post('/workoutplan', data),
-  update: (id, data) => baseApi.put(`/workoutplan/${id}`, data),
-  delete: (id) => baseApi.delete(`/workoutplan/${id}`),
+  getAll: (params) => api.get("/workoutplan", { params }),
+  getById: (id) => api.get("/workoutplan/" + id),
+  create: (data) => api.post("/workoutplan", data),
+  update: (id, data) => api.put("/workoutplan/" + id, data),
+  delete: (id) => api.delete("/workoutplan/" + id),
 };
 
 export default WorkoutPlanService;

@@ -47,7 +47,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 var plMeal = _mapper.Map<PagedList<Meal>>(meals);
                 var plMealsView = _mapper.Map<PagedList<MealView>>(plMeal);
                 if (plMealsView != null)
-                    return Request.CreateResponse(HttpStatusCode.Found, plMealsView);
+                    return Request.CreateResponse(HttpStatusCode.OK, plMealsView);
 
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
@@ -67,7 +67,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 var meal = await _mealService.GetByIdAsync(id);
                 if (meal == null)
                     return Request.CreateResponse(HttpStatusCode.NotFound);
-                return Request.CreateResponse(HttpStatusCode.Found,meal);
+                return Request.CreateResponse(HttpStatusCode.OK,meal);
             }
             catch(Exception ex) { return Request.CreateResponse(HttpStatusCode.InternalServerError, ex); }
         }

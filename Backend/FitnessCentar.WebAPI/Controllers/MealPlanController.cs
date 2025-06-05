@@ -26,7 +26,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetByIdAsync([FromUri] Guid id)
         { 
             var mealPlan = await _mealPlanService.GetByIdAsync(id);
@@ -35,7 +35,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             try 
             {
-                return Request.CreateResponse(HttpStatusCode.Found,mealPlanView);
+                return Request.CreateResponse(HttpStatusCode.OK,mealPlanView);
             }
             catch(Exception ex)
             {
@@ -44,7 +44,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
         
         [HttpGet]
-        [Authorize(Roles = "Admin, User")]
+       // [Authorize(Roles = "Admin, User")]
         public async Task<HttpResponseMessage> GetAllAsync
             (
             Guid? userId = null,
@@ -67,7 +67,7 @@ namespace FitnessCentar.WebAPI.Controllers
                 var plMealPlans = _mapper.Map<PagedList<MealPlan>>(mealPlans);
                 var plMealPlansView = _mapper.Map<PagedList<MealPlanView>>(plMealPlans);
 
-                return Request.CreateResponse(HttpStatusCode.Found,plMealPlansView);
+                return Request.CreateResponse(HttpStatusCode.OK,plMealPlansView);
             }
             catch(Exception ex)
             {
@@ -77,7 +77,7 @@ namespace FitnessCentar.WebAPI.Controllers
 
 
         [HttpDelete]
-        [Authorize(Roles ="Admin, User")]
+       // [Authorize(Roles ="Admin, User")]
         public async Task<HttpResponseMessage> DeleteAsync([FromUri] Guid id)
         {
             try
@@ -92,7 +92,7 @@ namespace FitnessCentar.WebAPI.Controllers
 
 
         [HttpPost]
-        [Authorize( Roles = "User, Admin")]
+       // [Authorize( Roles = "User, Admin")]
         public async Task<HttpResponseMessage> PostAsync([FromBody] MealPlanCreate mealPlanCreate)
         {
             var mealPlan = _mapper.Map<MealPlan>(mealPlanCreate);
@@ -113,7 +113,7 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "User,Admin")]
+       // [Authorize(Roles = "User,Admin")]
         public async Task<HttpResponseMessage> PutAsync([FromUri] Guid id, [FromBody] MealPlanUpdate mealPlanUpdate)
         {
             var mealPlan = _mapper.Map<MealPlan>(mealPlanUpdate);

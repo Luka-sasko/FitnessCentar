@@ -1,79 +1,53 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import SubscriptionService from "../services/SubscriptionService";
+import SubscriptionService from "../api/services/SubscriptionService";
 
 class SubscriptionStore {
-  subscriptions = [];
+  subscriptionList = [];
   selectedSubscription = null;
-  loading = false;
-  error = null;
+  pagedMeta = {
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 0
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchAll() {
-    this.loading = true;
-    try {
-      const response = await SubscriptionService.getAll();
-      runInAction(() => {
-        this.subscriptions = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+  async fetchAll(params) {
+    const response = await SubscriptionService.getAll(params);
+    runInAction(() => {
+      this.subscriptionList = response.data.Items;
+      this.pagedMeta = {
+        pageNumber: response.data.PageNumber,
+        pageSize: response.data.PageSize,
+        totalCount: response.data.TotalCount,
+        totalPages: response.data.TotalPages
+      };
+    });
   }
 
   async fetchById(id) {
-    this.loading = true;
-    try {
-      const response = await SubscriptionService.getById(id);
-      runInAction(() => {
-        this.selectedSubscription = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+    const response = await SubscriptionService.getById(id);
+    runInAction(() => {
+      this.selectedSubscription = response.data;
+    });
   }
 
-  async create(data) {
-    try {
-      await SubscriptionService.create(data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async createSubscription(data) {
+    await SubscriptionService.create(data);
+    await this.fetchAll();
   }
 
-  async update(id, data) {
-    try {
-      await SubscriptionService.update(id, data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async updateSubscription(id, data) {
+    await SubscriptionService.update(id, data);
+    await this.fetchAll();
   }
 
-  async delete(id) {
-    try {
-      await SubscriptionService.delete(id);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async deleteSubscription(id) {
+    await SubscriptionService.delete(id);
+    await this.fetchAll();
   }
 }
 

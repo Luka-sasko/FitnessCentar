@@ -7,10 +7,20 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  const userJson = localStorage.getItem("user");
+  let token;
+
+  try {
+    const user = JSON.parse(userJson);
+    token = user?.token;
+  } catch (err) {
+    console.warn("❌ Neispravan JSON u localStorage.user");
+  }
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 

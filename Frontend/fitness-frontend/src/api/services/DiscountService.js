@@ -1,11 +1,11 @@
-import baseApi from '../api/baseApi';
+import api from "../BaseApi";
 
 const DiscountService = {
-  getAll: () => baseApi.get('/discount'),
-  getById: (id) => baseApi.get(`/discount/${id}`),
-  create: (data) => baseApi.post('/discount', data),
-  update: (id, data) => baseApi.put(`/discount/${id}`, data),
-  delete: (id) => baseApi.delete(`/discount/${id}`),
+  getAll: (params) => api.get("/discount", { params }),
+  getById: (id) => api.get("/discount", { params: { id } }),
+  create: (data) => api.post("/discount", data),
+  update: (id, data) => api.put("/discount?id=" + id, data),
+  delete: (id) => api.delete("/discount?id=" + id),
 };
 
 export default DiscountService;

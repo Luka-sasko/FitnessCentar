@@ -1,79 +1,53 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import MealService from "../services/MealService";
+import MealService from "../api/services/MealService";
 
 class MealStore {
-  meals = [];
+  mealList = [];
   selectedMeal = null;
-  loading = false;
-  error = null;
+  pagedMeta = {
+    pageNumber: 1,
+    pageSize: 10,
+    totalCount: 0,
+    totalPages: 0
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async fetchAll() {
-    this.loading = true;
-    try {
-      const response = await MealService.getAll();
-      runInAction(() => {
-        this.meals = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+  async fetchAll(params) {
+    const response = await MealService.getAll(params);
+    runInAction(() => {
+      this.mealList = response.data.Items;
+      this.pagedMeta = {
+        pageNumber: response.data.PageNumber,
+        pageSize: response.data.PageSize,
+        totalCount: response.data.TotalCount,
+        totalPages: response.data.TotalPages
+      };
+    });
   }
 
   async fetchById(id) {
-    this.loading = true;
-    try {
-      const response = await MealService.getById(id);
-      runInAction(() => {
-        this.selectedMeal = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+    const response = await MealService.getById(id);
+    runInAction(() => {
+      this.selectedMeal = response.data;
+    });
   }
 
-  async create(data) {
-    try {
-      await MealService.create(data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async createMeal(data) {
+    await MealService.create(data);
+    await this.fetchAll();
   }
 
-  async update(id, data) {
-    try {
-      await MealService.update(id, data);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async updateMeal(id, data) {
+    await MealService.update(id, data);
+    await this.fetchAll();
   }
 
-  async delete(id) {
-    try {
-      await MealService.delete(id);
-      this.fetchAll();
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-      });
-    }
+  async deleteMeal(id) {
+    await MealService.delete(id);
+    await this.fetchAll();
   }
 }
 
