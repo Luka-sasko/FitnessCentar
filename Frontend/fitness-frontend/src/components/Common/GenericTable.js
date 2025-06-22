@@ -5,11 +5,18 @@ const GenericTable = observer(({ store }) => {
     const data = store.items ?? [];
 
     if (!data || data.length === 0) return <p>🔍 Nema podataka.</p>;
+    const hiddenColumns = ["id", "datecreated", "updatedby", "createdby", "updatedat", "dateupdated", "isactive"];
+    const columns = Object.keys(data[0] || {}).filter(
+        (key) => !hiddenColumns.includes(key.toLowerCase())
+    );
+    /* const hiddenColumns = ["id", "datecreated", "updatedby", "createdby", "updatedat", "dateupdated", "isactive"];
 
-    const columns = Object.keys(data[0]).filter((key) => key.toLowerCase() !== "id");
+    const columns = Object.keys(data[0]).filter(
+        (key) => !hiddenColumns.includes(key.toLowerCase())
+    ); */
 
     const handleSort = (col) => {
-        console.log(col,store.sortOrder.toLowerCase() === "asc" ? "desc" : "asc");
+        console.log(col, store.sortOrder.toLowerCase() === "asc" ? "desc" : "asc");
         store.setSort(col, store.sortOrder.toLowerCase() === "asc" ? "desc" : "asc");
     };
 

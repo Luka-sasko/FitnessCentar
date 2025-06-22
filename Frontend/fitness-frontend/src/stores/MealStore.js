@@ -34,6 +34,18 @@ class MealStore {
       this.selectedMeal = response.data;
     });
   }
+  async fetchByUser() {
+    const response = await MealService.getByUser();
+    runInAction(() => {
+      this.mealList = response.data;
+      this.pagedMeta = {
+        pageNumber: response.data.PageNumber,
+        pageSize: response.data.length,
+        totalCount: response.data.length,
+        totalPages: response.data.TotalPages
+      };
+    });
+  }
 
   async createMeal(data) {
     await MealService.create(data);

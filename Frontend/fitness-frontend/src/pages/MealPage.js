@@ -1,21 +1,30 @@
 import React, { useEffect } from "react";
-import { toJS } from "mobx";
 import { mealStore } from "../stores/MealStore";
+import GenericTable from "../components/Common/GenericTable";
 
 const MealPage = () => {
   useEffect(() => {
     const fetchData = async () => {
-      await mealStore.fetchAll();
-      console.log("Fetched Meal list:", toJS(mealStore.mealList));
-      console.log("PagedMeta:", toJS(mealStore.pagedMeta));
-
+      await mealStore.fetchByUser();
     };
     fetchData();
   }, []);
 
   return (
     <div>
-      <h2>Meal Page</h2>
+      <h2>MY MEALS</h2>
+      <GenericTable
+        store={{
+          items: mealStore.mealList,
+          sortBy: "",
+          sortOrder: "asc",
+          setSort: () => { },
+          currentPage: 1,
+          totalPages: 1,
+          setCurrentPage: () => { }
+        }}
+
+      />
     </div>
   );
 };

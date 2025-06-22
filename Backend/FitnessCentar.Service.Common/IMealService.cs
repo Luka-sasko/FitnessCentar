@@ -15,5 +15,7 @@ namespace FitnessCentar.Service.Common
         Task<string> DeleteAsync(Guid mealId);
         Task<string> CreateAsync(IMeal newMeal);
         Task<string> UpdateAsync(IMeal updatedMeal);
+        Task<PagedList<IMeal>> GetMealsForUserAsync(MealFilter filter, Sorting sorting, Paging paging);
+
     }
 }

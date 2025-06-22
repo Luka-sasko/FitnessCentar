@@ -152,6 +152,59 @@ namespace FitnessCentar.Repository
             return new PagedList<IMeal>(meal, paging.PageNumber, paging.PageSize, itemCount);
         }
 
+        public async Task<PagedList<IMeal>> GetMealsForUserAsync(Guid userId, MealFilter filter, Sorting sorting, Paging paging)
+        {
+            var meals = new List<IMeal>();
+            var itemCount = 0;
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var queryBuilder = new StringBuilder();
+                queryBuilder.AppendLine("SELECT meal.*");
+                queryBuilder.AppendLine("FROM \"Meal\" meal");
+                queryBuilder.AppendLine("JOIN \"MealPlanMeal\" mpm ON mpm.\"MealId\" = meal.\"Id\"");
+                queryBuilder.AppendLine("JOIN \"MealPlan\" mp ON mp.\"Id\" = mpm.\"MealPlanId\"");
+                queryBuilder.AppendLine("WHERE mp.\"UserId\" = @UserId AND meal.\"IsActive\" = TRUE");
+
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandText = queryBuilder.ToString();
+
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+
+                   
+                    ApplyFilter(cmd, filter);
+                    ApplySorting(cmd, sorting);
+
+                    itemCount = await GetItemCountAsync(filter);
+                    ApplyPaging(cmd, paging, itemCount);
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            meals.Add(new Meal
+                            {
+                                Id = (Guid)reader["Id"],
+                                Name = (string)reader["Name"],
+                                CreatedBy = (Guid)reader["CreatedBy"],
+                                UpdatedBy = (Guid)reader["UpdatedBy"],
+                                DateCreated = (DateTime)reader["DateCreated"],
+                                DateUpdated = (DateTime)reader["DatedUpdated"],
+                                IsActive = (bool)reader["IsActive"]
+                            });
+                        }
+                    }
+                }
+            }
+
+            return new PagedList<IMeal>(meals, paging.PageNumber, paging.PageSize, itemCount);
+        }
+ 
+
         public async  Task<IMeal> GetByIdAsync(Guid id)
         {
             IMeal meal = null;
@@ -302,5 +355,7 @@ namespace FitnessCentar.Repository
 
             cmd.CommandText = queryBuilder.ToString();
         }
+
+        
     }
 }

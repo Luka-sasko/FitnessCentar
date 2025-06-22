@@ -4,16 +4,19 @@ using FitnessCentar.Model;
 using FitnessCentar.Model.Common;
 using FitnessCentar.Service.Common;
 using FitnessCentar.WebAPI.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 
 namespace FitnessCentar.WebAPI.Controllers
 {
+    [RoutePrefix("api/meal")]
     public class MealController : ApiController
     {
         private readonly IMealService _mealService;
@@ -56,10 +59,26 @@ namespace FitnessCentar.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-        
-        
-        
+
         [HttpGet]
+        [Route("by-user")]
+        public async Task<IHttpActionResult> GetMealsByUser(string searchQuery = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            string sortBy = "Name",
+            string sortOrder = "ASC")
+        {
+            Paging paging = new Paging() { PageNumber = pageNumber, PageSize = pageSize };
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
+            MealFilter mealFilter = new MealFilter() { SearchQuery = searchQuery };
+            var meals = await _mealService.GetMealsForUserAsync(mealFilter, sorting, paging);
+            return Ok(meals);
+        }
+
+
+
+        [HttpGet]
+        [Route("{id:guid}")]
         public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
         {
             try

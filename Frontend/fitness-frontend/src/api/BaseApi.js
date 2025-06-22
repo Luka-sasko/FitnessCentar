@@ -11,14 +11,14 @@ axiosInstance.interceptors.request.use((config) => {
   let token;
 
   try {
-    const user = JSON.parse(userJson);
-    token = user?.token;
+    token = userJson;
   } catch (err) {
     console.warn("❌ Neispravan JSON u localStorage.user");
   }
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.log("Uspješnp");
   }
 
   return config;

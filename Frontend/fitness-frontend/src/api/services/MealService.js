@@ -6,6 +6,7 @@ const MealService = {
   delete: (id) => api.delete("/meal/" + id),
   update: (id, data) => api.put("/meal/" + id, data),
   create: (data) => api.post("/meal", data),
+  getByUser: () => api.get("/meal/by-user"),
 };
 
 export default MealService;

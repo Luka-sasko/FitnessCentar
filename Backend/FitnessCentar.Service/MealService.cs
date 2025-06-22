@@ -23,7 +23,6 @@ namespace FitnessCentar.Service
         public async Task<string> CreateAsync(IMeal newMeal)
         {
             var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
-
             newMeal = FillUserAndDateInfoOnCreate(newMeal, userId);
             return await _mealRepository.CreateAsync(newMeal);
         }
@@ -49,6 +48,12 @@ namespace FitnessCentar.Service
         {
             return await _mealRepository.GetAllAsync(filter, sorting, paging);  
         }
+        public async Task<PagedList<IMeal>> GetMealsForUserAsync(MealFilter filter, Sorting sorting, Paging paging)
+        {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            return await _mealRepository.GetMealsForUserAsync(userId, filter, sorting, paging);
+        }
+
 
         public async Task<IMeal> GetByIdAsync(Guid id)
         {
