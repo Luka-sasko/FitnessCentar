@@ -72,6 +72,8 @@ namespace FitnessCentar.WebAPI.Controllers
             Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
             MealFilter mealFilter = new MealFilter() { SearchQuery = searchQuery };
             var meals = await _mealService.GetMealsForUserAsync(mealFilter, sorting, paging);
+            if (meals == null)
+                return BadRequest("No meals for user");
             return Ok(meals);
         }
 

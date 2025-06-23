@@ -1,31 +1,22 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeObservable, observable, action, runInAction } from "mobx";
+import { BasePagedStore } from "./BasePagedStore";
 import MealService from "../api/services/MealService";
 
-class MealStore {
-  mealList = [];
+class MealStore extends BasePagedStore {
   selectedMeal = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
+  dialogOpen = false;
 
   constructor() {
-    makeAutoObservable(this);
+    super(MealService.getByUser); 
+    makeObservable(this, {
+      selectedMeal: observable,
+      dialogOpen: observable,
+      setDialogOpen: action,
+    });
   }
 
-  async fetchAll(params) {
-    const response = await MealService.getAll(params);
-    runInAction(() => {
-      this.mealList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
-    });
+  setDialogOpen(value) {
+    this.dialogOpen = value;
   }
 
   async fetchById(id) {
@@ -34,15 +25,16 @@ class MealStore {
       this.selectedMeal = response.data;
     });
   }
+
   async fetchByUser() {
     const response = await MealService.getByUser();
     runInAction(() => {
-      this.mealList = response.data;
+      this.items = response.data.Items;
       this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.length,
-        totalCount: response.data.length,
-        totalPages: response.data.TotalPages
+        pageNumber: response.data.PageNumber ?? 1,
+        pageSize: response.data.length ?? 10,
+        totalCount: response.data.length ?? 0,
+        totalPages: response.data.TotalPages ?? 1,
       };
     });
   }

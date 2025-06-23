@@ -10,7 +10,7 @@ const FoodForm = ({ onSubmit, onClose }) => {
     useEffect(() => {
         const fetchMeals = async () => {
             try {
-                const response = await MealService.getAll();
+                const response = await MealService.getByUser();
                 console.log("Meal response:", response.data);
                 setMeals(response.data.Items);
             } catch (error) {

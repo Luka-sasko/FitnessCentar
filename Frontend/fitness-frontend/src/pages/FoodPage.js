@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { foodStore } from "../stores/FoodStore";
 import GenericTable from "../components/Common/GenericTable";
-import FoodForm from "../components/food/FoodForm";
+import FoodForm from "../components/Food/FoodForm.jsx";
 
 const FoodPage = observer(() => {
   useEffect(() => {

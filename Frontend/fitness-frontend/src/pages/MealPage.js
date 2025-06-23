@@ -14,15 +14,7 @@ const MealPage = () => {
     <div>
       <h2>MY MEALS</h2>
       <GenericTable
-        store={{
-          items: mealStore.mealList,
-          sortBy: "",
-          sortOrder: "asc",
-          setSort: () => { },
-          currentPage: 1,
-          totalPages: 1,
-          setCurrentPage: () => { }
-        }}
+        store={mealStore}
 
       />
     </div>
