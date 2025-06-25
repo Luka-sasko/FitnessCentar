@@ -310,7 +310,7 @@ namespace FitnessCentar.Repository
             if (filter.MealId != default)
             {
                 cmd.Parameters.AddWithValue("@MealId", filter.MealId);
-                queryBuilder.AppendLine(" AND food.\"MealId\" >= @MealId");
+                queryBuilder.AppendLine(" AND food.\"MealId\" = @MealId");
             }
 
             if (!string.IsNullOrEmpty(filter.SearchQuery))

@@ -2,40 +2,40 @@ import { makeObservable, observable, runInAction, action } from "mobx";
 import { BasePagedStore } from "./BasePagedStore";
 import FoodService from "../api/services/FoodService";
 
-class FoodStore extends BasePagedStore {
-  selectedFood = null;
+class FoodStore {
+  items = [];
   dialogOpen = false;
+
   constructor() {
-    super(FoodService.getAll);
     makeObservable(this, {
-      selectedFood: observable,
+      items: observable,
       dialogOpen: observable,
-      setDialogOpen: action
+      fetchAll: action,
+      setDialogOpen: action,
+      createFood: action,
     });
   }
-  setDialogOpen(value) {
-    this.dialogOpen = value;
+
+  async fetchAll(params = {}) {
+    try {
+      const response = await FoodService.getAll(params);
+      runInAction(() => {
+        this.items = response.data.Items || [];
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.items = [];
+      });
+    }
   }
-  async fetchById(id) {
-    const response = await FoodService.getById(id);
-    runInAction(() => {
-      this.selectedFood = response.data;
-    });
+
+  setDialogOpen(val) {
+    this.dialogOpen = val;
   }
 
   async createFood(data) {
     await FoodService.create(data);
-    await this.fetchAll();
-  }
-
-  async updateFood(id, data) {
-    await FoodService.update(id, data);
-    await this.fetchAll();
-  }
-
-  async deleteFood(id) {
-    await FoodService.delete(id);
-    await this.fetchAll();
+    // Optionally: refresh list after creation
   }
 }
 

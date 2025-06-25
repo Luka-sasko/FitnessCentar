@@ -134,8 +134,8 @@ namespace FitnessCentar.WebAPI.Controllers
 
             try 
             {
-                string mealCreated = await _mealService.CreateAsync(meal);
-                if(mealCreated != null) { return Request.CreateResponse(HttpStatusCode.Created,mealCreated); }
+                Guid mealCreatedId = await _mealService.CreateAsync(meal);
+                if(mealCreatedId != null) { return Request.CreateResponse(HttpStatusCode.Created, mealCreatedId); }
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
 

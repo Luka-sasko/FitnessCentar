@@ -15,17 +15,16 @@ import WorkoutPlanPage from './WorkoutPlanPage.js';
 import WorkoutPlanExercisePage from './WorkouotPlanExercisePage.js';
 import Navbar from '../components/Common/Navbar.js';
 
-
-
 const IndexRoutePage = () => {
     return (
         <Router>
-            <Navbar/>
+            <Navbar />
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/discounts" element={<DiscountPage />} />
                 <Route path="/exercises" element={<ExercisePage />} />
                 <Route path="/foods" element={<FoodPage />} />
+                <Route path="/food" element={<FoodPage />} /> {/* <-- Add this line */}
                 <Route path="/meals" element={<MealPage />} />
                 <Route path="/mealplans" element={<MealPlanPage />} />
                 <Route path="/mealplanmeals" element={<MealPlanMealPage />} />
@@ -36,7 +35,6 @@ const IndexRoutePage = () => {
                 <Route path="/workoutplans" element={<WorkoutPlanPage />} />
                 <Route path="/workoutplanexercises" element={<WorkoutPlanExercisePage />} />
             </Routes>
-
         </Router>
     );
 };

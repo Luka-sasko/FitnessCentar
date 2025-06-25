@@ -48,6 +48,7 @@ namespace FitnessCentar.Service
 
         public async Task<PagedList<IMealPlanMeal>> GetAllsync(MealPlanMealFilter filter, Sorting sorting, Paging paging)
         {
+            
             return await _mealPlanMealRepository.GetAllAsync(filter, sorting, paging);
         }
 

@@ -7,7 +7,7 @@ class MealStore extends BasePagedStore {
   dialogOpen = false;
 
   constructor() {
-    super(MealService.getByUser); 
+    super(MealService.getByUser);
     makeObservable(this, {
       selectedMeal: observable,
       dialogOpen: observable,

@@ -32,7 +32,302 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* GENERIC TABLE STYLING */
+.generic-table-container {
+  margin-bottom: 32px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px #0001;
+  background: #f8fafc;
+}
+
+.generic-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.05em;
+}
+
+.generic-table th,
+.generic-table td {
+  padding: 12px 18px;
+  text-align: left;
+}
+
+.generic-table th {
+  background: #f3f7fa;
+  color: #2b4f77;
+  font-weight: 700;
+  border-bottom: 2px solid #e0e7ef;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.18s;
+}
+
+.generic-table th:hover {
+  background: #eaf3ff;
+}
+
+.generic-table tr {
+  transition: background 0.15s;
+}
+
+.generic-table tr:hover {
+  background: #f0f7ff;
+}
+
+.generic-table td {
+  border-bottom: 1px solid #e0e7ef;
+}
+
+.generic-table tr:last-child td {
+  border-bottom: none;
+}
+
+.generic-table-pagination {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* MEALPLAN SPECIFIČAN STYLING - override */
+.mealplan-table-wrapper .generic-table-container {
+  background: #f8fafc;
+  box-shadow: 0 4px 24px #4f8cff11;
+}
+
+.mealplan-table-wrapper .generic-table th {
+  background: #eaf3ff;
+  color: #184d8a;
+  border-bottom: 2px solid #4f8cff33;
+}
+
+.mealplan-table-wrapper .generic-table tr.selected,
+.mealplan-table-wrapper .generic-table tr:hover {
+  background: #eaf3ff;
+}
+
+/* Ostali stilovi za meals i foods */
+.meals-container {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-card {
+  background: #f8fafc;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 10px;
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border 0.2s;
+  box-shadow: 0 2px 8px #e0e7ef44;
+  position: relative;
+}
+
+.meal-card.selected {
+  border: 2px solid #4f8cff;
+  background: #eaf3ff;
+  box-shadow: 0 4px 16px #4f8cff22;
+}
+
+.meal-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #223;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meal-description {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #888;
+}
+
+.foods-container {
+  margin-top: 8px;
+  padding-left: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.food-item {
+  background: #fff;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e0e7ef;
+}
+
+.food-item.empty {
+  color: #aaa;
+  font-style: italic;
+  background: none;
+  border: none;
+  padding-left: 0;
+}
+
+.food-name {
+  font-weight: 500;
+  color: #2b4f77;
+}
+
+.food-weight {
+  color: #4f8cff;
+  font-size: 0.97em;
+  margin-left: 4px;
+}
+
+.food-desc {
+  color: #888;
+  font-size: 0.96em;
+  margin-left: 8px;
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(30, 41, 59, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-glass {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 32px #184d8a22;
+  border-radius: 18px;
+  padding: 32px 36px 28px 36px;
+  min-width: 320px;
+  max-width: 95vw;
+  backdrop-filter: blur(8px) saturate(1.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid #e0e7ef;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #4f8cff;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-close:hover {
+  color: #184d8a;
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #184d8a;
+  margin-bottom: 12px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-form label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: 500;
+  color: #223;
+  font-size: 1.05em;
+}
+
+.modal-form input {
+  margin-top: 6px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid #e0e7ef;
+  font-size: 1em;
+  width: 220px;
+  background: #f8fafc;
+  transition: border 0.15s;
+}
+
+.modal-form input:focus {
+  border: 1.5px solid #4f8cff;
+  outline: none;
+}
+
+.modal-error {
+  color: #e03c3c;
+  font-size: 0.98em;
+  margin-top: -8px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  padding: 8px 22px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  background: #4f8cff;
+  color: #fff;
+}
+
+.modal-actions button:disabled {
+  background: #b1d0ff;
+  cursor: not-allowed;
+}
+
+.modal-cancel {
+  background: #e0e7ef;
+  color: #223;
+}
+
+.modal-cancel:hover {
+  background: #c9d7ee;
 }

@@ -16,7 +16,7 @@ namespace FitnessCentar.Repository
     public class MealRepository : IMealRepository
     {
         private readonly string _connectionString = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
-        public async Task<string> CreateAsync(IMeal newMeal)
+        public async Task<Guid> CreateAsync(IMeal newMeal)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
@@ -45,7 +45,7 @@ namespace FitnessCentar.Repository
                     try
                     {
                         cmd.ExecuteNonQuery();
-                        return "Meal created!";
+                        return newMeal.Id;
                     }
                     catch (Exception ex)
                     {

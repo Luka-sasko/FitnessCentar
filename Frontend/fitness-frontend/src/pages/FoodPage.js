@@ -1,17 +1,24 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { useSearchParams } from "react-router-dom";
 import { foodStore } from "../stores/FoodStore";
 import GenericTable from "../components/Common/GenericTable";
-import FoodForm from "../components/Food/FoodForm.jsx";
+import FoodForm from "../components/food/FoodForm";
 
 const FoodPage = observer(() => {
+  const [searchParams] = useSearchParams();
+  const mealId = searchParams.get("mealId");
+
   useEffect(() => {
-    foodStore.fetchAll();
-  }, []);
+    foodStore.fetchAll({
+      mealId: mealId || undefined,
+    });
+  }, [mealId]);
 
   const handleSubmit = async (data) => {
     await foodStore.createFood(data);
     foodStore.setDialogOpen(false);
+    foodStore.fetchAll({ mealId });
   };
 
   return (

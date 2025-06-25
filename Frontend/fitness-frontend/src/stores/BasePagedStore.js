@@ -23,7 +23,7 @@ export class BasePagedStore {
       setCurrentPage: action,
       setItemsPerPage: action,
       setSort: action,
-      
+
       totalPages: computed,
     });
   }
@@ -69,7 +69,7 @@ export class BasePagedStore {
   setSort(col, order) {
     this.sortBy = col;
     this.sortOrder = order;
-    console.log(this.sortBy,this.sortOrder);
+    console.log(this.sortBy, this.sortOrder);
     this.fetchAll();
   }
 

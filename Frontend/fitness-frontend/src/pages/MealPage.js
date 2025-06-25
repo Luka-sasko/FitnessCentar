@@ -15,7 +15,6 @@ const MealPage = () => {
       <h2>MY MEALS</h2>
       <GenericTable
         store={mealStore}
-
       />
     </div>
   );

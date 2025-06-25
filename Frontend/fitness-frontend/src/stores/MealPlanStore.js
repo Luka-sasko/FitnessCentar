@@ -1,32 +1,25 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeObservable, observable, runInAction, action } from "mobx";
+import { BasePagedStore } from "./BasePagedStore";
 import MealPlanService from "../api/services/MealPlanService";
 
-class MealPlanStore {
-  mealPlanList = [];
+class MealPlanStore extends BasePagedStore {
   selectedMealPlan = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
+  dialogOpen = false;
 
   constructor() {
-    makeAutoObservable(this);
-  }
-
-  async fetchAll(params) {
-    const response = await MealPlanService.getAll(params);
-    runInAction(() => {
-      this.mealPlanList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
+    super(MealPlanService.getAll);
+    makeObservable(this, {
+      selectedMealPlan: observable,
+      dialogOpen: observable,
+      setDialogOpen: action
     });
   }
+
+  setDialogOpen(value) {
+    this.dialogOpen = value;
+  }
+
+
 
   async fetchById(id) {
     const response = await MealPlanService.getById(id);

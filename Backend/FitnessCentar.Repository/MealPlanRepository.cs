@@ -262,33 +262,43 @@ namespace FitnessCentar.Repository
                 cmd.CommandText = commandText.ToString();
             }
         }
-
-        private async Task<int> GetItemCountAsync(MealPlanFilter filter)
+        private async Task<int> GetItemCountAsync(MealPlanFilter filter, Guid? userId = null)
         {
             NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
-            using (connection)
+            NpgsqlCommand command = new NpgsqlCommand();
+
+            var queryBuilder = new StringBuilder();
+            queryBuilder.AppendLine("SELECT COUNT(\"Id\") FROM \"MealPlan\" mealPlan");
+            queryBuilder.AppendLine("WHERE mealPlan.\"IsActive\" = TRUE");
+
+            if (userId.HasValue)
             {
-                NpgsqlCommand command = new NpgsqlCommand();
-                command.CommandText = "SELECT COUNT(\"Id\") FROM \"MealPlan\" mealPlan WHERE mealPlan.\"IsActive\" = TRUE";
-                ApplyFilter(command, filter);
-                command.Connection = connection;
-                try
-                {
-                    await connection.OpenAsync();
-                    NpgsqlDataReader reader = await command.ExecuteReaderAsync();
-                    await reader.ReadAsync();
-                    return reader.GetInt32(0);
-                }
-                catch (Exception e)
-                {
-                    return 0;
-                }
-                finally
-                {
-                    await connection.CloseAsync();
-                }
+                queryBuilder.AppendLine("AND mealPlan.\"UserId\" = @UserId");
+                command.Parameters.AddWithValue("@UserId", userId.Value);
+            }
+
+            command.CommandText = queryBuilder.ToString();
+            ApplyFilter(command, filter);
+            command.Connection = connection;
+
+            try
+            {
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+                await reader.ReadAsync();
+                return reader.GetInt32(0);
+            }
+            catch
+            {
+                return 0;
+            }
+            finally
+            {
+                await connection.CloseAsync();
             }
         }
+
+       
 
         private void ApplySorting(NpgsqlCommand cmd, Sorting sorting)
         {

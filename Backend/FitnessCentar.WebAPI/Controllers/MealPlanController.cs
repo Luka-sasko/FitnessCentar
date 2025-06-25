@@ -26,8 +26,9 @@ namespace FitnessCentar.WebAPI.Controllers
         }
 
         [HttpGet]
-       // [Authorize(Roles = "Admin, User")]
-        public async Task<HttpResponseMessage> GetByIdAsync([FromUri] Guid id)
+        [Route("{id:guid}")]
+        // [Authorize(Roles = "Admin, User")]
+        public async Task<HttpResponseMessage> GetByIdAsync(Guid id)
         { 
             var mealPlan = await _mealPlanService.GetByIdAsync(id);
             var mealPlanView = _mapper.Map<MealPlanView>(mealPlan);

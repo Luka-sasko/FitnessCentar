@@ -35,6 +35,7 @@ namespace FitnessCentar.Service
             newMealPlan.DateCreated = DateTime.UtcNow;
             newMealPlan.IsActive= true;
             newMealPlan.Id= Guid.NewGuid();
+            newMealPlan.UserId = userId;
             return newMealPlan;
         }
 
@@ -47,8 +48,12 @@ namespace FitnessCentar.Service
 
         public async Task<PagedList<IMealPlan>> GetAllsync(MealPlanFilter filter, Sorting sorting, Paging paging)
         {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            filter.UserId = userId;
             return await _mealPlanRepository.GetAllAsync(filter, sorting, paging);
         }
+
+
 
         public async Task<IMealPlan> GetByIdAsync(Guid id)
         {
