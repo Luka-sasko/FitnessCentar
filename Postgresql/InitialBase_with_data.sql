@@ -208,3 +208,10 @@ INSERT INTO "WorkoutPlan" ("Id", "Name", "Description", "UserId", "CreatedBy", "
 -- Unos u tablicu 'WorkoutPlanExercise'
 INSERT INTO "WorkoutPlanExercise" ("Id", "ExerciseNumber", "WorkoutPlanId", "ExerciseId", "CreatedBy", "UpdatedBy") VALUES
 ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 1, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '99999999-9999-9999-9999-999999999999', '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111');
+
+
+
+
+
+ALTER TABLE "Exercises"
+ADD COLUMN "UserId" UUID NULL;
