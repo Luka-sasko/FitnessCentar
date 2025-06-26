@@ -67,7 +67,7 @@ const ExercisePage = () => {
           Sets: ex.Sets,
           RestPeriod: ex.RestPeriod
         }))}
-        onDeleteRow={item => openDeleteModal(item.Id)}
+        onDeleteRow={item => openDeleteModal(item)}
       />
 
       <AddExerciseModal
