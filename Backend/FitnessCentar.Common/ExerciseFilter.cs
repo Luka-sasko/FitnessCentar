@@ -9,5 +9,7 @@ namespace FitnessCentar.Common
     public class ExerciseFilter
     {
         public string SearchQuery { get; set; }
+        public Guid? UserId { get; set; }
+
     }
 }

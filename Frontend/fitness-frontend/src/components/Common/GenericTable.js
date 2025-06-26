@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 
-const GenericTable = observer(({ store, onRowClick, headerButton, onDeleteRow }) => {
-    const data = store.items ?? [];
+const GenericTable = observer(({ store, items, onRowClick, headerButton, onDeleteRow }) => {
+    const data = items ?? store?.items ?? [];
 
     if (!data || data.length === 0) return <p>🔍 No data found.</p>;
 
@@ -22,12 +22,14 @@ const GenericTable = observer(({ store, onRowClick, headerButton, onDeleteRow })
     );
 
     const handleSort = (col) => {
-        const newOrder = store.sortOrder.toLowerCase() === "asc" ? "desc" : "asc";
+        if (!store?.setSort) return;
+        const newOrder = store.sortOrder?.toLowerCase() === "asc" ? "desc" : "asc";
         store.setSort(col, newOrder);
     };
 
     const handlePageChange = (newPage) => {
         if (
+            store &&
             newPage >= 1 &&
             newPage <= store.totalPages &&
             newPage !== store.currentPage
@@ -46,15 +48,15 @@ const GenericTable = observer(({ store, onRowClick, headerButton, onDeleteRow })
                                 key={col}
                                 onClick={() => handleSort(col)}
                                 style={{
-                                    cursor: "pointer",
+                                    cursor: store?.setSort ? "pointer" : "default",
                                     userSelect: "none",
                                 }}
                             >
-                                {col}{" "}
-                                {store.sortBy === col
-                                    ? store.sortOrder.toLowerCase() === "asc"
-                                        ? "↑"
-                                        : "↓"
+                                {col}
+                                {store?.sortBy === col
+                                    ? store.sortOrder?.toLowerCase() === "asc"
+                                        ? " ↑"
+                                        : " ↓"
                                     : ""}
                             </th>
                         ))}
@@ -63,9 +65,9 @@ const GenericTable = observer(({ store, onRowClick, headerButton, onDeleteRow })
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item) => (
+                    {data.map((item, idx) => (
                         <tr
-                            key={item.Id}
+                            key={item.Id || idx}
                             onClick={() => onRowClick?.(item)}
                             className={onRowClick ? "clickable" : ""}
                             style={{ cursor: onRowClick ? "pointer" : "default" }}
@@ -95,23 +97,25 @@ const GenericTable = observer(({ store, onRowClick, headerButton, onDeleteRow })
                     ))}
                 </tbody>
             </table>
-            <div className="generic-table-pagination">
-                <button
-                    onClick={() => handlePageChange(store.currentPage - 1)}
-                    disabled={store.currentPage <= 1}
-                >
-                    ⬅️
-                </button>
-                <span>
-                    Page {store.currentPage} / {store.totalPages}
-                </span>
-                <button
-                    onClick={() => handlePageChange(store.currentPage + 1)}
-                    disabled={store.currentPage >= store.totalPages}
-                >
-                    ➡️
-                </button>
-            </div>
+            {store && (
+                <div className="generic-table-pagination">
+                    <button
+                        onClick={() => handlePageChange(store.currentPage - 1)}
+                        disabled={store.currentPage <= 1}
+                    >
+                        ⬅️
+                    </button>
+                    <span>
+                        Page {store.currentPage} / {store.totalPages}
+                    </span>
+                    <button
+                        onClick={() => handlePageChange(store.currentPage + 1)}
+                        disabled={store.currentPage >= store.totalPages}
+                    >
+                        ➡️
+                    </button>
+                </div>
+            )}
         </div>
     );
 });

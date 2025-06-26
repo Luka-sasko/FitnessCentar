@@ -152,45 +152,63 @@ namespace FitnessCentar.Repository
 
         public async Task<string> CreateAsync(IWorkoutPlanExercise newworkoutPlanExercise)
         {
-            using(var connection=new NpgsqlConnection(_connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var queryBuilder=new StringBuilder();
 
-                queryBuilder.AppendLine("INSERT INTO \"WorkoutPlanExercise\" (");
-                queryBuilder.AppendLine(" \"Id\", \"ExerciseNumber\", \"WorkoutPlanId\", \"ExerciseId\",");
-                queryBuilder.AppendLine("    \"CreatedBy\", \"UpdatedBy\", \"DateCreated\", \"DatedUpdated\", \"IsActive\"");
-                queryBuilder.AppendLine(")");
-                queryBuilder.AppendLine("VALUES (");
-                queryBuilder.AppendLine("    @Id, @ExerciseNumber, @WorkoutPlanId, @ExerciseId,");
-                queryBuilder.AppendLine("    @CreatedBy, @UpdatedBy, @DateCreated, @DateUpdated, @IsActive");
-                queryBuilder.AppendLine(")");
-
-                using(var cmd=new NpgsqlCommand(queryBuilder.ToString(), connection))
+                var queryCheck = @"SELECT ""Id"" FROM ""WorkoutPlanExercise""
+                           WHERE ""WorkoutPlanId"" = @WorkoutPlanId
+                             AND ""ExerciseId"" = @ExerciseId
+                             AND ""IsActive"" = FALSE";
+                using (var cmdCheck = new NpgsqlCommand(queryCheck, connection))
                 {
-                    cmd.Parameters.AddWithValue("@Id",newworkoutPlanExercise.Id);
-                    cmd.Parameters.AddWithValue("@ExerciseNumber", newworkoutPlanExercise.Exercisenumber);
-                    cmd.Parameters.AddWithValue("@WorkoutPlanId", newworkoutPlanExercise.WorkoutPlanId);
-                    cmd.Parameters.AddWithValue("@ExerciseId", newworkoutPlanExercise.ExerciseId);
-                    cmd.Parameters.AddWithValue("@CreatedBy", newworkoutPlanExercise.CreatedBy);
-                    cmd.Parameters.AddWithValue("@UpdatedBy", newworkoutPlanExercise.UpdatedBy);
-                    cmd.Parameters.AddWithValue("@DateCreated", newworkoutPlanExercise.DateCreated);
-                    cmd.Parameters.AddWithValue("@DateUpdated", newworkoutPlanExercise.DatedUpdated);
-                    cmd.Parameters.AddWithValue("@IsActive", newworkoutPlanExercise.IsActive);
+                    cmdCheck.Parameters.AddWithValue("@WorkoutPlanId", newworkoutPlanExercise.WorkoutPlanId);
+                    cmdCheck.Parameters.AddWithValue("@ExerciseId", newworkoutPlanExercise.ExerciseId);
+                    var existingId = await cmdCheck.ExecuteScalarAsync();
 
-                    try
+                    if (existingId != null && existingId != DBNull.Value)
                     {
-                        cmd.ExecuteNonQuery();
+                        var queryUpdate = @"UPDATE ""WorkoutPlanExercise""
+                                    SET ""IsActive"" = TRUE,
+                                        ""ExerciseNumber"" = @ExerciseNumber,
+                                        ""UpdatedBy"" = @UpdatedBy,
+                                        ""DatedUpdated"" = @DatedUpdated
+                                    WHERE ""Id"" = @Id";
+                        using (var cmdUpdate = new NpgsqlCommand(queryUpdate, connection))
+                        {
+                            cmdUpdate.Parameters.AddWithValue("@ExerciseNumber", newworkoutPlanExercise.Exercisenumber);
+                            cmdUpdate.Parameters.AddWithValue("@UpdatedBy", newworkoutPlanExercise.UpdatedBy);
+                            cmdUpdate.Parameters.AddWithValue("@DatedUpdated", newworkoutPlanExercise.DatedUpdated);
+                            cmdUpdate.Parameters.AddWithValue("@Id", (Guid)existingId);
+                            await cmdUpdate.ExecuteNonQueryAsync();
+                        }
+                        return "WorkoutPlanExercise reactivated!";
+                    }
+                    else
+                    {
+                       
+                        var queryInsert = @"INSERT INTO ""WorkoutPlanExercise"" 
+                    (""Id"", ""ExerciseNumber"", ""WorkoutPlanId"", ""ExerciseId"", ""CreatedBy"", ""UpdatedBy"", ""DateCreated"", ""DatedUpdated"", ""IsActive"")
+                    VALUES (@Id, @ExerciseNumber, @WorkoutPlanId, @ExerciseId, @CreatedBy, @UpdatedBy, @DateCreated, @DatedUpdated, @IsActive)";
+                        using (var cmdInsert = new NpgsqlCommand(queryInsert, connection))
+                        {
+                            cmdInsert.Parameters.AddWithValue("@Id", newworkoutPlanExercise.Id);
+                            cmdInsert.Parameters.AddWithValue("@ExerciseNumber", newworkoutPlanExercise.Exercisenumber);
+                            cmdInsert.Parameters.AddWithValue("@WorkoutPlanId", newworkoutPlanExercise.WorkoutPlanId);
+                            cmdInsert.Parameters.AddWithValue("@ExerciseId", newworkoutPlanExercise.ExerciseId);
+                            cmdInsert.Parameters.AddWithValue("@CreatedBy", newworkoutPlanExercise.CreatedBy);
+                            cmdInsert.Parameters.AddWithValue("@UpdatedBy", newworkoutPlanExercise.UpdatedBy);
+                            cmdInsert.Parameters.AddWithValue("@DateCreated", newworkoutPlanExercise.DateCreated);
+                            cmdInsert.Parameters.AddWithValue("@DatedUpdated", newworkoutPlanExercise.DatedUpdated);
+                            cmdInsert.Parameters.AddWithValue("@IsActive", newworkoutPlanExercise.IsActive);
+                            await cmdInsert.ExecuteNonQueryAsync();
+                        }
                         return "WorkoutPlanExercise created!";
                     }
-                   catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-                    finally { connection.Close(); }
                 }
             }
         }
+
 
         public async Task<string> UpdateAsync(IWorkoutPlanExercise updatedWorkoutPlanExercise)
         {

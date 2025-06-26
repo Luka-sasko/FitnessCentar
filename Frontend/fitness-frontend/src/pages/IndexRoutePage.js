@@ -24,7 +24,7 @@ const IndexRoutePage = () => {
                 <Route path="/discounts" element={<DiscountPage />} />
                 <Route path="/exercises" element={<ExercisePage />} />
                 <Route path="/foods" element={<FoodPage />} />
-                <Route path="/food" element={<FoodPage />} /> {/* <-- Add this line */}
+                <Route path="/food" element={<FoodPage />} /> { }
                 <Route path="/meals" element={<MealPage />} />
                 <Route path="/mealplans" element={<MealPlanPage />} />
                 <Route path="/mealplanmeals" element={<MealPlanMealPage />} />

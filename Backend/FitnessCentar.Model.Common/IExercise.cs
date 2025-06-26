@@ -19,6 +19,6 @@ namespace FitnessCentar.Model.Common
         DateTime DateCreated { get; set; }
         DateTime DatedUpdated { get; set; }
         bool? IsActive { get; set; }
-
+         Guid? UserId { get; set; }
     }
 }

@@ -331,3 +331,201 @@
 .modal-cancel:hover {
   background: #c9d7ee;
 }
+
+.navbar {
+  display: flex;
+  align-items: center;
+  background: #222;
+  color: #fff;
+  padding: 0 24px;
+  height: 52px;
+}
+
+.navbar-logo {
+  height: 38px;
+  margin-right: 18px;
+  display: block;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  margin: 0 8px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05em;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.navbar a.active,
+.navbar a:hover {
+  background: #333;
+  color: #61dafb;
+}
+
+/* Moderni stil za select i label */
+.exercise-select-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #223;
+  letter-spacing: 0.02em;
+}
+
+.exercise-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #4f8cff;
+  border-radius: 6px;
+  background: #f6f8fa;
+  color: #223;
+  font-size: 1em;
+  outline: none;
+  margin-bottom: 18px;
+  transition: border 0.15s, box-shadow 0.15s;
+}
+
+.exercise-select:focus {
+  border-color: #356ad6;
+  box-shadow: 0 0 0 2px #4f8cff33;
+}
+
+.exercise-select option {
+  background: #fff;
+  color: #223;
+}
+
+/* Modal overlay: poluprozirna pozadina */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(30, 41, 59, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: background 0.18s;
+}
+
+/* Modal staklasti prozor */
+.modal-glass {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 16px;
+  box-shadow: 0 6px 32px #4f8cff22, 0 1.5px 6px #2232;
+  padding: 36px 32px 28px 32px;
+  min-width: 340px;
+  max-width: 98vw;
+  position: relative;
+  animation: modalFadeIn 0.22s cubic-bezier(.4, 1.7, .6, 1) 1;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-32px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Naslov modala */
+.modal-glass h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #223;
+  letter-spacing: 0.01em;
+}
+
+/* Zatvori gumb */
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.16s;
+}
+
+.modal-close:hover {
+  color: #e03c3c;
+}
+
+/* Forme i inputi */
+.modal-glass form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-glass input[type="text"],
+.modal-glass input[type="number"] {
+  padding: 9px 12px;
+  border: 1.5px solid #e0e7ef;
+  border-radius: 6px;
+  font-size: 1em;
+  background: #f6f8fa;
+  color: #223;
+  transition: border 0.17s, box-shadow 0.17s;
+}
+
+.modal-glass input:focus {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 2px #4f8cff22;
+  outline: none;
+}
+
+/* Submit gumb */
+.modal-glass button[type="submit"] {
+  background: #4f8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 0;
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #4f8cff22;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+
+.modal-glass button[type="submit"]:hover {
+  background: #356ad6;
+}
+
+/* Error poruka */
+.modal-error {
+  color: #e03c3c;
+  font-size: 0.97em;
+  margin-bottom: 4px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .modal-glass {
+    padding: 18px 6vw 18px 6vw;
+    min-width: unset;
+  }
+}

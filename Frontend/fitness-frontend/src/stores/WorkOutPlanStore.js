@@ -3,6 +3,9 @@ import WorkoutPlanService from "../api/services/WorkoutPlanService";
 
 class WorkoutPlanStore {
   workoutPlanList = [];
+  get items() {
+    return this.workoutPlanList;
+  }
   selectedWorkoutPlan = null;
   pagedMeta = {
     pageNumber: 1,

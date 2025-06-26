@@ -27,6 +27,8 @@ namespace FitnessCentar.Service
 
         public async Task<PagedList<IWorkoutPlan>> GetAllAsync(WorkoutPlanFilter filter, Sorting sorting, Paging paging)
         {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            filter.UserId = userId;
             return await _workoutPlanRepository.GetAllAsync(filter, sorting, paging);
         }
 
@@ -57,6 +59,7 @@ namespace FitnessCentar.Service
             newWorkoutPlan.DateCreated= DateTime.UtcNow;
             newWorkoutPlan.IsActive = true;
             newWorkoutPlan.Id=Guid.NewGuid();
+            newWorkoutPlan.UserId = userId;
             return newWorkoutPlan;
         }
 
