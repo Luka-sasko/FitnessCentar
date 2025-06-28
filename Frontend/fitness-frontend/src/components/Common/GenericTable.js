@@ -4,8 +4,6 @@ import { observer } from "mobx-react-lite";
 const GenericTable = observer(({ store, items, onRowClick, headerButton, onDeleteRow }) => {
     const data = items ?? store?.items ?? [];
 
-    if (!data || data.length === 0) return <p>🔍 No data found.</p>;
-
     const hiddenColumns = [
         "Id",
         "DateCreated",
@@ -23,7 +21,7 @@ const GenericTable = observer(({ store, items, onRowClick, headerButton, onDelet
 
     const handleSort = (col) => {
         if (!store?.setSort) return;
-        const newOrder = store.sortOrder?.toLowerCase() === "asc" ? "desc" : "asc";
+        const newOrder = store.sortBy === col && store.sortOrder?.toLowerCase() === "asc" ? "desc" : "asc";
         store.setSort(col, newOrder);
     };
 
@@ -37,6 +35,8 @@ const GenericTable = observer(({ store, items, onRowClick, headerButton, onDelet
             store.setCurrentPage(newPage);
         }
     };
+
+    
 
     return (
         <div className="generic-table-container">
@@ -97,23 +97,27 @@ const GenericTable = observer(({ store, items, onRowClick, headerButton, onDelet
                     ))}
                 </tbody>
             </table>
+
             {store && (
                 <div className="generic-table-pagination">
-                    <button
-                        onClick={() => handlePageChange(store.currentPage - 1)}
-                        disabled={store.currentPage <= 1}
-                    >
-                        ⬅️
-                    </button>
-                    <span>
-                        Page {store.currentPage} / {store.totalPages}
-                    </span>
-                    <button
-                        onClick={() => handlePageChange(store.currentPage + 1)}
-                        disabled={store.currentPage >= store.totalPages}
-                    >
-                        ➡️
-                    </button>
+                    
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 5 }}>
+                        <button
+                            onClick={() => handlePageChange(store.currentPage - 1)}
+                            disabled={store.currentPage <= 1}
+                        >
+                            ⬅️
+                        </button>
+                        <span>
+                            Page {store.currentPage} / {store.totalPages}
+                        </span>
+                        <button
+                            onClick={() => handlePageChange(store.currentPage + 1)}
+                            disabled={store.currentPage >= store.totalPages}
+                        >
+                            ➡️
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

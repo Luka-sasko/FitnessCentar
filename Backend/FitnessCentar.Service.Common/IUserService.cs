@@ -10,6 +10,7 @@ namespace FitnessCentar.Service.Common
     public interface IUserService
     {
         Task<IUser> GetUserAsync();
+        Task<Guid> GetUserIdAsync();
         Task<bool> CreateUserAsync(IUser user);
         Task<bool> UpdateUserAsync(IUser user);
         Task<bool> DeleteUserAsync(Guid id);

@@ -38,6 +38,18 @@ namespace FitnessCentar.Service
             }
         }
 
+        public async Task<Guid> GetUserIdAsync()
+        {
+            var userId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            try
+            {
+                return userId;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<bool> CreateUserAsync(Model.Common.IUser user)
         {
             var id=Guid.NewGuid();
@@ -65,6 +77,9 @@ namespace FitnessCentar.Service
                 var userIdString = HttpContext.Current.User.Identity.GetUserId();
 
                 var userId = Guid.Parse(userIdString);
+
+                profile.DatedUpdated = DateTime.UtcNow;
+                profile.UpdatedBy = userId;
 
                 return await _userRepository.UpdateAsync(userId, profile);
             }

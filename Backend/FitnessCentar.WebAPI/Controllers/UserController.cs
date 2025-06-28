@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.UI;
 
 namespace FitnessCentar.WebAPI.Controllers
 {
@@ -16,109 +15,153 @@ namespace FitnessCentar.WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        
+
         public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
-            _mapper= mapper;
+            _mapper = mapper;
         }
 
         [HttpGet]
-       // [Authorize(Roles = "Admin,User")]
+        [Route("api/GetUserId")]
+        // [Authorize(Roles = "Admin,User")]
+        public async Task<HttpResponseMessage> GetUserIdAsync()
+        {
+            try
+            {
+                var userId = await _userService.GetUserIdAsync();
 
+                if (userId == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "User ID not found.");
+
+                return Request.CreateResponse(HttpStatusCode.OK, userId);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        // [Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> GetUserAsync()
         {
             try
             {
-                IUser profile = await _userService.GetUserAsync();
+                var user = await _userService.GetUserAsync();
+                if (user == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "User not found.");
 
-                if (profile == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
-                var profileView = _mapper.Map<UserView>(profile);
-                profileView.Role = await _userService.GetRoleTypeByRoleIdAsync(profile.RoleId);
-                return Request.CreateResponse(HttpStatusCode.OK, profileView);
+                var viewModel = _mapper.Map<UserView>(user);
+                viewModel.Role = await _userService.GetRoleTypeByRoleIdAsync(user.RoleId);
+
+                return Request.CreateResponse(HttpStatusCode.OK, viewModel);
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpPost]
         //[Authorize(Roles = "Admin,User")]
-        public async Task<HttpResponseMessage> CreateUserAsync(UserRegistered userRegistered)
+        public async Task<HttpResponseMessage> CreateUserAsync(UserRegistered model)
         {
-            if(userRegistered==null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-            IUser profile=new User();
-            profile.Firstname = userRegistered.Firstname;
-            profile.Lastname = userRegistered.Lastname;
-            profile.Email = userRegistered.Email;
-            profile.Password = userRegistered.Password;
-            profile.Contact=userRegistered.Contact;
-            profile.Birthdate= userRegistered.Birthdate;
-            profile.Weight=userRegistered.Weight;
-            profile.Height=userRegistered.Height;
-            
+            if (model == null)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid user data.");
+
             try
             {
-                bool created = await _userService.CreateUserAsync(profile);
-                if(created) { return Request.CreateResponse(HttpStatusCode.OK); }
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                var user = _mapper.Map<User>(model);
+                var created = await _userService.CreateUserAsync(user);
+
+                if (created)
+                    return Request.CreateResponse(HttpStatusCode.OK, "User registered successfully.");
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Registration failed.");
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
         [HttpPut]
-        //[Authorize(Roles ="Admin,User")]
+        //[Authorize(Roles = "Admin,User")]
         public async Task<HttpResponseMessage> UpdateUserAsync(UserUpdated updatedProfile)
         {
             if (updatedProfile == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-            IUser profileInBase = await _userService.GetUserAsync();
-            if(profileInBase == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid request body.");
 
-            IUser user = new User
-            {
-                Id = profileInBase.Id, 
-                Firstname = updatedProfile.Firstname,
-                Lastname = updatedProfile.Lastname,
-                Email = updatedProfile.Email,
-                Password = updatedProfile.Password,
-                Contact = updatedProfile.Contact,
-                RoleId = profileInBase.RoleId, 
-                CreatedBy = profileInBase.CreatedBy,
-                DateCreated = profileInBase.DateCreated,
-                UpdatedBy = profileInBase.Id, 
-                DatedUpdated = DateTime.UtcNow,
-            };
+            var user = await _userService.GetUserAsync();
+            if (user == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "User not found.");
+
+            _mapper.Map(updatedProfile, user);
+            user.DatedUpdated = DateTime.UtcNow;
+            user.UpdatedBy = user.Id;
 
             try
             {
-                bool updated = await _userService.UpdateUserAsync(user);
+                var updated = await _userService.UpdateUserAsync(user);
                 if (updated)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK,"User updated!");
-                }
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                    return Request.CreateResponse(HttpStatusCode.OK, "User updated successfully.");
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Update failed.");
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
+        }
 
+        [HttpPut]
+        [Route("updatePassword")]
+        //[Authorize(Roles = "Admin,User")]
+        public async Task<HttpResponseMessage> UpdatePasswordAsync([FromBody] PasswordUpdateModel model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.PasswordNew))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "New password must be provided.");
+
+            var user = await _userService.GetUserAsync();
+            if (user == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "User not found.");
+
+            try
+            {
+                var updated = await _userService.UpdatePasswordAsync(model.PasswordNew, model.PasswordOld);
+                if (updated)
+                    return Request.CreateResponse(HttpStatusCode.OK, "Password updated.");
+
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Incorrect current password.");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("validate")]
+        //[Authorize(Roles = "Admin,User")]
+        public async Task<HttpResponseMessage> ValidateUserAsync([FromBody] UserLoginRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Email and password must be provided.");
+
+            try
+            {
+                var user = await _userService.ValidateUserAsync(request.Email, request.Password);
+
+                if (user == null)
+                    return Request.CreateResponse(HttpStatusCode.Unauthorized, "Invalid email or password.");
+
+                return Request.CreateResponse(HttpStatusCode.OK, "User authorized successfully.");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         [HttpDelete]
@@ -127,82 +170,16 @@ namespace FitnessCentar.WebAPI.Controllers
         {
             try
             {
-                
-                bool deleted = await _userService.DeleteUserAsync(id);
-
+                var deleted = await _userService.DeleteUserAsync(id);
                 if (deleted)
-                {
-                    
                     return Request.CreateResponse(HttpStatusCode.OK, "User has been successfully deactivated.");
-                }
 
-                
                 return Request.CreateResponse(HttpStatusCode.NotFound, "User not found or already deactivated.");
             }
             catch (Exception ex)
             {
-                
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-
-        [HttpPost]
-        //[Authorize(Roles = "Admin,User")]
-        [Route("validate")]
-        public async Task<HttpResponseMessage> ValidateUserAsync([FromBody] UserLoginRequest request)
-        {
-            if (request == null || string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Email and password must be provided.");
-            }
-
-            try
-            {
-                var user = await _userService.ValidateUserAsync(request.Email, request.Password);
-
-                if (user == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.Unauthorized, "Invalid email or password.");
-                }
-
-                return Request.CreateResponse(HttpStatusCode.OK, "User authorized successfully.");
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
-
-        [HttpPut]
-       // [Authorize(Roles = "Admin,User")]
-        [Route("updatePassword")]
-        public async Task<HttpResponseMessage> UpdatePasswordAsync([FromBody] PasswordUpdateModel passwordUpdateModel)
-        {
-            if (passwordUpdateModel == null || string.IsNullOrEmpty(passwordUpdateModel.PasswordNew))
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-
-            IUser profileInBase = await _userService.GetUserAsync();
-            if (profileInBase == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            try
-            {
-                bool updated = await _userService.UpdatePasswordAsync(passwordUpdateModel.PasswordNew, passwordUpdateModel.PasswordOld);
-                if (updated) return Request.CreateResponse(HttpStatusCode.OK, "Password updated");
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex);
-            }
-        }
-
-
     }
 }

@@ -1,10 +1,12 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../assets/icons/barbell.png';
 import '../../styles/Navbar.css';
+import { observer } from 'mobx-react-lite';
+import { userStore } from '../../stores/UserStore';
 
 const links = [
-  { name: 'Home', path: '/' },
+  { name: 'Home', path: '/home' },
   { name: 'Discounts', path: '/discounts' },
   { name: 'Meal Plans', path: '/mealplans' },
   { name: 'Subscriptions', path: '/subscriptions' },
@@ -12,26 +14,53 @@ const links = [
   { name: 'Exercises', path: '/exercises' },
 ];
 
-const Navbar = () => (
-  <nav className="navbar">
-    <img
-      src={logo}
-      alt="App logo"
-      className="navbar-logo"
-    />
-    <ul>
-      {links.map(link => (
-        <li key={link.path}>
-          <NavLink
-            to={link.path}
-            className={({ isActive }) => isActive ? 'active' : ''}
-          >
-            {link.name}
-          </NavLink>
-        </li>
-      ))}
-    </ul>
-  </nav>
-);
+const Navbar = observer(() => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    userStore.logout();
+    navigate("/login");
+  };
+
+  return (
+    <nav className="navbar">
+      <img src={logo} alt="App logo" className="navbar-logo" />
+      <>
+        {userStore.isLoggedIn && (
+          <div className="navbar-left">
+            <ul className="navbar-links">
+              {links.map(link => (
+                <li key={link.path}>
+                  <NavLink
+                    to={link.path}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                  >
+                    {link.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </>
+
+
+      <ul className="navbar-right">
+        {!userStore.isLoggedIn ? (
+          <>
+            <li><NavLink to="/">Home</NavLink></li>
+            <li><NavLink to="/login">Login</NavLink></li>
+            <li><NavLink to="/register">Register</NavLink></li>
+          </>
+        ) : (
+          <>
+            <li><NavLink to="/profile">{userStore.currentUser?.username || 'Profile'}</NavLink></li>
+            <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
+          </>
+        )}
+      </ul>
+    </nav>
+  );
+});
 
 export default Navbar;

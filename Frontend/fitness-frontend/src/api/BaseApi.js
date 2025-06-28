@@ -7,13 +7,11 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const userJson = localStorage.getItem("user");
-  let token;
+  const token = localStorage.getItem("token");
 
   try {
-    token = userJson;
   } catch (err) {
-    console.warn("❌ Neispravan JSON u localStorage.user");
+    console.warn("❌ Neispravan JSON u localStorage.token");
   }
 
   if (token) {

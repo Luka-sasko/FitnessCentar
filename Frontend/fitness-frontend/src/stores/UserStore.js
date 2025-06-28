@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import UserService from "../services/UserService";
+import axios from "axios";
+import UserService from "../api/services/UserService";
 
 class UserStore {
   users = [];
@@ -13,18 +14,59 @@ class UserStore {
     this.currentUser = JSON.parse(localStorage.getItem("user")) || null;
   }
 
-  async login(data) {
+  async login(username, password) {
     try {
-      const response = await UserService.login(data);
+      const response = await axios.post(
+        "https://localhost:44366/Login",
+        new URLSearchParams({
+          grant_type: "password",
+          username,
+          password
+        }),
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }
+      );
+
       runInAction(() => {
-        this.currentUser = response.data;
-        localStorage.setItem("user", JSON.stringify(response.data));
-        localStorage.setItem("token", response.data.token);
+        const token = response.data.access_token;
+        this.currentUser = { username, token };
+        localStorage.setItem("user", JSON.stringify(this.currentUser));
+        localStorage.setItem("token", token);
+        this.error = null;
       });
     } catch (err) {
       runInAction(() => {
-        this.error = err;
+        this.error = "Invalid username or password.";
       });
+      throw err;
+    }
+  }
+  async fetchUserId() {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get("https://localhost:44366/api/GetUserId", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data; // očekuje se da je ovo `userId`
+  } catch (error) {
+    console.error("Failed to fetch user ID:", error);
+    throw error;
+  }
+}
+
+
+  async register(data) {
+    try {
+      const response = await UserService.register(data);
+      return response.data;
+    } catch (err) {
+      runInAction(() => {
+        this.error = "Registration failed.";
+      });
+      throw err;
     }
   }
 
@@ -34,41 +76,13 @@ class UserStore {
     localStorage.removeItem("token");
   }
 
-  async fetchAll() {
-    this.loading = true;
-    try {
-      const response = await UserService.getAll();
-      runInAction(() => {
-        this.users = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
+  async fetch() {
+    return await UserService.get();
   }
 
-  async fetchById(id) {
-    this.loading = true;
+  async update(data) {
     try {
-      const response = await UserService.getById(id);
-      runInAction(() => {
-        this.selectedUser = response.data;
-        this.loading = false;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = err;
-        this.loading = false;
-      });
-    }
-  }
-
-  async update(id, data) {
-    try {
-      await UserService.update(id, data);
+      await UserService.update(data);
       this.fetchAll();
     } catch (err) {
       runInAction(() => {
@@ -86,6 +100,10 @@ class UserStore {
         this.error = err;
       });
     }
+  }
+
+  get isLoggedIn() {
+    return !!this.currentUser;
   }
 }
 
