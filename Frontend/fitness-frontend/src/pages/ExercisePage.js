@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import baseApi from "../api/BaseApi"; // prilagodi putanju prema svom projektu
+import baseApi from "../api/BaseApi"; 
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
-import AddExerciseModal from "../components/exercise/AddExerciseModal"; // vidi ispod
+import AddExerciseModal from "../components/exercise/AddExerciseModal";
 import GenericTable from "../components/Common/GenericTable";
 
 const ExercisePage = () => {

@@ -134,7 +134,10 @@ namespace FitnessCentar.Repository
                                     Height=reader.GetDouble(reader.GetOrdinal("Height")),
                                     Birthdate=reader.GetDateTime(reader.GetOrdinal("Birthdate")),
                                     SubscriptionId=reader.GetGuid(reader.GetOrdinal("SubscriptionId")),
-                                    CoachId=reader.GetGuid(reader.GetOrdinal("CoachId"))
+                                    CoachId = reader.IsDBNull(reader.GetOrdinal("CoachId"))
+                                    ? (Guid?)null
+                                    : reader.GetGuid(reader.GetOrdinal("CoachId"))
+
                                 };
                             }
                         }
@@ -151,36 +154,75 @@ namespace FitnessCentar.Repository
         public async Task<bool> UpdateAsync(Guid id, IUser updatedUser)
         {
             int rowsChanged;
-            IUser profile = await GetByIdAsync(id);
-            if(profile == null)
-            {
+            IUser existingUser = await GetByIdAsync(id);
+            if (existingUser == null)
                 throw new Exception("No user with such ID in the database!");
-            }
-            using (NpgsqlConnection connection = new NpgsqlConnection(_connectionString))
+
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
-                string updateQuery = "UPDATE \"User\" SET";
-                List<String> updateFields = new List<String>();
-                if (!string.IsNullOrEmpty(updatedUser.Firstname)) { updateFields.Add("\"Firstname\" = @Firstname"); }
-                if (!string.IsNullOrEmpty(updatedUser.Lastname)) { updateFields.Add("\"Lastname\"= @Lastname"); }
-                if (!string.IsNullOrEmpty(updatedUser.Email)) { updateFields.Add("\"Email\" = @Email"); }
-                if (!string.IsNullOrEmpty(updatedUser.Contact)) { updateFields.Add("\"Contact\" = @Contact"); }
-                if (!string.IsNullOrEmpty(updatedUser.Password)) { updateFields.Add("\"Password\" = @Password"); }
+                await connection.OpenAsync();
+
+                var updateFields = new List<string>();
+                var command = new NpgsqlCommand();
+                command.Connection = connection;
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Firstname))
+                {
+                    updateFields.Add("\"Firstname\" = @Firstname");
+                    command.Parameters.AddWithValue("@Firstname", updatedUser.Firstname);
+                }
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Lastname))
+                {
+                    updateFields.Add("\"Lastname\" = @Lastname");
+                    command.Parameters.AddWithValue("@Lastname", updatedUser.Lastname);
+                }
+
+                if (!string.IsNullOrWhiteSpace(updatedUser.Contact))
+                {
+                    updateFields.Add("\"Contact\" = @Contact");
+                    command.Parameters.AddWithValue("@Contact", updatedUser.Contact);
+                }
+
+                if (updatedUser.Birthdate > DateTime.MinValue)
+                {
+                    updateFields.Add("\"Birthdate\" = @Birthdate");
+                    command.Parameters.AddWithValue("@Birthdate", updatedUser.Birthdate.Date);
+                }
+
+                if (updatedUser.Weight > 0)
+                {
+                    updateFields.Add("\"Weight\" = @Weight");
+                    command.Parameters.AddWithValue("@Weight", updatedUser.Weight);
+                }
+
+                if (updatedUser.Height > 0)
+                {
+                    updateFields.Add("\"Height\" = @Height");
+                    command.Parameters.AddWithValue("@Height", updatedUser.Height);
+                }
+
+                updateFields.Add("\"UpdatedBy\" = @UpdatedBy");
+                command.Parameters.AddWithValue("@UpdatedBy", updatedUser.UpdatedBy);
+
                 updateFields.Add("\"DatedUpdated\" = @DatedUpdated");
+                command.Parameters.AddWithValue("@DatedUpdated", DateTime.UtcNow);
 
-                
+                string query = $@"
+            UPDATE ""User"" SET {string.Join(", ", updateFields)}
+            WHERE ""Id"" = @Id AND ""IsActive"" = TRUE";
 
-                updateQuery += " " + string.Join(",", updateFields);
-                updateQuery += " WHERE \"Id\" = @Id AND \"IsActive\" = TRUE";
+                command.CommandText = query;
+                command.Parameters.AddWithValue("@Id", id);
 
-                NpgsqlCommand updateCommand = new NpgsqlCommand(updateQuery, connection);
-                AddProfileParameters(updateCommand, id, updatedUser);
-
-                rowsChanged = await updateCommand.ExecuteNonQueryAsync();
+                rowsChanged = await command.ExecuteNonQueryAsync();
             }
-            return rowsChanged != 0;
 
+            return rowsChanged > 0;
         }
+
+
+
 
         public async Task<IUser> ValidateUserAsync(string email, string password)
         {

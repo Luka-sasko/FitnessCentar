@@ -13,5 +13,8 @@ namespace FitnessCentar.WebAPI.Models
         public string Email { get; set; }
         public string Contact { get; set; }
         public string Role { get; set; }
+        public DateTime Birthdate { get; set; }
+        public decimal Weight { get; set; }
+        public decimal Height { get; set; }
     }
 }

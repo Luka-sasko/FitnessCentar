@@ -9,18 +9,20 @@ import MealPlanPage from './MealPlanPage.js';
 import MealPlanMealPage from './MealPlanMealPage.js';
 import SubscriptionPage from './SubscriptionPage.js';
 import UserProfilePage from './UserPage/ProfilePage.js';
-import LoginPage from './UserPage/LoginPage.js';
+import LoginPage from "./UserPage/LoginPage.js";
 import RegisterPage from './UserPage/RegisterPage.js';
 import WorkoutPlanPage from './WorkoutPlanPage.js';
 import WorkoutPlanExercisePage from './WorkouotPlanExercisePage.js';
 import Navbar from '../components/Common/Navbar.js';
+import LandingPage from './LandingPage.js';
 
 const IndexRoutePage = () => {
     return (
         <Router>
             <Navbar />
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/" element={<LandingPage/>} />
+                <Route path="/home" element={<HomePage />} />
                 <Route path="/discounts" element={<DiscountPage />} />
                 <Route path="/exercises" element={<ExercisePage />} />
                 <Route path="/foods" element={<FoodPage />} />
