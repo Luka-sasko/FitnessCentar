@@ -1,7 +1,7 @@
 import api from "../BaseApi";
 
 const MealPlanMealService = {
-  getAll: (params) => api.get("/mealplanmeal",params ),
+  getAll: (params) => api.getAll("/mealplanmeal",params ),
   getById: (id) => api.get("/mealplanmeal/" + id),
   create: (data) => api.post("/mealplanmeal", data),
   update: (id, data) => api.put("/mealplanmeal/" + id, data),

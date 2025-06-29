@@ -57,7 +57,7 @@ namespace FitnessCentar.WebAPI.Controllers
             )
         {
             Paging paging = new Paging() { PageNumber = pageNumber, PageSize = pageSize };
-            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder.ToUpper() };
             MealPlanFilter mealPlanFilter = new MealPlanFilter() { SearchQuery = searchQuery , UserId = userId};
             try 
             {
