@@ -70,7 +70,6 @@ export class BasePagedStore {
   DateStart: "StartDate",
   DateEnd: "EndDate",
   Active: "IsActive",
-  Desc: "Description"
 
 };
 
