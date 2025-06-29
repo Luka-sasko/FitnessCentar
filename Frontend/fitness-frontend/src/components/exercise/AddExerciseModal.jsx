@@ -1,83 +1,131 @@
-import React, { useState } from "react";
-import baseApi from "../../api/BaseApi";
+import React, { useEffect, useState } from "react";
 
-const AddExerciseModal = ({ open, onClose, onAdded }) => {
-    const [form, setForm] = useState({ Name: "", Desc: "", Reps: 0, Sets: 0, RestPeriod: 0 });
-    const [loading, setLoading] = useState(false);
+const AddExerciseModal = ({ open, onClose, initialData = null, onSubmit }) => {
+  const isEditMode = !!initialData;
 
-    const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const [form, setForm] = useState({
+    Name: "",
+    Desc: "",
+    Reps: "",
+    Sets: "",
+    RestPeriod: "",
+  });
 
-    const handleSubmit = async e => {
-        e.preventDefault();
-        setLoading(true);
-        await baseApi.post("/exercise", form);
-        setLoading(false);
-        onAdded?.();
-        onClose();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isEditMode) {
+      setForm({
+        Name: initialData.Name ?? "",
+        Desc: initialData.Desc ?? "",
+        Reps: initialData.Reps ?? "",
+        Sets: initialData.Sets ?? "",
+        RestPeriod: initialData.RestPeriod ?? "",
+      });
+    } else {
+      setForm({
+        Name: "",
+        Desc: "",
+        Reps: "",
+        Sets: "",
+        RestPeriod: "",
+      });
+    }
+  }, [initialData, isEditMode]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const payload = {
+      Name: form.Name,
+      Desc: form.Desc,
+      Reps: parseInt(form.Reps),
+      Sets: parseInt(form.Sets),
+      RestPeriod: parseInt(form.RestPeriod),
     };
 
-    if (!open) return null;
+    await onSubmit(payload);
+    setLoading(false);
+  };
 
-    return (
-        <div className="modal-overlay">
-            <div className="modal-glass">
-                <button className="modal-close" onClick={onClose}>&times;</button>
-                <h3 className="modal-title">ADD EXERCISE</h3>
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 , color: "black"}} className="modal-form">
-                    <label>
-                        NAME:
-                        <input
-                            name="Name"
-                            type="text"
-                            value={form.Name}
-                            onChange={handleChange}
-                            required
-                        />
-                    </label>
-                    <label>
-                        DESCRIPTION:
-                        <input
-                            name="Desc"
-                            type="text"
-                            value={form.Desc}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        REPS:
-                        <input
-                            name="Reps"
-                            type="number"
-                            value={form.Reps}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        SETS:
-                        <input
-                            name="Sets"
-                            type="number"
-                            value={form.Sets}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label>
-                        REST PERIOD:
-                        <input
-                            name="RestPeriod"
-                            type="number"
-                            value={form.RestPeriod}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <button type="submit" disabled={loading}>
-                        {loading ? "ADDING..." : "ADD"}
-                    </button>
-                </form>
+  if (!open) return null;
 
-            </div>
-        </div>
-    );
+  return (
+    <div className="modal-overlay">
+      <div className="modal-glass">
+        <button className="modal-close" onClick={onClose}>&times;</button>
+        <h3 className="modal-title">{isEditMode ? "EDIT EXERCISE" : "ADD EXERCISE"}</h3>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: 10, color: "black" }}
+          className="modal-form"
+        >
+          <label>
+            NAME:
+            <input
+              name="Name"
+              type="text"
+              value={form.Name}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            DESCRIPTION:
+            <input
+              name="Desc"
+              type="text"
+              value={form.Desc}
+              onChange={handleChange}
+            />
+          </label>
+          <label>
+            REPS:
+            <input
+              name="Reps"
+              type="number"
+              value={form.Reps}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            SETS:
+            <input
+              name="Sets"
+              type="number"
+              value={form.Sets}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            REST PERIOD (sec):
+            <input
+              name="RestPeriod"
+              type="number"
+              value={form.RestPeriod}
+              onChange={handleChange}
+            />
+          </label>
+          <div className="modal-actions">
+            <button type="submit" disabled={loading}>
+              {loading ? (isEditMode ? "UPDATING..." : "ADDING...") : isEditMode ? "UPDATE" : "ADD"}
+            </button>
+            <button type="button" className="modal-cancel" onClick={onClose}>
+              CANCEL
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default AddExerciseModal;

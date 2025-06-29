@@ -1,30 +1,19 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeObservable, observable, action, runInAction } from "mobx";
 import ExerciseService from "../api/services/ExerciseService";
+import { BasePagedStore } from "./BasePagedStore";
 
-class ExerciseStore {
-  exerciseList = [];
+class ExerciseStore extends BasePagedStore {
   selectedExercise = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
 
   constructor() {
-    makeAutoObservable(this);
-  }
+    super(ExerciseService.getAll);
 
-  async fetchAll(params) {
-    const response = await ExerciseService.getAll(params);
-    runInAction(() => {
-      this.exerciseList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
+    makeObservable(this, {
+      selectedExercise: observable,
+      fetchById: action,
+      createExercise: action,
+      updateExercise: action,
+      deleteExercise: action,
     });
   }
 
