@@ -10,7 +10,7 @@ namespace FitnessCentar.Model.Common
     {
         Guid Id { get; set; }
         string Name { get; set; }
-        string Desc { get; set; }
+        string Description { get; set; }
         Guid UserId { get; set; }
         Guid CreatedBy { get; set; }
         Guid UpdatedBy { get; set; }

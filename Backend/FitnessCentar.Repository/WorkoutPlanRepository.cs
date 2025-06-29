@@ -48,7 +48,7 @@ namespace FitnessCentar.Repository
                                 {
                                     Id = (Guid)reader["Id"],
                                     Name = (string)reader["Name"],
-                                    Desc= (string)reader["Description"],
+                                    Description= (string)reader["Description"],
                                     UserId= (Guid)reader["UserId"],
                                     CreatedBy = (Guid)reader["CreatedBy"],
                                     UpdatedBy = (Guid)reader["UpdatedBy"],
@@ -90,7 +90,7 @@ namespace FitnessCentar.Repository
                             {
                                 Id = (Guid)reader["Id"],
                                 Name= (string)reader["Name"],
-                                Desc= (string)reader["Description"],
+                                Description= (string)reader["Description"],
                                 UserId = (Guid)reader["UserId"],
                                 CreatedBy = (Guid)reader["CreatedBy"],
                                 UpdatedBy = (Guid)reader["UpdatedBy"],
@@ -170,7 +170,7 @@ namespace FitnessCentar.Repository
                 {
                     cmd.Parameters.AddWithValue("@Id", newworkoutPlan.Id);
                     cmd.Parameters.AddWithValue("@Name", newworkoutPlan.Name);
-                    cmd.Parameters.AddWithValue("@Description",newworkoutPlan.Desc);
+                    cmd.Parameters.AddWithValue("@Description",newworkoutPlan.Description);
                     cmd.Parameters.AddWithValue("@UserId", newworkoutPlan.UserId);
                     cmd.Parameters.AddWithValue("@CreatedBy", newworkoutPlan.CreatedBy);
                     cmd.Parameters.AddWithValue("@UpdatedBy", newworkoutPlan.UpdatedBy);
@@ -217,10 +217,10 @@ namespace FitnessCentar.Repository
                         queryBuilder.AppendLine("    \"UserId\" = @UserId,");
                         cmd.Parameters.AddWithValue("@UserId", updatedWorkoutPlan.UserId);
                     }
-                    if(updatedWorkoutPlan.Desc != null)
+                    if(updatedWorkoutPlan.Description != null)
                     {
                         queryBuilder.AppendLine("   \"Description\" = @Desc,");
-                        cmd.Parameters.AddWithValue("@Desc", updatedWorkoutPlan.Desc);
+                        cmd.Parameters.AddWithValue("@Desc", updatedWorkoutPlan.Description);
                     }
 
                     queryBuilder.AppendLine("    \"UpdatedBy\" = @UpdatedBy,");

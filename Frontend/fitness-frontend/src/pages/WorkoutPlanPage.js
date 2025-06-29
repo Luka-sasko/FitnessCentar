@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { workoutPlanStore } from "../stores/WorkOutPlanStore";
+import { exerciseStore } from "../stores/ExerciseStore";
 import GenericTable from "../components/Common/GenericTable";
 import baseApi from "../api/BaseApi";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
@@ -29,12 +30,10 @@ const WorkoutPlanPage = observer(() => {
   const handleDeleteConfirmed = async () => {
     setDeleteModalOpen(false);
     if (deleteTarget.type === "workoutplan") {
-      await baseApi.delete(`/workoutplan?id=${deleteTarget.id}`);
-      workoutPlanStore.fetchAll();
+      await workoutPlanStore.deleteWorkoutPlan(deleteTarget.id);
       setSelectedPlanExercises([]);
       setCurrentWorkoutPlan(null);
     } else if (deleteTarget.type === "exercise") {
-      console.log(deleteTarget.id);
       await baseApi.delete(`/workoutplanexercise?id=${deleteTarget.id}`);
       if (currentWorkoutPlan) {
         await handleWorkoutPlanClick(currentWorkoutPlan);
@@ -51,14 +50,21 @@ const WorkoutPlanPage = observer(() => {
         pageNumber: 1,
         pageSize: 100,
       });
+
       const planExercises = response.data.Items || [];
 
-      const exerciseRequests = planExercises.map(wpe =>
-        baseApi.get(`/exercise?id=${wpe.ExerciseId}`).then(res => ({
-          ...wpe,
-          Exercise: res.data
-        })).catch(() => wpe)
-      );
+      const exerciseRequests = planExercises.map(async (wpe) => {
+        try {
+          await exerciseStore.fetchById(wpe.ExerciseId);
+          return {
+            ...wpe,
+            Exercise: exerciseStore.selectedExercise,
+          };
+        } catch {
+          return wpe;
+        }
+      });
+
       const planExercisesWithData = await Promise.all(exerciseRequests);
       setSelectedPlanExercises(planExercisesWithData);
     } catch (error) {
@@ -69,7 +75,7 @@ const WorkoutPlanPage = observer(() => {
   const addWorkoutPlanButton = (
     <button
       style={{
-        background: "#000" ,
+        background: "#000",
         color: "#fff",
         border: "none",
         borderRadius: "6px",
@@ -80,8 +86,8 @@ const WorkoutPlanPage = observer(() => {
         boxShadow: "0 2px 8px #4f8cff22",
         transition: "background 0.18s, box-shadow 0.18s",
       }}
-      onMouseOver={e => e.currentTarget.style.background = "#000"}
-      onMouseOut={e => e.currentTarget.style.background = "#000"}
+      onMouseOver={(e) => (e.currentTarget.style.background = "#000")}
+      onMouseOut={(e) => (e.currentTarget.style.background = "#000")}
       onClick={() => setAddModalOpen(true)}
     >
       ➕ ADD WORKOUT PLAN
@@ -96,21 +102,24 @@ const WorkoutPlanPage = observer(() => {
           store={workoutPlanStore}
           onRowClick={handleWorkoutPlanClick}
           headerButton={addWorkoutPlanButton}
-          onDeleteRow={id => openDeleteModal("workoutplan", id)}
+          onDeleteRow={(id) => openDeleteModal("workoutplan", id)}
         />
       </div>
 
       {currentWorkoutPlan && (
         <div>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 12,
-            gap: 16
-          }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 12,
+              gap: 16,
+            }}
+          >
             <h3 style={{ margin: 0 }}>
-              🏋️‍♂️ EXERCISES IN {currentWorkoutPlan.Name ? `"${currentWorkoutPlan.Name}"` : "SELECTED PLAN"}
+              🏋️‍♂️ EXERCISES IN{" "}
+              {currentWorkoutPlan.Name ? `"${currentWorkoutPlan.Name}"` : "SELECTED PLAN"}
             </h3>
             <button
               style={{
@@ -124,7 +133,7 @@ const WorkoutPlanPage = observer(() => {
                 cursor: "pointer",
                 boxShadow: "0 2px 8px #4f8cff22",
                 transition: "background 0.18s, box-shadow 0.18s",
-                marginLeft: 16
+                marginLeft: 16,
               }}
               onClick={() => setAddExerciseModalOpen(true)}
             >
@@ -139,16 +148,15 @@ const WorkoutPlanPage = observer(() => {
             </div>
           ) : (
             <GenericTable
-              items={selectedPlanExercises.map(wpe => ({
+              items={selectedPlanExercises.map((wpe) => ({
                 Id: wpe.Id,
                 Name: wpe.Exercise?.Name ?? "",
                 Desc: wpe.Exercise?.Desc ?? "",
                 Reps: wpe.Exercise?.Reps ?? "",
                 Sets: wpe.Exercise?.Sets ?? "",
-                RestPeriod: wpe.Exercise?.RestPeriod ?? ""
+                RestPeriod: wpe.Exercise?.RestPeriod ?? "",
               }))}
-
-              onDeleteRow={item => { openDeleteModal("exercise", item); }}
+              onDeleteRow={(id) => openDeleteModal("exercise", id)}
             />
           )}
         </div>

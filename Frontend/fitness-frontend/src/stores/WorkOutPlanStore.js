@@ -1,33 +1,18 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeObservable, observable, action, runInAction } from "mobx";
 import WorkoutPlanService from "../api/services/WorkoutPlanService";
+import { BasePagedStore } from "./BasePagedStore";
 
-class WorkoutPlanStore {
-  workoutPlanList = [];
-  get items() {
-    return this.workoutPlanList;
-  }
+class WorkoutPlanStore extends BasePagedStore {
   selectedWorkoutPlan = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
 
   constructor() {
-    makeAutoObservable(this);
-  }
-
-  async fetchAll(params) {
-    const response = await WorkoutPlanService.getAll(params);
-    runInAction(() => {
-      this.workoutPlanList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
+    super(WorkoutPlanService.getAll);
+    makeObservable(this, {
+      selectedWorkoutPlan: observable,
+      fetchById: action,
+      createWorkoutPlan: action,
+      updateWorkoutPlan: action,
+      deleteWorkoutPlan: action,
     });
   }
 

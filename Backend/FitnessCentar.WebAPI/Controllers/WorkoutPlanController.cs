@@ -40,7 +40,7 @@ namespace FitnessCentar.WebAPI.Controllers
             )
         {
             Paging paging = new Paging() {PageNumber=pageNumber,PageSize=pageSize };
-            Sorting sorting= new Sorting() {SortBy=sortBy,SortOrder=sortOrder };
+            Sorting sorting= new Sorting() {SortBy=sortBy,SortOrder=sortOrder.ToUpper() };
             WorkoutPlanFilter workoutPlanFilter = new WorkoutPlanFilter() {SearchQuery=searchQuery,UserId=userId };
 
             try
