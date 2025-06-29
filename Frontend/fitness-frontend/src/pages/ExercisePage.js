@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
-import baseApi from "../api/BaseApi"; 
+import { observer } from "mobx-react-lite";
+import { exerciseStore } from "../stores/ExerciseStore";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
 import AddExerciseModal from "../components/exercise/AddExerciseModal";
 import GenericTable from "../components/Common/GenericTable";
-import '../App.css';
+import "../App.css";
 
-const ExercisePage = () => {
-  const [exercises, setExercises] = useState([]);
+const ExercisePage = observer(() => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [editData, setEditData] = useState(null);
 
   useEffect(() => {
-    fetchExercises();
+    exerciseStore.fetchAll();
   }, []);
 
-  const fetchExercises = async () => {
-    try {
-      const res = await baseApi.getAll("/exercise", { pageSize: 100 });
-      setExercises(res.data.Items || []);
-    } catch (e) {
-      setExercises([]);
-    }
+  const handleAdd = () => {
+    setEditData(null);
+    setAddModalOpen(true);
+  };
+
+  const handleEdit = (exercise) => {
+    setEditData(exercise);
+    setAddModalOpen(true);
   };
 
   const openDeleteModal = (id) => {
@@ -30,52 +32,59 @@ const ExercisePage = () => {
   };
 
   const handleDeleteConfirmed = async () => {
-    await baseApi.delete(`/exercise?id=${deleteId}`);
+    await exerciseStore.deleteExercise(deleteId);
     setDeleteModalOpen(false);
     setDeleteId(null);
-    fetchExercises();
   };
+
+  const addButton = (
+    <button
+      style={{
+        background: "black",
+        color: "white",
+        border: "none",
+        borderRadius: "6px",
+        padding: "8px 20px",
+        fontSize: "1em",
+        fontWeight: 600,
+        cursor: "pointer",
+        boxShadow: "0 2px 8px #4f8cff22",
+        transition: "background 0.18s, box-shadow 0.18s",
+      }}
+      onClick={handleAdd}
+    >
+      ➕ ADD EXERCISE
+    </button>
+  );
 
   return (
     <div style={{ padding: 24, maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
         <h2>All Exercises</h2>
-        <button
-          style={{
-            background: "black",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            padding: "8px 20px",
-            fontSize: "1em",
-            fontWeight: 600,
-            cursor: "pointer",
-            boxShadow: "0 2px 8px #4f8cff22",
-            transition: "background 0.18s, box-shadow 0.18s",
-          }}
-          onClick={() => setAddModalOpen(true)}
-        >
-          ➕ ADD EXERCISE 
-        </button>
+        {addButton}
       </div>
 
       <GenericTable
-        items={exercises.map(ex => ({
-          Id: ex.Id,
-          Name: ex.Name,
-          Desc: ex.Desc,
-          Reps: ex.Reps,
-          Sets: ex.Sets,
-          RestPeriod: ex.RestPeriod
-        }))}
-        onDeleteRow={item => openDeleteModal(item)}
+        store={exerciseStore}
+        onRowClick={handleEdit}
+        onDeleteRow={openDeleteModal}
       />
 
       <AddExerciseModal
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
-        onAdded={fetchExercises}
-      />
+        initialData={editData}
+        onSubmit={async (data) => {
+          if (editData) {
+            await exerciseStore.updateExercise(editData.Id, data);
+          } else {
+            await exerciseStore.createExercise(data);
+          }
+          setAddModalOpen(false);
+          setEditData(null);
+        }}
+      />  
+
 
       <ConfirmDeleteModal
         open={deleteModalOpen}
@@ -85,6 +94,6 @@ const ExercisePage = () => {
       />
     </div>
   );
-};
+});
 
 export default ExercisePage;

@@ -37,9 +37,7 @@ export class BasePagedStore {
         sortOrder: this.sortOrder,
       
       };
-      console.log(params);
       const response = await this.fetchMethod(params);
-      console.log(response)
       runInAction(() => {
         this.items = response.data.Items;
         this.totalCount = response.data.TotalCount;

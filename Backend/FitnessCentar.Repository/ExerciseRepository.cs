@@ -106,53 +106,114 @@ namespace FitnessCentar.Repository
 
         public async Task<PagedList<IExercise>> GetAllExercisesAsync(ExerciseFilter filter, Sorting sorting, Paging paging)
         {
-            using (var connection = new NpgsqlConnection(_connectionString))
+            var exercises = new List<IExercise>();
+            var itemCount = 0;
+
+            if (filter != null)
             {
-                await connection.OpenAsync();
-                var queryBuilder = new StringBuilder();
-                queryBuilder.AppendLine(@"SELECT * FROM ""Exercises"" WHERE ""IsActive"" = TRUE");
-
-                if (filter.UserId.HasValue)
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    queryBuilder.AppendLine("AND (\"UserId\" = @UserId OR \"UserId\" IS NULL)");
-                }
-                if (!string.IsNullOrEmpty(filter.SearchQuery))
-                {
-                    queryBuilder.AppendLine("AND LOWER(\"Name\") LIKE @SearchQuery");
-                }
+                    await connection.OpenAsync();
 
-                // TODO: Dodaj sortiranje i paginaciju
+                    var queryBuilder = new StringBuilder();
+                    queryBuilder.AppendLine(@"SELECT ex.* FROM ""Exercises"" ex");
+                    queryBuilder.AppendLine(@"WHERE ex.""IsActive"" = TRUE");
 
-                using (var cmd = new NpgsqlCommand(queryBuilder.ToString(), connection))
-                {
-                    if (filter.UserId.HasValue)
-                        cmd.Parameters.AddWithValue("@UserId", filter.UserId.Value);
-                    if (!string.IsNullOrEmpty(filter.SearchQuery))
-                        cmd.Parameters.AddWithValue("@SearchQuery", "%" + filter.SearchQuery.ToLower() + "%");
-
-                    var reader = await cmd.ExecuteReaderAsync();
-                    var exercises = new List<IExercise>();
-                    while (await reader.ReadAsync())
+                    using (var cmd = new NpgsqlCommand())
                     {
-                        exercises.Add(new Exercise
+                        cmd.Connection = connection;
+                        cmd.CommandText = queryBuilder.ToString();
+
+                        ApplyFilter(cmd, filter);
+                        ApplySorting(cmd, sorting);
+
+                        itemCount = await GetItemCountAsync(filter, connection);
+                        ApplyPaging(cmd, paging, itemCount);
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
                         {
-                            Id = (Guid)reader["Id"],
-                            Name = reader["Name"].ToString(),
-                            Desc = reader["Desc"].ToString(),
-                            Reps = (int)reader["Reps"],
-                            Sets = (int)reader["Sets"],
-                            RestPeriod = (int)reader["RestPeriod"],
-                            CreatedBy = (Guid)reader["CreatedBy"],
-                            UpdatedBy = (Guid)reader["UpdatedBy"],
-                            DateCreated = (DateTime)reader["DateCreated"],
-                            DatedUpdated = (DateTime)reader["DatedUpdated"],
-                            IsActive = (bool)reader["IsActive"],
-                            UserId = (Guid)reader["UserId"]
-                        });
+                            while (await reader.ReadAsync())
+                            {
+                                exercises.Add(new Exercise
+                                {
+                                    Id = (Guid)reader["Id"],
+                                    Name = reader["Name"].ToString(),
+                                    Desc = reader["Desc"].ToString(),
+                                    Reps = (int)reader["Reps"],
+                                    Sets = (int)reader["Sets"],
+                                    RestPeriod = (int)reader["RestPeriod"],
+                                    CreatedBy = (Guid)reader["CreatedBy"],
+                                    UpdatedBy = (Guid)reader["UpdatedBy"],
+                                    DateCreated = (DateTime)reader["DateCreated"],
+                                    DatedUpdated = (DateTime)reader["DatedUpdated"],
+                                    IsActive = (bool)reader["IsActive"],
+                                    UserId = (Guid)reader["UserId"]
+                                });
+                            }
+                        }
                     }
-                    // TODO: Implement pagination logic here
-                    return new PagedList<IExercise>(exercises, 1, exercises.Count, exercises.Count);
                 }
+            }
+
+            return new PagedList<IExercise>(exercises, paging.PageNumber, paging.PageSize, itemCount);
+        }
+
+        private async Task<int> GetItemCountAsync(ExerciseFilter filter, NpgsqlConnection connection)
+        {
+            var query = new StringBuilder();
+            query.AppendLine(@"SELECT COUNT(*) FROM ""Exercises"" ex");
+            query.AppendLine(@"WHERE ex.""IsActive"" = TRUE");
+
+            using (var cmd = new NpgsqlCommand())
+            {
+                cmd.Connection = connection;
+                cmd.CommandText = query.ToString();
+
+                ApplyFilter(cmd, filter);
+
+                var count = await cmd.ExecuteScalarAsync();
+                return Convert.ToInt32(count);
+            }
+        }
+
+        private void ApplyFilter(NpgsqlCommand cmd, ExerciseFilter filter)
+        {
+            if (filter.UserId.HasValue)
+            {
+                cmd.CommandText += " AND (\"UserId\" = @UserId OR \"UserId\" IS NULL)";
+                cmd.Parameters.AddWithValue("@UserId", filter.UserId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchQuery))
+            {
+                cmd.CommandText += " AND LOWER(\"Name\") LIKE @SearchQuery";
+                cmd.Parameters.AddWithValue("@SearchQuery", "%" + filter.SearchQuery.ToLower() + "%");
+            }
+        }
+
+
+        private void ApplySorting(NpgsqlCommand cmd, Sorting sorting)
+        {
+            StringBuilder commandText = new StringBuilder(cmd.CommandText);
+            commandText.Append(" ORDER BY \"");
+            commandText.Append(sorting.SortBy).Append("\" ");
+            commandText.Append(sorting.SortOrder == "ASC" ? "ASC" : "DESC");
+            cmd.CommandText = commandText.ToString();
+        }
+
+        private void ApplyPaging(NpgsqlCommand cmd, Paging paging, int itemCount)
+        {
+            StringBuilder commandText = new StringBuilder(cmd.CommandText);
+            int currentItem = (paging.PageNumber - 1) * paging.PageSize;
+            if (currentItem >= 0 && currentItem < itemCount)
+            {
+                commandText.Append(" LIMIT ").Append(paging.PageSize).Append(" OFFSET ").Append(currentItem);
+                cmd.CommandText = commandText.ToString();
+            }
+            else
+            {
+                commandText.Append(" LIMIT 10");
+                cmd.CommandText = commandText.ToString();
             }
         }
 

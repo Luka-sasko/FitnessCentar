@@ -1,7 +1,7 @@
 import api from "../BaseApi";
 
 const ExerciseService = {
-  getAll: (params) => api.get("/exercise", { params }),
+  getAll: (params) => api.getAll("/exercise",  params ),
   getById: (id) => api.get("/exercise/" + id),
   create: (data) => api.post("/exercise", data),
   update: (id, data) => api.put("/exercise/" + id, data),

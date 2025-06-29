@@ -33,12 +33,9 @@ namespace FitnessCentar.WebAPI.Controllers
             [FromUri] string searchQuery = null)
         {
             Paging paging = new Paging() { PageNumber = pageNumber, PageSize = pageSize };
-            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder.ToUpper() };
             ExerciseFilter filter = new ExerciseFilter() { SearchQuery = searchQuery };
 
-            // Dodaj UserId u filter
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            filter.UserId = userId;
 
             try
             {
