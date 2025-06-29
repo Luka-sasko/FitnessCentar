@@ -19,10 +19,10 @@ const LandingPage = () => {
                 <section className="features-section">
                     <h2>App Features</h2>
                     <ul>
-                        <li>✅ View and track meal plans</li>
-                        <li>✅ Create and manage workout plans</li>
-                        <li>✅ Log your weight and height</li>
-                        <li>✅ Connect with a personal coach</li>
+                        <li>✔ View and track meal plans</li>
+                        <li>✔ Create and manage workout plans</li>
+                        <li>✔ Log your weight and height</li>
+                        <li>✔ Connect with a personal coach</li>
                     </ul>
                 </section>
                 <section className="gallery-section">

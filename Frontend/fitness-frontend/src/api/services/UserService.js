@@ -5,6 +5,7 @@ const UserService = {
   get: () => baseApi.get('/user'),
   update: (data) => baseApi.put(`/user`, data),
   delete: (id) => baseApi.delete(`/user/${id}`),
+  resetPassword: (data) => baseApi.updatePassword('/updatePassword',  data)
 };
 
 export default UserService;

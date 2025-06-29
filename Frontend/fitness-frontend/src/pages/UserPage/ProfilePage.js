@@ -1,99 +1,103 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { userStore } from "../../stores/UserStore";
+import EditProfileModal from "../../components/User/EditProfileModal.js";
+import ResetPasswordModal from "../../components/User/ResetPasswordModal";
+
 import "../../styles/auth.css";
 
 const ProfilePage = observer(() => {
-  const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    contact: "",
-    birthdate: "",
-    weight: 0,
-    height: 0
-  });
-
-  const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await userStore.fetch();
-        const user = response.data;
-
-        setForm({
-          firstname: user.Firstname || "",
-          lastname: user.Lastname || "",
-          contact: user.Contact || "",
-          birthdate: user.Birthdate?.split("T")[0] || "", 
-          weight: user.Weight || 0,
-          height: user.Height || 0
-        });
-      } catch (error) {
-        setError("Failed to fetch user profile.");
+        setUser(response.data);
+      } catch {
+        setError("❌ Failed to fetch user profile.");
       }
     };
 
     fetchData();
   }, []);
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    setError("");
-
-    try {
-      await userStore.update(form);
-      setMessage(" ✔️ Profile updated successfully.");
-      await userStore.fetch();
-    } catch (err) {
-      setError(" ❌ Failed to update profile.");
-    }
-  };
+  if (!user) return <div className="profile-page">Loading...</div>;
 
   return (
-    <div className="auth-form">
-      <h2>Edit Profile</h2>
-      {message && <div className="success">{message}</div>}
-      {error && <div className="error">{error}</div>}
+    <div className="profile-wrapper">
+      <h2 className="profile-title">User Profile</h2>
 
-      <form onSubmit={handleSubmit} className="auth-form-inner">
-        <label>Firstname:
-          <input name="firstname" value={form.firstname} onChange={handleChange} required />
-        </label>
+      <table className="profile-table">
+        <tbody>
+          <tr>
+            <th>Firstname:</th>
+            <td>{user.Firstname}</td>
+          </tr>
+          <tr>
+            <th>Lastname:</th>
+            <td>{user.Lastname}</td>
+          </tr>
+          <tr>
+            <th>Contact:</th>
+            <td>{user.Contact}</td>
+          </tr>
+          <tr>
+            <th>Birthdate:</th>
+            <td>{user.Birthdate?.split("T")[0]}</td>
+          </tr>
+          <tr>
+            <th>Weight:</th>
+            <td>{user.Weight} kg</td>
+          </tr>
+          <tr>
+            <th>Height:</th>
+            <td>{user.Height} cm</td>
+          </tr>
+        </tbody>
+      </table>
 
-        <label>Lastname:
-          <input name="lastname" value={form.lastname} onChange={handleChange} required />
-        </label>
+      <div className="edit-btn-wrapper">
+        <button onClick={() => setShowModal(true)} className="edit-btn">
+          Edit Profile
+        </button>
 
-        <label>Contact:
-          <input name="contact" value={form.contact} onChange={handleChange} />
-        </label>
+        <button onClick={() => setShowPasswordModal(true)} className="edit-btn reset-btn">
+          Reset Password
+        </button>
+      </div>
 
-        <label>Birthday:
-          <input name="birthdate" type="date" value={form.birthdate} onChange={handleChange} />
-        </label>
 
-        <label>Weight (kg):
-          <input name="weight" type="number" step="0.1" value={form.weight} onChange={handleChange} />
-        </label>
+      {showModal && (
+        <EditProfileModal
+          user={user}
+          onClose={() => setShowModal(false)}
+          onUpdate={async () => {
+            const res = await userStore.fetch();
+            setUser(res.data);
+          }}
+        />
+      )}
 
-        <label>Height (cm):
-          <input name="height" type="number" value={form.height} onChange={handleChange} />
-        </label>
+      {showPasswordModal && (
+        <ResetPasswordModal
+          onClose={() => setShowPasswordModal(false)}
+          onSubmit={async (form) => {
+            await userStore.updatePassword({
+              PasswordOld: form.passwordOld,
+              PasswordNew: form.passwordNew
+            });
+          }}
+        />
+      )}
 
-        <button type="submit">Save Changes</button>
-      </form>
+
     </div>
   );
+
 });
 
 export default ProfilePage;

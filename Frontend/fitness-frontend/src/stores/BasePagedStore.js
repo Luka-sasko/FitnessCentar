@@ -35,14 +35,17 @@ export class BasePagedStore {
         pageSize: this.itemsPerPage,
         sortBy: this.sortBy,
         sortOrder: this.sortOrder,
+
       };
       console.log(params);
+
       const response = await this.fetchMethod(params);
+      console.log("Response from backend:", response.data, params);
+
 
       runInAction(() => {
         this.items = response.data.Items;
         this.totalCount = response.data.TotalCount;
-
         this.currentPage = response.data.PageNumber;
         this.itemsPerPage = response.data.PageSize;
       });
@@ -56,9 +59,11 @@ export class BasePagedStore {
   }
 
   setCurrentPage(page) {
+    console.log("⬅️ setCurrentPage called with:", page); 
     this.currentPage = page;
     this.fetchAll();
   }
+
 
   setItemsPerPage(count) {
     this.itemsPerPage = count;

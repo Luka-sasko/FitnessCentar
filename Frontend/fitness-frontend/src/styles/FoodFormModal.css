@@ -85,7 +85,7 @@
 }
 
 .modal-form input:focus {
-    border: 1.5px solid #4f8cff;
+    border: 1.5px solid #021029;
     outline: none;
 }
 
@@ -112,7 +112,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
-    background: #4f8cff;
+    background: #000000;
     color: #fff;
 }
 

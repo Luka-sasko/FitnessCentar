@@ -25,32 +25,34 @@ const LoginPage = observer(() => {
   };
 
   return (
-    <div className="auth-form">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="auth-form-inner">
-        <label>
-          Email:
-          <input
-            name="username"
-            type="email"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        {error && <div className="error">{error}</div>}
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-page">
+      <div className="auth-form">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit} className="auth-form-inner">
+          <label>
+            Email:
+            <input
+              name="username"
+              type="email"
+              value={form.username}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Password:
+            <input
+              name="password"
+              type="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          {error && <div className="error">{error}</div>}
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
   );
 });

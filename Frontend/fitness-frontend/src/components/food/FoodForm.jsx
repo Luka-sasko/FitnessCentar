@@ -11,7 +11,6 @@ const FoodForm = ({ onSubmit, onClose }) => {
         const fetchMeals = async () => {
             try {
                 const response = await MealService.getByUser();
-                console.log("Meal response:", response.data);
                 setMeals(response.data.Items);
             } catch (error) {
                 console.error("Failed to fetch meals", error);
@@ -32,132 +31,95 @@ const FoodForm = ({ onSubmit, onClose }) => {
         setMealId("");
     };
 
-    const formContainerStyle = {
-        background: "#ffffff",
-        padding: "24px",
-        borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        marginTop: "20px",
-        maxWidth: "400px",
-        marginLeft: "auto",
-        marginRight: "auto",
-    };
-
-    const formStyle = {
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-    };
-
-    const inputGroupStyle = {
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-    };
-
-    const labelStyle = {
-        fontSize: "14px",
-        fontWeight: "600",
-        color: "#333",
-    };
-
-    const inputStyle = {
-        padding: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        fontSize: "14px",
-        transition: "border-color 0.3s ease",
-    };
-
-    const selectStyle = {
-        ...inputStyle,
-        appearance: "none",
-        background: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%23333'><path d='M0 3l5 5 5-5H0z'/></svg>") no-repeat right 10px center`,
-        paddingRight: "30px",
-    };
-
-    const buttonGroupStyle = {
-        display: "flex",
-        gap: "12px",
-    };
-
-    const buttonStyle = {
-        padding: "10px 16px",
-        border: "none",
-        borderRadius: "4px",
-        fontSize: "14px",
-        fontWeight: "600",
-        cursor: "pointer",
-        transition: "background-color 0.3s ease, transform 0.2s ease",
-    };
-
-    const submitButtonStyle = {
-        ...buttonStyle,
-        backgroundColor: "#28a745",
-        color: "#ffffff",
-    };
-
-    const cancelButtonStyle = {
-        ...buttonStyle,
-        backgroundColor: "#dc3545",
-        color: "#ffffff",
-    };
-
     return (
-        <div style={formContainerStyle}>
-            <h3 style={{ marginBottom: "16px", fontSize: "18px", color: "#333" }}>Dodaj hranu</h3>
-            <form onSubmit={handleSubmit} style={formStyle}>
-                <div style={inputGroupStyle}>
-                    <label style={labelStyle}>Naziv:</label>
+        <div style={{
+            background: "#fff",
+            padding: "24px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+            marginTop: "20px",
+            maxWidth: "500px",
+            marginInline: "auto"
+        }}>
+            <h3 style={{ fontSize: "20px", color: "#000", marginBottom: "16px" }}>Add Food</h3>
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <label style={{ fontWeight: 600, color: "#000" }}>
+                    Name:
                     <input
+                        type="text"
+                        required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        required
-                        style={inputStyle}
-                        onFocus={(e) => (e.target.style.borderColor = "#007bff")}
-                        onBlur={(e) => (e.target.style.borderColor = "#ccc")}
+                        style={{
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "6px"
+                        }}
                     />
-                </div>
-                <div style={inputGroupStyle}>
-                    <label style={labelStyle}>Količina (g):</label>
+                </label>
+                <label style={{ fontWeight: 600, color: "#000" }}>
+                    Weight (g):
                     <input
                         type="number"
+                        required
                         value={weight}
                         onChange={(e) => setWeight(e.target.value)}
-                        required
-                        style={inputStyle}
-                        onFocus={(e) => (e.target.style.borderColor = "#007bff")}
-                        onBlur={(e) => (e.target.style.borderColor = "#ccc")}
+                        style={{
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "6px"
+                        }}
                     />
-                </div>
-                <div style={inputGroupStyle}>
-                    <label style={labelStyle}>Meal:</label>
+                </label>
+                <label style={{ fontWeight: 600, color: "#000" }}>
+                    Meal:
                     <select
+                        required
                         value={mealId}
                         onChange={(e) => setMealId(e.target.value)}
-                        required
-                        style={selectStyle}
-                        onFocus={(e) => (e.target.style.borderColor = "#007bff")}
-                        onBlur={(e) => (e.target.style.borderColor = "#ccc")}
+                        style={{
+                            padding: "10px",
+                            border: "1px solid #ccc",
+                            borderRadius: "6px"
+                        }}
                     >
-                        <option value="">-- Odaberi obrok --</option>
-                        {meals.map((meal) => (
-                            <option key={meal.Id} value={meal.Id}>
-                                {meal.Name}
-                            </option>
+                        <option value="">-- Select Meal --</option>
+                        {meals.map(meal => (
+                            <option key={meal.Id} value={meal.Id}>{meal.Name}</option>
                         ))}
                     </select>
-                </div>
-                <div style={buttonGroupStyle}>
-                    <button type="submit" style={submitButtonStyle}>
-                        ✅ Spremi
+                </label>
+                <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+                    <button
+                        type="submit"
+                        style={{
+                            background: "#000",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "6px",
+                            padding: "10px 16px",
+                            cursor: "pointer"
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = "#333"}
+                        onMouseOut={(e) => e.currentTarget.style.background = "#000"}
+                    >
+                        ✅ Save
                     </button>
                     <button
                         type="button"
                         onClick={onClose}
-                        style={cancelButtonStyle}
+                        style={{
+                            background: "#000",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "6px",
+                            padding: "10px 16px",
+                            cursor: "pointer"
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.background = "#333"}
+                        onMouseOut={(e) => e.currentTarget.style.background = "#000"}
                     >
-                        ❌ Odustani
+                        ❌ Cancel
                     </button>
                 </div>
             </form>

@@ -22,8 +22,8 @@ const AddExerciseModal = ({ open, onClose, onAdded }) => {
         <div className="modal-overlay">
             <div className="modal-glass">
                 <button className="modal-close" onClick={onClose}>&times;</button>
-                <h3>ADD EXERCISE</h3>
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <h3 className="modal-title">ADD EXERCISE</h3>
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 10 , color: "black"}} className="modal-form">
                     <label>
                         NAME:
                         <input

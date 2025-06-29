@@ -69,7 +69,7 @@ const WorkoutPlanPage = observer(() => {
   const addWorkoutPlanButton = (
     <button
       style={{
-        background: "#4f8cff",
+        background: "#000" ,
         color: "#fff",
         border: "none",
         borderRadius: "6px",
@@ -80,8 +80,8 @@ const WorkoutPlanPage = observer(() => {
         boxShadow: "0 2px 8px #4f8cff22",
         transition: "background 0.18s, box-shadow 0.18s",
       }}
-      onMouseOver={e => e.currentTarget.style.background = "#356ad6"}
-      onMouseOut={e => e.currentTarget.style.background = "#4f8cff"}
+      onMouseOver={e => e.currentTarget.style.background = "#000"}
+      onMouseOut={e => e.currentTarget.style.background = "#000"}
       onClick={() => setAddModalOpen(true)}
     >
       ➕ ADD WORKOUT PLAN
@@ -114,7 +114,7 @@ const WorkoutPlanPage = observer(() => {
             </h3>
             <button
               style={{
-                background: "#4f8cff",
+                background: "#000",
                 color: "#fff",
                 border: "none",
                 borderRadius: "6px",

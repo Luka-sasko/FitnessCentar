@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { toJS } from "mobx";
 import { workoutPlanExerciseStore } from "../stores/WorkoutPlanExerciseStore";
 
+
 const WorkoutPlanExercisePage = () => {
   useEffect(() => {
     const fetchData = async () => {

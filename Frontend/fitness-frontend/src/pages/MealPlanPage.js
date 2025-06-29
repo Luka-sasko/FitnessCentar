@@ -133,37 +133,38 @@ const MealPlanPage = observer(() => {
   const addMealPlanButton = (
     <button
       style={{
-        background: "#4f8cff",
+        background: "#000",
         color: "#fff",
-        border: "none",
+        border: "1px solid #000",
         borderRadius: "6px",
         padding: "8px 20px",
         fontSize: "1em",
         fontWeight: 600,
         cursor: "pointer",
-        boxShadow: "0 2px 8px #4f8cff22",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
         transition: "background 0.18s, box-shadow 0.18s",
       }}
-      onMouseOver={e => e.currentTarget.style.background = "#356ad6"}
-      onMouseOut={e => e.currentTarget.style.background = "#4f8cff"}
+      onMouseOver={e => e.currentTarget.style.background = "#444"}
+      onMouseOut={e => e.currentTarget.style.background = "#000"}
       onClick={() => setAddModalOpen(true)}
     >
       ➕ ADD MEAL PLAN
     </button>
+
   );
 
   const addMealButton = (
     <button
       style={{
-        background: "#4f8cff",
+        background: "#000",
         color: "#fff",
-        border: "none",
+        border: "1px solid #000",
         borderRadius: "6px",
         padding: "8px 20px",
         fontSize: "1em",
         fontWeight: 600,
         cursor: "pointer",
-        boxShadow: "0 2px 8px #4f8cff22",
+        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
         transition: "background 0.18s, box-shadow 0.18s",
         marginLeft: 16
       }}
@@ -238,7 +239,7 @@ const MealPlanPage = observer(() => {
                         style={{
                           marginTop: 8,
                           marginBottom: 8,
-                          background: "#4f8cff",
+                          background: "black",
                           color: "#fff",
                           border: "none",
                           borderRadius: "6px",

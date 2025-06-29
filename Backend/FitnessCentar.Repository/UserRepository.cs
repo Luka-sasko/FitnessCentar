@@ -317,6 +317,7 @@ namespace FitnessCentar.Repository
             byte[] salt = GenerateSalt();
             string hashedPassword = HashPassword(passwordNew, salt);
             IUser currUser = await ValidateUserByPasswordAsync(id, passwordOld);
+            if (currUser == null) { return false; }
             string oldPassword = currUser.Password;
             if (hashedPassword == oldPassword)
             {

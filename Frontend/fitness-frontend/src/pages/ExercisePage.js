@@ -3,6 +3,7 @@ import baseApi from "../api/BaseApi";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
 import AddExerciseModal from "../components/exercise/AddExerciseModal";
 import GenericTable from "../components/Common/GenericTable";
+import '../App.css';
 
 const ExercisePage = () => {
   const [exercises, setExercises] = useState([]);
@@ -41,8 +42,8 @@ const ExercisePage = () => {
         <h2>All Exercises</h2>
         <button
           style={{
-            background: "#4f8cff",
-            color: "#fff",
+            background: "black",
+            color: "white",
             border: "none",
             borderRadius: "6px",
             padding: "8px 20px",
@@ -54,7 +55,7 @@ const ExercisePage = () => {
           }}
           onClick={() => setAddModalOpen(true)}
         >
-          ➕ ADD EXERCISE
+          ➕ ADD EXERCISE 
         </button>
       </div>
 

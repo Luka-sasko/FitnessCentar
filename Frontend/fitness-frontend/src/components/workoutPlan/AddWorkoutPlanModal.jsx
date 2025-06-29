@@ -29,7 +29,7 @@ const AddWorkoutPlanModal = ({ open, onClose, onAdded }) => {
         <div className="modal-overlay">
             <div className="modal-glass">
                 <button className="modal-close" onClick={onClose}>&times;</button>
-                <h3 className="modal-title">ADD WORKOUT PLAN</h3>
+                <h3 className="modal-title">ADD WORKOUT PLAN </h3>
                 <form onSubmit={handleSubmit} className="modal-form">
                     <label>
                         NAME:

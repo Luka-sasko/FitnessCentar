@@ -37,6 +37,21 @@
     transform: rotate(360deg);
   }
 }
+/* Omogući scroll na svim stranicama */
+html, body, #root {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Ograniči root wrapper (ako koristiš layout komponente) */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #fff;
+}
+
 
 /* GENERIC TABLE STYLING */
 .generic-table-container {
@@ -94,19 +109,19 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  justify-content: flex-end;
+  justify-content: center
 }
 
 /* MEALPLAN SPECIFIČAN STYLING - override */
 .mealplan-table-wrapper .generic-table-container {
   background: #f8fafc;
-  box-shadow: 0 4px 24px #4f8cff11;
+  box-shadow: 0 4px 24px #00000011;
 }
 
 .mealplan-table-wrapper .generic-table th {
   background: #eaf3ff;
-  color: #184d8a;
-  border-bottom: 2px solid #4f8cff33;
+  color: #000;
+  border-bottom: 2px solid #00000033;
 }
 
 .mealplan-table-wrapper .generic-table tr.selected,
@@ -131,10 +146,11 @@
   transition: box-shadow 0.2s, border 0.2s;
   box-shadow: 0 2px 8px #e0e7ef44;
   position: relative;
+  color: #000 !important;
 }
 
 .meal-card.selected {
-  border: 2px solid #4f8cff;
+  border: 2px solid #000;
   background: #eaf3ff;
   box-shadow: 0 4px 16px #4f8cff22;
 }
@@ -142,7 +158,7 @@
 .meal-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #223;
+  color: #000000;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -152,7 +168,7 @@
 .meal-description {
   font-size: 1rem;
   font-weight: 400;
-  color: #888;
+  color: #2c2b2b;
 }
 
 .foods-container {
@@ -189,13 +205,13 @@
 }
 
 .food-weight {
-  color: #4f8cff;
+  color: #000;
   font-size: 0.97em;
   margin-left: 4px;
 }
 
 .food-desc {
-  color: #888;
+  color: #2c2b2b;
   font-size: 0.96em;
   margin-left: 8px;
 }
@@ -243,20 +259,20 @@
   background: none;
   border: none;
   font-size: 2rem;
-  color: #4f8cff;
+  color: #000;
   cursor: pointer;
   transition: color 0.15s;
 }
 
 .modal-close:hover {
-  color: #184d8a;
+  color: #000;
 }
 
 .modal-title {
   text-align: center;
   font-size: 1.35rem;
   font-weight: 700;
-  color: #184d8a;
+  color: #000;
   margin-bottom: 12px;
 }
 
@@ -271,7 +287,7 @@
   flex-direction: column;
   align-items: flex-start;
   font-weight: 500;
-  color: #223;
+  color: #fff;
   font-size: 1.05em;
 }
 
@@ -306,17 +322,7 @@
   margin-top: 8px;
 }
 
-.modal-actions button {
-  padding: 8px 22px;
-  border-radius: 6px;
-  border: none;
-  font-size: 1em;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  background: #4f8cff;
-  color: #fff;
-}
+
 
 .modal-actions button:disabled {
   background: #b1d0ff;
@@ -324,12 +330,12 @@
 }
 
 .modal-cancel {
-  background: #e0e7ef;
-  color: #223;
+  background: #000;
+  color: #fff;
 }
 
 .modal-cancel:hover {
-  background: #c9d7ee;
+  background: #444;
 }
 
 .navbar {
@@ -379,7 +385,7 @@
   font-weight: 600;
   margin-bottom: 6px;
   display: block;
-  color: #223;
+  color: #fff;
   letter-spacing: 0.02em;
 }
 
@@ -389,7 +395,7 @@
   border: 1.5px solid #4f8cff;
   border-radius: 6px;
   background: #f6f8fa;
-  color: #223;
+  color: #fff;
   font-size: 1em;
   outline: none;
   margin-bottom: 18px;
@@ -397,13 +403,13 @@
 }
 
 .exercise-select:focus {
-  border-color: #356ad6;
-  box-shadow: 0 0 0 2px #4f8cff33;
+  border-color: #444;
+  box-shadow: 0 0 0 2px #00000033;
 }
 
 .exercise-select option {
   background: #fff;
-  color: #223;
+  color: #fff;
 }
 
 /* Modal overlay: poluprozirna pozadina */
@@ -425,7 +431,7 @@
 .modal-glass {
   background: rgba(255, 255, 255, 0.96);
   border-radius: 16px;
-  box-shadow: 0 6px 32px #4f8cff22, 0 1.5px 6px #2232;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.2), 0 1.5px 6px rgba(0, 0, 0, 0.1);
   padding: 36px 32px 28px 32px;
   min-width: 340px;
   max-width: 98vw;
@@ -451,7 +457,7 @@
   margin-bottom: 18px;
   font-size: 1.3em;
   font-weight: 700;
-  color: #223;
+  color: #fff;
   letter-spacing: 0.01em;
 }
 
@@ -486,19 +492,19 @@
   border-radius: 6px;
   font-size: 1em;
   background: #f6f8fa;
-  color: #223;
+  color: #fff;
   transition: border 0.17s, box-shadow 0.17s;
 }
 
 .modal-glass input:focus {
-  border-color: #4f8cff;
+  border-color: #000;
   box-shadow: 0 0 0 2px #4f8cff22;
   outline: none;
 }
 
 /* Submit gumb */
 .modal-glass button[type="submit"] {
-  background: #4f8cff;
+  background: #000;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -507,12 +513,12 @@
   font-weight: 600;
   margin-top: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 8px #4f8cff22;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   transition: background 0.18s, box-shadow 0.18s;
 }
 
 .modal-glass button[type="submit"]:hover {
-  background: #356ad6;
+  background: #444;
 }
 
 /* Error poruka */
@@ -529,3 +535,59 @@
     min-width: unset;
   }
 }
+
+.modal-title {
+    color: #000;
+    font-weight: 700;
+    font-size: 1.3em;
+}
+
+.modal-glass{
+  color: black !important;
+}
+
+.modal-actions button:hover {
+    background-color: #444;
+}
+
+.modal-title{
+  color: #000 !important;
+}
+
+
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.modal-cancel {
+  background-color: #000;
+  color: #fff;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1rem;
+  min-width: 140px; 
+  min-height: 50px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.modal-cancel:hover {
+  background-color: #333;
+}
+
+.modal-form input,
+.modal-form select,
+.modal-form textarea {
+  color: #000 !important;
+  background-color: #fff !important;
+}
+
+
+

@@ -14,6 +14,22 @@ class UserStore {
     this.currentUser = JSON.parse(localStorage.getItem("user")) || null;
   }
 
+  async updatePassword(data) {
+    try {
+      const response = await UserService.resetPassword(data);
+      runInAction(() => {
+        this.error = "";
+      });
+      return response;
+    } catch (err) {
+      runInAction(() => {
+        this.error = "Couldn't reset password, try again!";
+      });
+      throw err;
+    }
+  }
+
+
   async login(username, password) {
     try {
       const response = await axios.post(
@@ -43,19 +59,19 @@ class UserStore {
     }
   }
   async fetchUserId() {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get("https://localhost:44366/api/GetUserId", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return response.data; // očekuje se da je ovo `userId`
-  } catch (error) {
-    console.error("Failed to fetch user ID:", error);
-    throw error;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("https://localhost:44366/api/GetUserId", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch user ID:", error);
+      throw error;
+    }
   }
-}
 
 
   async register(data) {

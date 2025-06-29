@@ -27,7 +27,7 @@ const AddMealPlanModal = ({ open, onClose, onAdded }) => {
         <div className="modal-overlay">
             <div className="modal-glass">
                 <button className="modal-close" onClick={onClose}>&times;</button>
-                <h3 className="modal-title">ADD MEAL PLAN</h3>
+                <h3 className="modal-title">ADD MEAL PLAN </h3>
                 <form onSubmit={handleSubmit} className="modal-form">
                     <label>
                         Name:
@@ -37,11 +37,12 @@ const AddMealPlanModal = ({ open, onClose, onAdded }) => {
                             value={name}
                             onChange={e => setName(e.target.value)}
                             placeholder="e.g. MY NEW PLAN"
+                            color="black"
                         />
                     </label>
                     {error && <div className="modal-error">{error}</div>}
                     <div className="modal-actions">
-                        <button type="submit" disabled={loading}>
+                        <button type="submit" className="modal-cancel" disabled={loading}>
                             {loading ? "SAVING..." : "SAVE"}
                         </button>
                         <button type="button" className="modal-cancel" onClick={onClose}>

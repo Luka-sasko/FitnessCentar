@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use((config) => {
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    console.log("Uspješnp");
+    console.log("Uspješno");
   }
 
   return config;
@@ -28,6 +28,15 @@ const baseApi = {
   post: (url, data) => axiosInstance.post(url, data),
   put: (url, data) => axiosInstance.put(url, data),
   delete: (url) => axiosInstance.delete(url),
+  updatePassword: (url, data) => {
+    console.log(`https://localhost:44366/${url}`, data, localStorage.getItem("token"));
+  return axios.put(`https://localhost:44366/${url}`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }
+  });
+}
+
 };
 
 export default baseApi;
