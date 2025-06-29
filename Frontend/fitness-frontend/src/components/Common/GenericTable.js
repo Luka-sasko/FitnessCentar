@@ -13,6 +13,9 @@ const GenericTable = observer(({ store, items, onRowClick, headerButton, onDelet
     "DateUpdated",
     "IsActive",
     "UserId",
+    "StartDate",
+    "EndDate",
+    "id"
   ];
 
   const columns = Object.keys(data[0] || {}).filter(

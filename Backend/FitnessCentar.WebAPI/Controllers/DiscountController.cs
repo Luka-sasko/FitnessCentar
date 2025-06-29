@@ -151,7 +151,7 @@ namespace FitnessCentar.WebAPI.Controllers
             )
         {
             Paging paging = new Paging() { PageNumber=pageNumber, PageSize=pageSize};
-            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder };
+            Sorting sorting = new Sorting() { SortBy = sortBy, SortOrder = sortOrder.ToUpper() };
             DiscountFilter filter = new DiscountFilter() {SearchQuery=searchQuery, StartDate=startDate, EndDate=endDate, Amount=amount };
 
             var discounts = await _discountService.GetAllDiscountsAsync(filter, sorting, paging);

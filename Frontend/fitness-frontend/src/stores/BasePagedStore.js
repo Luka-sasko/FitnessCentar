@@ -6,7 +6,7 @@ export class BasePagedStore {
   currentPage = 1;
   itemsPerPage = 10;
   sortBy = "Name";
-  sortOrder = "asc";
+  sortOrder = "ASC";
 
   constructor(fetchMethod) {
     this.fetchMethod = fetchMethod;
@@ -35,14 +35,11 @@ export class BasePagedStore {
         pageSize: this.itemsPerPage,
         sortBy: this.sortBy,
         sortOrder: this.sortOrder,
-
+      
       };
       console.log(params);
-
       const response = await this.fetchMethod(params);
-      console.log("Response from backend:", response.data, params);
-
-
+      console.log(response)
       runInAction(() => {
         this.items = response.data.Items;
         this.totalCount = response.data.TotalCount;
@@ -58,25 +55,33 @@ export class BasePagedStore {
     }
   }
 
-  setCurrentPage(page) {
+  async setCurrentPage(page) {
     console.log("⬅️ setCurrentPage called with:", page); 
     this.currentPage = page;
-    this.fetchAll();
+    await this.fetchAll();
   }
 
 
-  setItemsPerPage(count) {
+  async setItemsPerPage(count) {
     this.itemsPerPage = count;
     this.currentPage = 1;
-    this.fetchAll();
+    await this.fetchAll();
   }
 
+  columnSortMap = {
+  DateStart: "StartDate",
+  DateEnd: "EndDate",
+  Active: "IsActive",
+
+};
+
   setSort(col, order) {
-    this.sortBy = col;
-    this.sortOrder = order;
-    console.log(this.sortBy, this.sortOrder);
-    this.fetchAll();
-  }
+  const apiCol = this.columnSortMap?.[col] ?? col; 
+  this.sortBy = apiCol;
+  this.sortOrder = order;
+  this.fetchAll();
+}
+
 
 
   get totalPages() {

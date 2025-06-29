@@ -7,36 +7,48 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-
   try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   } catch (err) {
-    console.warn("❌ Neispravan JSON u localStorage.token");
+    console.warn("❌ Invalid token in localStorage");
   }
-
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-    console.log("Uspješno");
-  }
-
   return config;
 });
 
 const baseApi = {
-  getAll: (url, params) => axiosInstance.get(url, { params }),
-  get: (url) => axiosInstance.get(url),
+  getAll: async (url,  params ) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log(params)
+      const queryString = new URLSearchParams(params).toString();
+      const fullUrl = `${BASE_URL}${url}?${queryString}`;
+      console.log(`📡 GET ${fullUrl}`);
+      const response = await axios.get(fullUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    } catch (err) {
+      console.error("❌ API getAll error:", err);
+      throw err;
+    }
+  },
+  
+  get: (url, config) => axiosInstance.get(url, config),
   post: (url, data) => axiosInstance.post(url, data),
   put: (url, data) => axiosInstance.put(url, data),
   delete: (url) => axiosInstance.delete(url),
   updatePassword: (url, data) => {
-    console.log(`https://localhost:44366/${url}`, data, localStorage.getItem("token"));
-  return axios.put(`https://localhost:44366/${url}`, data, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }
-  });
-}
-
+    return axios.put(`https://localhost:44366/${url}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+  }
 };
 
 export default baseApi;
