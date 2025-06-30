@@ -57,12 +57,6 @@ class DiscountStore extends BasePagedStore {
               minute: "2-digit",
             })
             : "",
-          isActiveDisplay:
-            item.IsActive === true
-              ? "✔️"
-              : item.IsActive === false
-                ? "❌"
-                : "",
         }));
 
         this.totalCount = response.data.TotalCount;

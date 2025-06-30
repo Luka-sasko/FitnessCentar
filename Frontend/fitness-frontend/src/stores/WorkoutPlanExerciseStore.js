@@ -1,32 +1,23 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { observable, action, makeObservable, runInAction } from "mobx";
 import WorkoutPlanExerciseService from "../api/services/WorkoutPlanExerciseService";
+import { BasePagedStore } from "./BasePagedStore";
 
-class WorkoutPlanExerciseStore {
+class WorkoutPlanExerciseStore extends BasePagedStore {
   workoutPlanExerciseList = [];
   selectedWorkoutPlanExercise = null;
-  pagedMeta = {
-    pageNumber: 1,
-    pageSize: 10,
-    totalCount: 0,
-    totalPages: 0
-  };
 
   constructor() {
-    makeAutoObservable(this);
-  }
-
-  async fetchAll(params) {
-    const response = await WorkoutPlanExerciseService.getAll(params);
-    runInAction(() => {
-      this.workoutPlanExerciseList = response.data.Items;
-      this.pagedMeta = {
-        pageNumber: response.data.PageNumber,
-        pageSize: response.data.PageSize,
-        totalCount: response.data.TotalCount,
-        totalPages: response.data.TotalPages
-      };
+    super(WorkoutPlanExerciseService.getAll);
+    makeObservable(this, {
+      workoutPlanExerciseList: observable,
+      selectedWorkoutPlanExercise: observable,
+      fetchById: action,
+      createWorkoutPlanExercise: action,
+      updateWorkoutPlanExercise: action,
+      deleteWorkoutPlanExercise: action
     });
   }
+
 
   async fetchById(id) {
     const response = await WorkoutPlanExerciseService.getById(id);
@@ -37,7 +28,6 @@ class WorkoutPlanExerciseStore {
 
   async createWorkoutPlanExercise(data) {
     await WorkoutPlanExerciseService.create(data);
-    await this.fetchAll();
   }
 
   async updateWorkoutPlanExercise(id, data) {

@@ -25,8 +25,9 @@ class ExerciseStore extends BasePagedStore {
   }
 
   async createExercise(data) {
-    await ExerciseService.create(data);
+    const res = await ExerciseService.create(data);
     await this.fetchAll();
+    return res.data;
   }
 
   async updateExercise(id, data) {

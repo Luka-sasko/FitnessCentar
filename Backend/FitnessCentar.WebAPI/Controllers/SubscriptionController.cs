@@ -31,8 +31,8 @@ namespace FitnessCentar.WebAPI.Controllers
         public async Task<HttpResponseMessage> GetAllAsync(
             int pageNumber = 1,
             int pageSize = 10,
-            string sortBy = "StartDate",
-            string sortOrder = "ASC",
+            string sortBy = "Price",
+            string sortOrder = "Asc",
             string searchQuery = null,
             DateTime? startDate = null,
             decimal? price = null,
@@ -40,7 +40,7 @@ namespace FitnessCentar.WebAPI.Controllers
             )
         { 
             Paging paging = new Paging() {PageNumber=pageNumber, PageSize = pageSize };
-            Sorting sorting = new Sorting() {SortBy=sortBy, SortOrder = sortOrder };
+            Sorting sorting = new Sorting() {SortBy=sortBy, SortOrder = sortOrder.ToUpper() };
             SubscriptionFilter filter = new SubscriptionFilter() { SearchQuery = searchQuery, Duration = duration, Price = price, StartDate = startDate };
 
             try

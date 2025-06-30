@@ -1,4 +1,3 @@
-
 import api from "../BaseApi";
 
 const WorkoutPlanExerciseService = {

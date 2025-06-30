@@ -5,7 +5,6 @@ const HomePage = () => {
 
   const pages = [
     
-    { name: 'Profile', path: '/profile' },
     { name: 'Discounts', path: '/discounts' },
     { name: 'Subscriptions', path: '/subscriptions' },
     { name: 'Workout Plans', path: '/workoutplans' },

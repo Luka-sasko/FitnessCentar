@@ -6,13 +6,11 @@ import ExercisePage from './ExercisePage.js';
 import FoodPage from './FoodPage.js';
 import MealPage from './MealPage.js';
 import MealPlanPage from './MealPlanPage.js';
-import MealPlanMealPage from './MealPlanMealPage.js';
 import SubscriptionPage from './SubscriptionPage.js';
 import UserProfilePage from './UserPage/ProfilePage.js';
 import LoginPage from "./UserPage/LoginPage.js";
 import RegisterPage from './UserPage/RegisterPage.js';
 import WorkoutPlanPage from './WorkoutPlanPage.js';
-import WorkoutPlanExercisePage from './WorkouotPlanExercisePage.js';
 import Navbar from '../components/Common/Navbar.js';
 import LandingPage from './LandingPage.js';
 
@@ -29,13 +27,11 @@ const IndexRoutePage = () => {
                 <Route path="/food" element={<FoodPage />} /> { }
                 <Route path="/meals" element={<MealPage />} />
                 <Route path="/mealplans" element={<MealPlanPage />} />
-                <Route path="/mealplanmeals" element={<MealPlanMealPage />} />
                 <Route path="/subscriptions" element={<SubscriptionPage />} />
                 <Route path="/profile" element={<UserProfilePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/workoutplans" element={<WorkoutPlanPage />} />
-                <Route path="/workoutplanexercises" element={<WorkoutPlanExercisePage />} />
             </Routes>
         </Router>
     );

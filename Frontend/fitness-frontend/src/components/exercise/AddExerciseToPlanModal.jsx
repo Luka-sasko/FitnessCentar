@@ -16,6 +16,7 @@ const AddExerciseToPlanModal = observer(({ open, onClose, workoutPlanId, onAdded
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+
   useEffect(() => {
     if (!open) return;
 
@@ -25,7 +26,7 @@ const AddExerciseToPlanModal = observer(({ open, onClose, workoutPlanId, onAdded
     setError("");
     setLoading(false);
 
-    exerciseStore.fetchAll({ pageSize: 100 });
+    exerciseStore.fetchAll();
   }, [open]);
 
   const handleSubmit = async (e) => {
@@ -58,11 +59,12 @@ const AddExerciseToPlanModal = observer(({ open, onClose, workoutPlanId, onAdded
         exerciseId = newId;
       }
 
-      await workoutPlanExerciseStore.addExerciseToPlan({
-        WorkoutPlanId: workoutPlanId,
+      await workoutPlanExerciseStore.createWorkoutPlanExercise({
+        WorkoutPlanId: workoutPlanId, 
         ExerciseId: exerciseId,
         ExerciseNumber: 1
-      });
+    });
+
 
       setLoading(false);
       onAdded();
@@ -82,8 +84,8 @@ const AddExerciseToPlanModal = observer(({ open, onClose, workoutPlanId, onAdded
         <h3 className="modal-title">ADD EXERCISE TO PLAN</h3>
 
         <div style={{ display: "flex", gap: 18, marginBottom: 18 }}>
-          <button type="button" style={{ background: mode === "list" ? "#4f8cff" : "#e0e7ef", color: mode === "list" ? "#fff" : "#223" }} onClick={() => setMode("list")}>ADD FROM LIST</button>
-          <button type="button" style={{ background: mode === "new" ? "#4f8cff" : "#e0e7ef", color: mode === "new" ? "#fff" : "#223" }} onClick={() => setMode("new")}>ADD NEW</button>
+          <button type="button" style={{ background: mode === "list" ? "#000" : "#d3d3d3", color: mode === "list" ? "#fff" : "#000" }} onClick={() => setMode("list")}>ADD FROM LIST</button>
+          <button type="button" style={{ background: mode === "new" ? "#000" : "#d3d3d3", color: mode === "new" ? "#fff" : "#000" }} onClick={() => setMode("new")}>ADD NEW</button>
         </div>
 
         <form onSubmit={handleSubmit} className="modal-form">
@@ -91,9 +93,9 @@ const AddExerciseToPlanModal = observer(({ open, onClose, workoutPlanId, onAdded
             <label>
               SELECT EXERCISE:
               <select value={selectedExerciseId} onChange={(e) => setSelectedExerciseId(e.target.value)} required>
-                <option value="">-- SELECT --</option>
+                <option value="" >-- SELECT --</option>
                 {exerciseStore.items.map((ex) => (
-                  <option key={ex.Id} value={ex.Id}>{ex.Name}</option>
+                  <option className="custom-option" key={ex.Id} value={ex.Id}>{ex.Name}</option>
                 ))}
               </select>
             </label>

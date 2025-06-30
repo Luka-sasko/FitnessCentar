@@ -1,9 +1,8 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { observable, action, makeObservable, runInAction } from "mobx";
 import SubscriptionService from "../api/services/SubscriptionService";
 
 class SubscriptionStore {
   subscriptionList = [];
-  selectedSubscription = null;
   pagedMeta = {
     pageNumber: 1,
     pageSize: 10,
@@ -12,10 +11,14 @@ class SubscriptionStore {
   };
 
   constructor() {
-    makeAutoObservable(this);
+    makeObservable(this, {
+      subscriptionList: observable,
+      pagedMeta: observable,
+      fetchAll: action
+    });
   }
 
-  async fetchAll(params) {
+  async fetchAll(params = {}) {
     const response = await SubscriptionService.getAll(params);
     runInAction(() => {
       this.subscriptionList = response.data.Items;
@@ -25,29 +28,8 @@ class SubscriptionStore {
         totalCount: response.data.TotalCount,
         totalPages: response.data.TotalPages
       };
+      console.log(this.subscriptionList,this.pagedMeta);
     });
-  }
-
-  async fetchById(id) {
-    const response = await SubscriptionService.getById(id);
-    runInAction(() => {
-      this.selectedSubscription = response.data;
-    });
-  }
-
-  async createSubscription(data) {
-    await SubscriptionService.create(data);
-    await this.fetchAll();
-  }
-
-  async updateSubscription(id, data) {
-    await SubscriptionService.update(id, data);
-    await this.fetchAll();
-  }
-
-  async deleteSubscription(id) {
-    await SubscriptionService.delete(id);
-    await this.fetchAll();
   }
 }
 

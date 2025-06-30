@@ -298,12 +298,12 @@ body {
   border: 1px solid #e0e7ef;
   font-size: 1em;
   width: 220px;
-  background: #f8fafc;
+  background: #bcc4cb;
   transition: border 0.15s;
 }
 
 .modal-form input:focus {
-  border: 1.5px solid #4f8cff;
+  border: 1.5px solid #555c6a !important;
   outline: none;
 }
 
@@ -337,6 +337,41 @@ body {
 .modal-cancel:hover {
   background: #444;
 }
+
+.custom-option {
+  background-color: #fff;
+  color: #000;
+}
+
+.custom-option:hover {
+  background-color: #666 !important; 
+}
+
+.modal-form select {
+  margin-top: 6px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid #e0e7ef;
+  font-size: 1em;
+  width: 240px;
+  background: #bcc4cb;
+  color: #000;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: 50%;
+  cursor: pointer;
+  transition: border 0.15s;
+}
+
+.modal-form select:focus {
+  border: 1.5px solid #555c6a !important;
+  outline: none;
+}
+
 
 .navbar {
   display: flex;
