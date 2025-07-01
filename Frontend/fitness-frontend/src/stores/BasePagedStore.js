@@ -54,7 +54,6 @@ export class BasePagedStore {
   }
 
   async setCurrentPage(page) {
-    console.log("⬅️ setCurrentPage called with:", page); 
     this.currentPage = page;
     await this.fetchAll();
   }

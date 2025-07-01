@@ -16,24 +16,20 @@ const ResetPasswordModal = ({ onClose, onSubmit }) => {
     };
 
     const handleSubmit = async (e) => {
-        console.log(form);
         e.preventDefault();
         setError("");
         setMessage("");
 
         if (form.passwordNew !== form.confirmPassword) {
-            console.log(form);
             setError("Passwords do not match.");
             return;
         }
 
         try {
             await onSubmit(form);
-            console.log(form);
             setMessage("✔️ Password updated successfully.");
             setTimeout(onClose, 1000);
         } catch (err) {
-            console.log(form);
             setError("❌ Failed to reset password.");
         }
     };

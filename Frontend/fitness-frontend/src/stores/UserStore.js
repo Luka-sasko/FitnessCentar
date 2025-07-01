@@ -2,10 +2,12 @@ import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
 import UserService from "../api/services/UserService";
 
+
 class UserStore {
   users = [];
   selectedUser = null;
   currentUser = null;
+  userRole = false;
   loading = false;
   error = null;
 
@@ -13,6 +15,7 @@ class UserStore {
     makeAutoObservable(this);
     this.currentUser = JSON.parse(localStorage.getItem("user")) || null;
   }
+
 
   async updatePassword(data) {
     try {
@@ -28,7 +31,6 @@ class UserStore {
       throw err;
     }
   }
-
 
   async login(username, password) {
     try {
@@ -93,7 +95,9 @@ class UserStore {
   }
 
   async fetch() {
-    return await UserService.get();
+    const response = await UserService.get();
+    this.userRole = response.data.Role;
+    return response;
   }
 
   async update(data) {
@@ -121,6 +125,11 @@ class UserStore {
   get isLoggedIn() {
     return !!this.currentUser;
   }
+
+  get isAdmin(){
+    return this.userRole === "Admin" ? true : false;
+  }
+
 }
 
 export const userStore = new UserStore();

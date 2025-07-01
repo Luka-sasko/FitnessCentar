@@ -28,7 +28,6 @@ class SubscriptionStore {
         totalCount: response.data.TotalCount,
         totalPages: response.data.TotalPages
       };
-      console.log(this.subscriptionList,this.pagedMeta);
     });
   }
 }

@@ -11,7 +11,7 @@ const RegisterPage = observer(() => {
     contact: null,
     height: 0.0,
     weight: 0.0,
-    birthday: '01/01/1900',
+    birthdate: '01/01/1900',
     email: "",
     password: "",
     confirmPassword: ""
@@ -25,6 +25,7 @@ const RegisterPage = observer(() => {
   };
 
   const handleSubmit = async e => {
+    console.log(form);
     e.preventDefault();
 
     if (form.password !== form.confirmPassword) {
@@ -83,16 +84,6 @@ const RegisterPage = observer(() => {
               name="contact"
               type="phone"
               value={form.contact}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Birthday:
-            <input
-              name="birthday"
-              type="date"
-              value={form.birthday}
               onChange={handleChange}
               required
             />

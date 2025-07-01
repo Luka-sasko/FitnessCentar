@@ -7,7 +7,7 @@ import { userStore } from '../../stores/UserStore';
 
 const links = [
   { name: 'Home', path: '/home' },
-  { name: 'Discounts', path: '/discounts' },
+  { name: 'Discounts', path: '/discounts', adminOnly: true },
   { name: 'Meal Plans', path: '/mealplans' },
   { name: 'Subscriptions', path: '/subscriptions' },
   { name: 'Workout Plans', path: '/workoutplans' },
@@ -29,16 +29,20 @@ const Navbar = observer(() => {
         {userStore.isLoggedIn && (
           <div className="navbar-left">
             <ul className="navbar-links">
-              {links.map(link => (
-                <li key={link.path}>
-                  <NavLink
-                    to={link.path}
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
-                    {link.name}
-                  </NavLink>
-                </li>
-              ))}
+              {links.map(link => {
+                if (link.adminOnly && !userStore.isAdmin) return null;
+                return (
+                  <li key={link.path}>
+                    <NavLink
+                      to={link.path}
+                      className={({ isActive }) => (isActive ? 'active' : '')}
+                    >
+                      {link.name}
+                    </NavLink>
+                  </li>
+                );
+              })}
+
             </ul>
           </div>
         )}

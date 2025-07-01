@@ -1,5 +1,4 @@
 import { makeObservable, observable, runInAction, action } from "mobx";
-import { BasePagedStore } from "./BasePagedStore";
 import FoodService from "../api/services/FoodService";
 
 class FoodStore {

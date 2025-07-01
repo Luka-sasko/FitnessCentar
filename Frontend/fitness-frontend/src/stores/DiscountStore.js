@@ -34,7 +34,6 @@ class DiscountStore extends BasePagedStore {
       };
 
       const response = await this.fetchMethod(params);
-      console.log(response.data);
 
       runInAction(() => {
         this.items = response.data.Items.map((item) => ({

@@ -57,7 +57,6 @@ const DiscountFormModal = observer(({ isOpen, onClose, initialData }) => {
 
         if (isEditMode) {
             data.IsActive = form.isActive;
-            console.log(initialData.id);
             await discountStore.updateDiscount(initialData.Id, data);
         } else {
             await discountStore.createDiscount(data);

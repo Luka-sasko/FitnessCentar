@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { workoutPlanStore } from "../stores/WorkOutPlanStore";
-import { exerciseStore } from "../stores/ExerciseStore";
-import { workoutPlanExerciseStore } from "../stores/WorkoutPlanExerciseStore";
 import GenericTable from "../components/Common/GenericTable";
 import baseApi from "../api/BaseApi";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";

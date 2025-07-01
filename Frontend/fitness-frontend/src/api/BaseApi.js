@@ -22,10 +22,8 @@ const baseApi = {
   getAll: async (url,  params ) => {
     try {
       const token = localStorage.getItem("token");
-      console.log(params)
       const queryString = new URLSearchParams(params).toString();
       const fullUrl = `${BASE_URL}${url}?${queryString}`;
-      console.log(`📡 GET ${fullUrl}`);
       const response = await axios.get(fullUrl, {
         headers: {
           Authorization: `Bearer ${token}`,

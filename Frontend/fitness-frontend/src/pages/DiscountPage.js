@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { discountStore } from "../stores/DiscountStore";
 import GenericTable from "../components/Common/GenericTable";
+import { userStore } from "../stores/UserStore.js";
 import DiscountFormModal from "../components/Discount/DiscountFormModal.js";
 import '../styles/discount.css';
 
@@ -12,6 +13,10 @@ const DiscountPage = observer(() => {
   useEffect(() => {
     discountStore.fetchAll();
   }, []);
+
+    if (!userStore.isAdmin) {
+    return (<div style={{marginTop: "10%"}}><h1>Access denied</h1></div>);
+  }
 
   const handleSubmit = async (data) => {
     if (editData) {

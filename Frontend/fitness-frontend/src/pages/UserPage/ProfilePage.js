@@ -34,6 +34,10 @@ const ProfilePage = observer(() => {
       <table className="profile-table">
         <tbody>
           <tr>
+            <th>Role:</th>
+            <td>{user.Role}</td>
+          </tr>
+          <tr>
             <th>Firstname:</th>
             <td>{user.Firstname}</td>
           </tr>
