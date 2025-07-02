@@ -6,7 +6,7 @@ const ConfirmDeleteModal = ({ open, onClose, onConfirm, text }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-glass">
-                <h3 className="modal-title">Are you sure you want to delete?</h3>
+                <h3 className="modal-title">ARE YOU SURE YOU WANT TO DELETE?</h3>
                 <p style={{ marginBottom: 24, textAlign: "center", color: "#555" }}>
                     {text}
                 </p>
@@ -19,14 +19,14 @@ const ConfirmDeleteModal = ({ open, onClose, onConfirm, text }) => {
                             padding: "8px 22px"
                         }}
                     >
-                        Yes
+                        YES
                     </button>
                     <button
                         onClick={onClose}
                         className="modal-cancel"
                         style={{ padding: "8px 22px" }}
                     >
-                        No
+                        NO
                     </button>
                 </div>
             </div>

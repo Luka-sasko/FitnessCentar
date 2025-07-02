@@ -25,40 +25,40 @@ const ProfilePage = observer(() => {
     fetchData();
   }, []);
 
-  if (!user) return <div className="profile-page">Loading...</div>;
+  if (!user) return <div className="profile-page">LOADING...</div>;
 
   return (
     <div className="profile-wrapper">
-      <h2 className="profile-title">User Profile</h2>
+      <h2 className="profile-title">YOUR PROFILE</h2>
 
       <table className="profile-table">
         <tbody>
           <tr>
-            <th>Role:</th>
+            <th>ROLE:</th>
             <td>{user.Role}</td>
           </tr>
           <tr>
-            <th>Firstname:</th>
+            <th>FIRSTNAME:</th>
             <td>{user.Firstname}</td>
           </tr>
           <tr>
-            <th>Lastname:</th>
+            <th>LASTNAME:</th>
             <td>{user.Lastname}</td>
           </tr>
           <tr>
-            <th>Contact:</th>
+            <th>CONTACT:</th>
             <td>{user.Contact}</td>
           </tr>
           <tr>
-            <th>Birthdate:</th>
+            <th>BIRTHDATE:</th>
             <td>{user.Birthdate?.split("T")[0]}</td>
           </tr>
           <tr>
-            <th>Weight:</th>
+            <th>WEIGHT:</th>
             <td>{user.Weight} kg</td>
           </tr>
           <tr>
-            <th>Height:</th>
+            <th>HEIGHT:</th>
             <td>{user.Height} cm</td>
           </tr>
         </tbody>
@@ -66,11 +66,11 @@ const ProfilePage = observer(() => {
 
       <div className="edit-btn-wrapper">
         <button onClick={() => setShowModal(true)} className="edit-btn">
-          Edit Profile
+          EDIT PROFILE
         </button>
 
         <button onClick={() => setShowPasswordModal(true)} className="edit-btn reset-btn">
-          Reset Password
+          RESET PASSWORD
         </button>
       </div>
 

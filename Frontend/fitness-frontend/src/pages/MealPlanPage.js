@@ -131,57 +131,37 @@ const MealPlanPage = observer(() => {
   };
 
   const addMealPlanButton = (
-    <button
-      style={{
-        background: "#000",
-        color: "#fff",
-        border: "1px solid #000",
-        borderRadius: "6px",
-        padding: "8px 20px",
-        fontSize: "1em",
-        fontWeight: 600,
-        cursor: "pointer",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-        transition: "background 0.18s, box-shadow 0.18s",
-      }}
-      onMouseOver={e => e.currentTarget.style.background = "#444"}
-      onMouseOut={e => e.currentTarget.style.background = "#000"}
-      onClick={() => setAddModalOpen(true)}
-    >
-      ➕ ADD MEAL PLAN
+    <button className="add-mealplan-btn" onClick={() => setAddModalOpen(true)}>
+      <span className="add-plus">＋</span>
+      ADD MEAL PLAN
     </button>
-
   );
 
   const addMealButton = (
-    <button
-      style={{
-        background: "#000",
-        color: "#fff",
-        border: "1px solid #000",
-        borderRadius: "6px",
-        padding: "8px 20px",
-        fontSize: "1em",
-        fontWeight: 600,
-        cursor: "pointer",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-        transition: "background 0.18s, box-shadow 0.18s",
-        marginLeft: 16
-      }}
-      onClick={() => setAddMealModalOpen(true)}
-    >
-      ➕ ADD MEAL
+    <button className="add-mealplan-btn" onClick={() => setAddMealModalOpen(true)}>
+      <span className="add-plus">＋</span>
+      ADD MEAL
     </button>
   );
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>📋 MY MEAL PLANS</h2>
-      <div className="mealplan-table-wrapper">
+    <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 18,
+          marginTop: 50,
+        }}
+      >
+        <h2 style={{ margin: 0, color: "white" }}>📋 MY MEAL PLANS</h2>
+        {addMealPlanButton}
+      </div>
+      <div>
         <GenericTable
           store={mealPlanStore}
           onRowClick={handleMealPlanClick}
-          headerButton={addMealPlanButton}
           onDeleteRow={id => openDeleteModal("mealplan", id)}
         />
       </div>
@@ -203,8 +183,8 @@ const MealPlanPage = observer(() => {
           <div className="meals-container">
             {selectedMeals.length === 0 ? (
               <div style={{ textAlign: "center", marginTop: 32 }}>
-                <p style={{ fontSize: "1.1em", color: "#888", marginBottom: 18 }}>
-                  No meals added yet.
+                <p style={{ fontSize: "1.1em", color: "#fff", marginBottom: 18 }}>
+                  NO MEALS ADDED YET.
                 </p>
               </div>
             ) : (
@@ -213,82 +193,74 @@ const MealPlanPage = observer(() => {
                   <div
                     className={`meal-title${selectedMealId === meal.Id ? " selected" : ""}`}
                     style={{
-                      cursor: "pointer",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      width: "100%"
+                      width: "100%",
+                      gap: 10,
+                      cursor: "pointer"
                     }}
                     onClick={() => handleMealClick(meal)}
                   >
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <strong>{meal.Name}</strong>
-                      {meal.Description ? (
+                      {meal.Description && (
                         <span className="meal-description"> - {meal.Description}</span>
-                      ) : null}
+                      )}
                     </div>
-                    <button
-                      onClick={e => { e.stopPropagation(); openDeleteModal("meal", meal.Id); }}
-                      style={deleteButtonStyle}
-                      title="Delete meal"
-                    >×</button>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {selectedMealId === meal.Id && (
+                        <button
+                          className="add-mealplan-btn"
+                          onClick={e => {
+                            e.stopPropagation();
+                            handleAddFoodClick(meal.Id);
+                          }}
+                          style={{ marginRight: 3 }}
+                        >
+                          <span className="add-plus">＋</span>
+                          ADD FOOD
+                        </button>
+                      )}
+
+                    </div>
                   </div>
                   {selectedMealId === meal.Id && (
-                    <>
-                      <button
-                        style={{
-                          marginTop: 8,
-                          marginBottom: 8,
-                          background: "black",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "8px 20px",
-                          fontSize: "1em",
-                          fontWeight: 600,
-                          cursor: "pointer",
-                          boxShadow: "0 2px 8px #4f8cff22",
-                          transition: "background 0.18s, box-shadow 0.18s",
-                        }}
-                        onClick={() => handleAddFoodClick(meal.Id)}
-                      >
-                        ➕ ADD FOOD
-                      </button>
-                      <div className="foods-container">
-                        {selectedMealFoods.length > 0 ? (
-                          selectedMealFoods.map((food) => (
-                            <div
-                              className="food-item"
-                              key={food.Id}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "space-between",
-                                width: "100%"
-                              }}
-                            >
-                              <div>
-                                <span className="food-name">{food.Name}</span>
-                                {food.Weight && (
-                                  <span className="food-weight">({food.Weight}g)</span>
-                                )}
-                                {food.Description && (
-                                  <span className="food-desc">- {food.Description}</span>
-                                )}
-                              </div>
-                              <button
-                                onClick={e => { e.stopPropagation(); openDeleteModal("food", food.Id); }}
-                                style={deleteButtonStyle}
-                                title="Delete food"
-                              >×</button>
+                    <div className="foods-container">
+                      {selectedMealFoods.length > 0 ? (
+                        selectedMealFoods.map((food) => (
+                          <div
+                            className="food-item"
+                            key={food.Id}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              width: "99%",
+                            }}
+                          >
+                            <div>
+                              <span className="food-name">{food.Name}</span>
+                              {food.Weight && (
+                                <span className="food-weight">({food.Weight}g)</span>
+                              )}
+                              {food.Description && (
+                                <span className="food-desc">- {food.Description}</span>
+                              )}
                             </div>
-                          ))
-                        ) : (
-                          <div className="food-item empty">THERE IS NO FOOD ADDED IN THIS MEAL!</div>
-                        )}
-                      </div>
-                    </>
+                            <button
+                              onClick={e => { e.stopPropagation(); openDeleteModal("food", food.Id); }}
+                              className="delete-btn"
+                              title="Delete food"
+                            >×</button>
+                          </div>
+                        ))
+                      ) : (
+                        <div style={{ color: "#fff" }} className="food-item empty">THERE IS NO FOOD ADDED IN THIS MEAL!</div>
+                      )}
+                    </div>
                   )}
+
                 </div>
               ))
             )}

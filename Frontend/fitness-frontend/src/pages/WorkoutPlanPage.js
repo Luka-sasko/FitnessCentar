@@ -71,69 +71,55 @@ const WorkoutPlanPage = observer(() => {
   };
 
   const addWorkoutPlanButton = (
-    <button
-      style={{
-        background: "#000",
-        color: "#fff",
-        border: "none",
-        borderRadius: "6px",
-        padding: "8px 20px",
-        fontSize: "1em",
-        fontWeight: 600,
-        cursor: "pointer",
-        boxShadow: "0 2px 8px #4f8cff22",
-        transition: "background 0.18s, box-shadow 0.18s",
-      }}
-      onMouseOver={e => e.currentTarget.style.background = "#000"}
-      onMouseOut={e => e.currentTarget.style.background = "#000"}
-      onClick={() => setAddModalOpen(true)}
-    >
-      ➕ ADD WORKOUT PLAN
+    <button className="add-workoutplan-btn" onClick={() => setAddModalOpen(true)}>
+      <span className="add-plus">＋</span>
+      ADD WORKOUT PLAN
+    </button>
+  );
+
+  const addExerciseButton = (
+    <button className="add-exercise-btn" onClick={() => setAddExerciseModalOpen(true)}>
+      <span className="add-plus">＋</span>
+      ADD EXERCISE
     </button>
   );
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>🏋️‍♂️ MY WORKOUT PLANS</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 18,
+        }}
+      >
+        <h2 style={{ margin: 0, color: "white" }}>🏋️‍♂️ MY WORKOUT PLANS</h2>
+        {addWorkoutPlanButton}
+      </div>
       <div className="workoutplan-table-wrapper">
         <GenericTable
           store={workoutPlanStore}
           onRowClick={handleWorkoutPlanClick}
-          headerButton={addWorkoutPlanButton}
           onDeleteRow={id => openDeleteModal("workoutplan", id)}
         />
       </div>
 
       {currentWorkoutPlan && (
         <div>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 12,
-            gap: 16
-          }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 12,
+              gap: 16,
+            }}
+          >
             <h3 style={{ margin: 0 }}>
               🏋️‍♂️ EXERCISES IN {currentWorkoutPlan.Name ? `"${currentWorkoutPlan.Name}"` : "SELECTED PLAN"}
             </h3>
-            <button
-              style={{
-                background: "#000",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                padding: "8px 20px",
-                fontSize: "1em",
-                fontWeight: 600,
-                cursor: "pointer",
-                boxShadow: "0 2px 8px #4f8cff22",
-                transition: "background 0.18s, box-shadow 0.18s",
-                marginLeft: 16
-              }}
-              onClick={() => setAddExerciseModalOpen(true)}
-            >
-              ➕ ADD EXERCISE
-            </button>
+            {addExerciseButton}
           </div>
           {selectedPlanExercises.length === 0 ? (
             <div style={{ textAlign: "center", marginTop: 32 }}>

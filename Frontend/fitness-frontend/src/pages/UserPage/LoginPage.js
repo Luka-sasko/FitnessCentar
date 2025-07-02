@@ -27,7 +27,7 @@ const LoginPage = observer(() => {
   return (
     <div className="login-page">
       <div className="auth-form">
-        <h2>Login</h2>
+        <h2>LOGIN</h2>
         <form onSubmit={handleSubmit} className="auth-form-inner">
           <label>
             Email:

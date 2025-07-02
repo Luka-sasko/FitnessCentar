@@ -37,45 +37,50 @@
     transform: rotate(360deg);
   }
 }
-/* Omogući scroll na svim stranicama */
-html, body, #root {
+
+html,
+body,
+#root {
   height: 100%;
   overflow-y: auto;
   scroll-behavior: smooth;
+  background-color: #FD9242;
 }
 
-/* Ograniči root wrapper (ako koristiš layout komponente) */
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
   background: #fff;
+
 }
 
 
-/* GENERIC TABLE STYLING */
 .generic-table-container {
   margin-bottom: 32px;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 4px 24px #0001;
-  background: #f8fafc;
+  box-shadow: 0 4px 28px #0002;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px) saturate(1.15);
+  transition: background 0.18s;
 }
 
 .generic-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.05em;
+  font-size: 1.08em;
+  background: transparent;
 }
 
 .generic-table th,
 .generic-table td {
-  padding: 12px 18px;
+  padding: 14px 20px;
   text-align: left;
 }
 
 .generic-table th {
-  background: #f3f7fa;
+  background: rgba(243, 247, 250, 0.75);
   color: #2b4f77;
   font-weight: 700;
   border-bottom: 2px solid #e0e7ef;
@@ -85,7 +90,7 @@ body {
 }
 
 .generic-table th:hover {
-  background: #eaf3ff;
+  background: rgba(234, 243, 255, 0.85);
 }
 
 .generic-table tr {
@@ -93,11 +98,13 @@ body {
 }
 
 .generic-table tr:hover {
-  background: #f0f7ff;
+  background: rgba(240, 247, 255, 0.55);
 }
 
 .generic-table td {
   border-bottom: 1px solid #e0e7ef;
+  color: #1a1a1a;
+  background: transparent;
 }
 
 .generic-table tr:last-child td {
@@ -109,10 +116,28 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
-  justify-content: center
+  justify-content: center;
+  background: transparent;
+  color: #223;
 }
 
-/* MEALPLAN SPECIFIČAN STYLING - override */
+.generic-table td button {
+  color: #fff;
+  background: #e03c3c;
+  border: none;
+  font-weight: bold;
+  font-size: 1.15em;
+  cursor: pointer;
+  padding: 0.25rem 0.7rem;
+  border-radius: 5px;
+  transition: background 0.15s;
+  box-shadow: 0 1.5px 6px #e03c3c22;
+}
+
+.generic-table td button:hover {
+  background: #b41e1e;
+}
+
 .mealplan-table-wrapper .generic-table-container {
   background: #f8fafc;
   box-shadow: 0 4px 24px #00000011;
@@ -129,7 +154,6 @@ body {
   background: #eaf3ff;
 }
 
-/* Ostali stilovi za meals i foods */
 .meals-container {
   margin-top: 24px;
   display: flex;
@@ -138,7 +162,7 @@ body {
 }
 
 .meal-card {
-  background: #f8fafc;
+  background: rgba(248, 250, 252, 0.5);
   border: 1.5px solid #e0e7ef;
   border-radius: 10px;
   padding: 18px 22px;
@@ -344,7 +368,7 @@ body {
 }
 
 .custom-option:hover {
-  background-color: #666 !important; 
+  background-color: #666 !important;
 }
 
 .modal-form select {
@@ -412,10 +436,9 @@ body {
 .navbar a.active,
 .navbar a:hover {
   background: #333;
-  color: #61dafb;
+  color: #FD9242;
 }
 
-/* Moderni stil za select i label */
 .exercise-select-label {
   font-weight: 600;
   margin-bottom: 6px;
@@ -447,7 +470,6 @@ body {
   color: #fff;
 }
 
-/* Modal overlay: poluprozirna pozadina */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -462,7 +484,6 @@ body {
   transition: background 0.18s;
 }
 
-/* Modal staklasti prozor */
 .modal-glass {
   background: rgba(255, 255, 255, 0.96);
   border-radius: 16px;
@@ -486,7 +507,6 @@ body {
   }
 }
 
-/* Naslov modala */
 .modal-glass h3 {
   margin-top: 0;
   margin-bottom: 18px;
@@ -496,7 +516,6 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* Zatvori gumb */
 .modal-close {
   position: absolute;
   top: 12px;
@@ -513,7 +532,6 @@ body {
   color: #e03c3c;
 }
 
-/* Forme i inputi */
 .modal-glass form {
   display: flex;
   flex-direction: column;
@@ -537,7 +555,6 @@ body {
   outline: none;
 }
 
-/* Submit gumb */
 .modal-glass button[type="submit"] {
   background: #000;
   color: #fff;
@@ -556,14 +573,12 @@ body {
   background: #444;
 }
 
-/* Error poruka */
 .modal-error {
   color: #e03c3c;
   font-size: 0.97em;
   margin-bottom: 4px;
 }
 
-/* Responsive */
 @media (max-width: 500px) {
   .modal-glass {
     padding: 18px 6vw 18px 6vw;
@@ -572,20 +587,20 @@ body {
 }
 
 .modal-title {
-    color: #000;
-    font-weight: 700;
-    font-size: 1.3em;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.3em;
 }
 
-.modal-glass{
+.modal-glass {
   color: black !important;
 }
 
 .modal-actions button:hover {
-    background-color: #444;
+  background-color: #444;
 }
 
-.modal-title{
+.modal-title {
   color: #000 !important;
 }
 
@@ -606,7 +621,7 @@ body {
   border-radius: 6px;
   font-weight: bold;
   font-size: 1rem;
-  min-width: 140px; 
+  min-width: 140px;
   min-height: 50px;
   cursor: pointer;
   text-align: center;
@@ -624,5 +639,97 @@ body {
   background-color: #fff !important;
 }
 
+.add-exercise-btn {
+  background: #fff;
+  color: #444;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #4f8cff22;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.18s, box-shadow 0.18s;
+}
 
+.add-exercise-btn:hover {
+  background: #f3f7fa;
+  color: #111;
+}
 
+.add-plus {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #222;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+.add-plus-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.add-mealplan-btn {
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #4f8cff22;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+
+.add-mealplan-btn:hover {
+  background: #f3f7fa;
+  color: #111;
+}
+
+.add-plus {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #222;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+.add-workoutplan-btn,
+.add-exercise-btn {
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #4f8cff22;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.18s, box-shadow 0.18s;
+}
+
+.add-workoutplan-btn:hover,
+.add-exercise-btn:hover {
+  background: #f3f7fa;
+  color: #111;
+}
+
+.add-plus {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #222;
+  margin-right: 2px;
+  vertical-align: middle;
+}
