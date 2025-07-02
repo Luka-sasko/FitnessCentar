@@ -1,43 +1,74 @@
 .subscription-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   max-width: 100%;
   margin: 40px auto;
   gap: 20px;
   justify-items: center;
+  padding: 0 20px;
 }
 
 .subscription-card {
-  margin-top: 25%;
-  background: #e0e2e6;
-  border: 1px solid #c2d0ff;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
   padding: 20px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   text-align: center;
-  transition: transform 0.2s ease;
-  height: 160px; /* fiksna visina ako želiš da su iste */
+  transition: all 0.3s ease;
+  height: 160px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: #333;
 }
+
 .subscription-card:hover {
-  transform: translateY(-4px);
-  scale: 1.25;
-  background-color: #222;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #fff !important;
+  transform: translateY(-6px) scale(1.05);
+  background: rgba(34, 34, 34, 0.85);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .subscription-card h3 {
   margin-bottom: 8px;
-  font-size: 2.1rem;
+  font-size: 2rem;
 }
 
 .subscription-card p {
   margin: 4px 0;
-  font-size: 0.95rem;
+  font-size: 1rem;
+}
+
+.subscription-card.gold-plan {
+  background: linear-gradient(135deg, #ffd700aa, #ffb300cc);
+  border: 2px solid #ffcc00;
+  color: #fff;
+  font-weight: bold;
+}
+
+.subscription-card.gold-plan:hover {
+  background: linear-gradient(135deg, #ffcc00, #e6ac00);
+  color: #222;
+  transform: scale(1.08);
+  font-size: 1.15rem;
+}
+
+.subscription-card.basic-plan {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border: 2px solid #60a5fa;
+  color: #1e3a8a;
+  font-weight: 500;
+}
+
+.subscription-card.basic-plan:hover {
+  background: linear-gradient(135deg, #93c5fd, #60a5fa);
+  color: #fff;
+  transform: scale(1.05);
+  font-size: 1.05rem;
 }

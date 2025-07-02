@@ -37,7 +37,7 @@ const Navbar = observer(() => {
                       to={link.path}
                       className={({ isActive }) => (isActive ? 'active' : '')}
                     >
-                      {link.name}
+                      {link.name.toLocaleUpperCase()}
                     </NavLink>
                   </li>
                 );
@@ -52,14 +52,14 @@ const Navbar = observer(() => {
       <ul className="navbar-right">
         {!userStore.isLoggedIn ? (
           <>
-            <li><NavLink to="/">Home</NavLink></li>
-            <li><NavLink to="/login">Login</NavLink></li>
-            <li><NavLink to="/register">Register</NavLink></li>
+            <li><NavLink to="/">HOME</NavLink></li>
+            <li><NavLink to="/login">LOGIN</NavLink></li>
+            <li><NavLink to="/register">REGISTER</NavLink></li>
           </>
         ) : (
           <>
             <li><NavLink to="/profile">{userStore.currentUser?.username || 'Profile'}</NavLink></li>
-            <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
+            <li><button onClick={handleLogout} className="logout-btn">LOGOUT</button></li>
           </>
         )}
       </ul>

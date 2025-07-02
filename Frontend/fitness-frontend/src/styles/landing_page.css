@@ -1,8 +1,9 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* sprječava dvostruki scroll */
+  overflow: hidden;
 }
 
 .landing-page {
@@ -16,11 +17,12 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #ebe9e9;
+  background: rgba(248, 250, 252, 0.3);
   padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
   z-index: 10;
+  margin-top: 100px;
 }
 
 .landing-buttons .btn {
@@ -37,18 +39,19 @@ html, body {
   background-color: #5f5959;
 }
 
-.landing-buttons{
-    margin-top: 2%;
-    margin-bottom: 1%;
+.landing-buttons {
+  margin-top: 2%;
+  margin-bottom: 1%;
 }
 
 .landing-content {
   flex: 1;
-  margin-top: 150px; 
-  margin-bottom: 150px; 
+  margin-top: 150px;
+  margin-bottom: 150px;
   overflow-y: auto;
   padding: 2rem;
   text-align: center;
+
 }
 
 .features-section ul {
@@ -66,12 +69,12 @@ html, body {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #ebe9e9;
+  background-color: rgba(34, 34, 34, 0.6);
   text-align: center;
   padding: 1rem;
-  border-top: 1px solid #ddd;
   font-size: 0.9rem;
   z-index: 10;
+  color: white;
 }
 
 .image-row {
@@ -100,11 +103,10 @@ html, body {
   height: 200px;
   object-fit: cover;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
 
 .image-row img:hover {
   transform: scale(1.5);
 }
-

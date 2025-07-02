@@ -58,7 +58,7 @@ namespace FitnessCentar.Service
             user.Id= id;
             user.IsActive = true;
             user.CoachId = Guid.Parse("151b32b8-16c1-49f5-91fb-cb6b4bff141c");
-            user.SubscriptionId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            user.SubscriptionId = Guid.Parse("c3333333-cccc-cccc-cccc-cccccccccccc");
             try
             {
                 return await _userRepository.CreateAsync(user);

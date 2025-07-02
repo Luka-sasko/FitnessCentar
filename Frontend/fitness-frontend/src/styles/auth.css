@@ -1,4 +1,3 @@
-/* PROFILE PAGE CONTAINER */
 .profile-page {
   padding: 40px 24px;
 }
@@ -8,14 +7,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height:10%; 
-  min-weight:50%;
+  min-height: 10%;
   padding: 32px 16px;
-  background-color: #ffffff;
+  background-color: #FD9242;
 }
 
 
-/* CARD-LIKE FORM */
 .auth-form {
   width: 50%;
   max-width: 600px;
@@ -24,38 +21,33 @@
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fafafa;
+  background: rgba(248, 250, 252, 0.3);
 }
 
 
-/* HEADER */
 .auth-form h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* FORM LAYOUT */
 .auth-form-inner {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* LABELS */
 .auth-form label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
 }
 
-/* INPUTS */
 .auth-form input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-/* BUTTON INSIDE FORM */
 .auth-form button {
   padding: 10px;
   background-color: #000000;
@@ -69,7 +61,6 @@
   background-color: #27282a;
 }
 
-/* MODAL BACKDROP */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -83,7 +74,6 @@
   align-items: center;
 }
 
-/* MODAL FORM */
 .modal-overlay .auth-form {
   width: 50%;
   max-width: 700px;
@@ -93,7 +83,6 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
-/* BUTTON GROUP IN MODAL */
 .auth-buttons {
   display: flex;
   justify-content: center;
@@ -101,7 +90,6 @@
   margin-top: 16px;
 }
 
-/* MESSAGES */
 .success {
   color: green;
   font-size: 14px;
@@ -127,6 +115,7 @@
   font-weight: bold;
   margin-bottom: 32px;
   text-align: center;
+  color: white;
 }
 
 .profile-table {
@@ -136,6 +125,8 @@
   border-collapse: collapse;
   font-size: 18px;
   text-align: left;
+  background: rgba(248, 250, 252, 0.5);
+
 }
 
 .profile-table th,

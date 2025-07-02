@@ -12,7 +12,7 @@ const AddWorkoutPlanModal = ({ open, onClose, onAdded }) => {
         setLoading(true);
         setError("");
         try {
-            await baseApi.post("/workoutplan", { Name: name, Desc: description });
+            await baseApi.post("/workoutplan", { Name: name, Description: description });
             setLoading(false);
             setName("");
             setDescription("");

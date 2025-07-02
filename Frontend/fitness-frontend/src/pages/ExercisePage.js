@@ -38,29 +38,19 @@ const ExercisePage = observer(() => {
   };
 
   const addButton = (
-    <button
-      style={{
-        background: "black",
-        color: "white",
-        border: "none",
-        borderRadius: "6px",
-        padding: "8px 20px",
-        fontSize: "1em",
-        fontWeight: 600,
-        cursor: "pointer",
-        boxShadow: "0 2px 8px #4f8cff22",
-        transition: "background 0.18s, box-shadow 0.18s",
-      }}
-      onClick={handleAdd}
-    >
-      ➕ ADD EXERCISE
+    <button className="add-exercise-btn" onClick={handleAdd}>
+      <svg width="20" height="20" className="add-plus-icon" viewBox="0 0 20 20" fill="none">
+        <rect x="9" y="3" width="2" height="14" rx="1" fill="#222" />
+        <rect x="3" y="9" width="14" height="2" rx="1" fill="#222" />
+      </svg>
+      ADD EXERCISE
     </button>
   );
 
   return (
     <div style={{ padding: 24, maxWidth: 900, margin: "0 auto" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-        <h2>All Exercises</h2>
+        <h2 style={{ color: "white" }}>ALL EXERCISES</h2>
         {addButton}
       </div>
 
@@ -83,7 +73,7 @@ const ExercisePage = observer(() => {
           setAddModalOpen(false);
           setEditData(null);
         }}
-      />  
+      />
 
 
       <ConfirmDeleteModal
